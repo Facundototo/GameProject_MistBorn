@@ -59,3 +59,6 @@ Proyecto final de la materia "programacion sobre redes".
 - Estuvimos comentando algunas cosas.
 
 *Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
+
+* Para ejecutar este juego en el cmd, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run * 
+

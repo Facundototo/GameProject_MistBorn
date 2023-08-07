@@ -1,5 +1,8 @@
 buildscript {
-    
+    apply plugin: 'java'
+	apply plugin: 'application'
+	
+	mainClassName = 'com.bakpun.mistborn.DesktopLauncher'
 
     repositories {
         mavenLocal()
@@ -59,4 +62,17 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
+    
+    task uberJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'uber'
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+    
 }
