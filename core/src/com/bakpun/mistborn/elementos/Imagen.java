@@ -9,6 +9,7 @@ public class Imagen {
 
 	private Texture t;
 	private Sprite s;
+	private float tamano;
 	
 	public Imagen(String ruta) {
 		t = new Texture(ruta);
@@ -19,9 +20,20 @@ public class Imagen {
 		s.draw(Render.batch);
 	}
 	
-	public void drawAnimacion(TextureRegion frameActual,float x,float y) { //Dibuja el Sprite con la animacion.
-		s.setRegion(frameActual);	//Cambia la textura por el frameActual que le paso.
+	public void draw(TextureRegion frameActual) {		//Medio que la sobrecargue mucho pero creo que no queda otra.
+		s.setRegion(frameActual);
 		s.draw(Render.batch);	
+	}
+	
+	public void draw(TextureRegion frameActual,boolean flip) { //Dibuja el Sprite con la animacion y flipea si es true.
+		s.setScale((flip)?-tamano-1:tamano+1, tamano+1);		//resto el tamano para quede invertida la textura.
+		s.setRegion(frameActual);
+		s.draw(Render.batch);	
+	}
+	
+	public void ajustarTamano(float tamano) {	//Tamano.
+		this.tamano = tamano;
+		s.scale(tamano);
 	}
 	
 	public void setTransparencia(float alpha) {	//Opacidad.
@@ -31,14 +43,8 @@ public class Imagen {
 	public void setPosicion(float x,float y) {	//Posicion x,y.
 		s.setPosition(x, y);
 	}
-	public void ajustarTamano(float tamano) {	//Tamano.
-		s.scale(tamano);
-	}
 	public Texture getTexture() {
 		return this.t;
 	}
-
-	public void flip() {	//Rotar sprite. Esto para utilizarlo con el personaje.
-		s.setSize(-t.getWidth(), 0);
-	}
+	
 }
