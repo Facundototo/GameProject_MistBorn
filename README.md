@@ -63,6 +63,14 @@ Proyecto final de la materia "programacion sobre redes".
 - Cambiamos cosas de la clase Animacion para que sea mas reutilizable todavia.
 - Ahora funciona lo de flipear el personaje, aunque sobrecargue mucho el metodo draw(). 
 
+### "back to the game (gran commit)" - Fecha 23/08
+
+- Implementamos Box2D. (Añadimos la dependencia al build.gradle).
+- Establecimos en el mundo (World) una conversion (PPM, esta explicado en el codigo). Llevo un tiempito entenderlo. Creamos una clase para eso.
+- Tuvimos que cambiar muchas cosas debido al punto anterior.Camara,viewport,tamaño de las texturas.
+- Creamos los Bodies con una clase que creamos (Fisica).
+- Actualizamos el movimiento del personaje en base a Box2D.
+
 *Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
 
 * Para ejecutar este juego en el cmd, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run * 

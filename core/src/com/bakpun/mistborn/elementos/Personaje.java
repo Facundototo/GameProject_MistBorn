@@ -1,26 +1,47 @@
 package com.bakpun.mistborn.elementos;
 
 import com.badlogic.gdx.Gdx;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.utiles.Box2dConfig;
 import com.bakpun.mistborn.utiles.Recursos;
 
 public class Personaje {
-	private final float VELOCIDAD_X = 400f, IMPULSO_Y = 12f,GRAVEDAD = -20f;
+	private final float VELOCIDAD_X = 10f, IMPULSO_Y = 7f;
 	private Animacion animacionQuieto,animacionCorrer;
 	private Imagen spr;
-	private float delta = 0f,x=100,y=200,velocidadImpulso = 0f;
+	private float delta = 0f;
 	private boolean saltar,puedeMoverse,estaSaltando = false,estaCorriendo,estaQuieto;
 	private Entradas entradas;
+	private Body pj;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f;
+	private Vector2 movimiento;
+	private Fisica f;
 	
-	public Personaje(String rutaPj) {
+	public Personaje(String rutaPj,World mundo) {
+		movimiento = new Vector2();
 		entradas = new Entradas();
+		f = new Fisica();
 		Gdx.input.setInputProcessor(entradas);
  		spr = new Imagen(rutaPj);
- 		spr.ajustarTamano(2);
+ 		spr.escalarImagen(12);
 		crearAnimaciones();
+		crearBody(mundo);
 	}
 	
+	private void crearBody(World mundo) {
+		f.setBody(BodyType.DynamicBody,new Vector2(10,5));
+		f.createPolygon(spr.getTexture().getWidth()/Box2dConfig.PPM, spr.getTexture().getHeight()/Box2dConfig.PPM);		//Uso la clase Fisica.
+		f.setFixture(f.getPolygon(), 1, 0, 0);
+		pj = mundo.createBody(f.getBody());
+		pj.createFixture(f.getFixture());
+		pj.setFixedRotation(true);		//Para que el body no rote por culpa de las fuerzas.
+	}
+
 	private void update() {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
 		delta = Gdx.graphics.getDeltaTime();
 		
@@ -28,22 +49,21 @@ public class Personaje {
 		animacionCorrer.update(delta);
 	}
 	
-	
 	public void draw() {
 		
-		update();
+		update();	
 		
 		saltar = (entradas.isEspacio() && !estaSaltando);
 		puedeMoverse = (entradas.isIrDer() != entradas.isIrIzq());	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
 		estaQuieto = ((!entradas.isIrDer() == !entradas.isIrIzq()) || !puedeMoverse);
 		estaCorriendo = ((entradas.isIrDer() || entradas.isIrIzq()) && puedeMoverse);
 		
-		
 		calcularSalto();	//Calcula el salto con la gravedad.
-		calcularMovimiento();	//Calcula el movimiento. Tendria que cambiarlo por la clase Entradas (creo).
-		calcularLimites();	//Calcula e impide que el jugador no se salga del plano visible.
+		calcularMovimiento();	//Calcula el movimiento.
 		
-		spr.setPosicion(x,y);
+		pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
+	
+		spr.setPosicion(pj.getPosition().x - 1.6f, pj.getPosition().y - 1.2f);	//Le digo al Sprite que se ponga en la posicion del body.
 		
 		animar();
 	}
@@ -70,44 +90,33 @@ public class Personaje {
 		animacionCorrer = new Animacion();
 		animacionCorrer.create(Recursos.ANIMACION_CORRER, 4,1, duracionCorrer);	
 	}
-	
-	private void calcularLimites() {
-		if(x >= Gdx.graphics.getWidth()) {
-			x = Gdx.graphics.getWidth();
-		}
-		if(x <= 0){
-			x = 0;
-		}
-	}
 	private void calcularSalto() {
 		if(saltar) {
-			velocidadImpulso += IMPULSO_Y;
-			y += velocidadImpulso * delta;
+			movimiento.y = IMPULSO_Y;
 			estaSaltando = true;
-		}	
-		if(estaSaltando) {
-			velocidadImpulso += GRAVEDAD * delta;
-			y += velocidadImpulso;
-			if(y <= 200) {
-				y = 200;
-				estaSaltando = false;
-				velocidadImpulso = 0;
-			}
+		}else {
+			movimiento.y = pj.getLinearVelocity().y;	//Esto hace que actue junto a la gravedad del mundo.
+		}
+		if(pj.getLinearVelocity().y == 0) {
+			estaSaltando = false;
 		}
 	}
 	private void calcularMovimiento() {
 		if(puedeMoverse) {
 			if(entradas.isIrDer()) {
-				x += VELOCIDAD_X * delta;
+				movimiento.x = VELOCIDAD_X;
 			} else if (entradas.isIrIzq()){
-				x -= VELOCIDAD_X * delta;
+				movimiento.x = -VELOCIDAD_X;
 			}
+		}
+		if(estaQuieto) {	//Esto para que no se quede deslizando.
+			movimiento.x = 0;
 		}
 	}
 	public float getX() {
-		return this.x;
+		return this.movimiento.x;
 	}
 	public float getY() {
-		return this.y;
+		return this.movimiento.y;
 	}
 }
