@@ -71,6 +71,15 @@ Proyecto final de la materia "programacion sobre redes".
 - Creamos los Bodies con una clase que creamos (Fisica).
 - Actualizamos el movimiento del personaje en base a Box2D.
 
+### "haciendo menu (apartado opciones)" - Fecha 24/08
+
+- Hicimos la pestaña Opciones, para poner Pantalla Completa,Ventana,Subir y bajar volumen.
+- Esta todo bien (adaptamos el mouse,las teclas,los sonidos,el bloqueo de las opciones principales), todo funcional.
+- Añadimos el viewport, porque faltaba solo en esta pantalla hacerlo.
+- Ahora tambien se puede saltar la pantalla de carga con el click, tambien modificamos algo en Config y pusimos el ESC en Entradas.
+*Recordatorio: Habria que hacer una clase Audio para manipular todos los sonidos que estaran en el juego.*
+
+
 *Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
 
 * Para ejecutar este juego en el cmd, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run * 

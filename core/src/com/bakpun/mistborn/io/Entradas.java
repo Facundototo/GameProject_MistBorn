@@ -7,7 +7,7 @@ import com.bakpun.mistborn.utiles.Config;
 public class Entradas implements InputProcessor{
 	//Hay que desarrollar esta clase para las entradas del usuario.
 
-	private boolean abajo,arriba,irDer,irIzq,saltar,mouseClick,enter;
+	private boolean abajo,arriba,irDer,irIzq,saltar,mouseClick,enter,escape;
 	private int mouseX=0,mouseY=0;
 	
 	public boolean keyDown(int keycode) {
@@ -30,6 +30,9 @@ public class Entradas implements InputProcessor{
 		if(keycode == Keys.ENTER) {
 			enter = true;
 		}
+		if(keycode == Keys.ESCAPE) {
+			escape = true;
+		}
 		return false;
 	}
 
@@ -51,6 +54,9 @@ public class Entradas implements InputProcessor{
 		}
 		if(keycode == Keys.ENTER) {
 			enter = false;
+		}
+		if(keycode == Keys.ESCAPE) {
+			escape = false;
 		}
 		return false;
 	}
@@ -113,6 +119,9 @@ public class Entradas implements InputProcessor{
 	}
 	public boolean isEnter() {
 		return this.enter;
+	}
+	public boolean isEscape() {
+		return this.escape;
 	}
 	public boolean isMouseClick() {
 		return this.mouseClick;
