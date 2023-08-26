@@ -88,9 +88,14 @@ Proyecto final de la materia "programacion sobre redes".
 - Arreglamos el flip del pj de nuevo!!! (era una boludez).
 - Hicimos una clase VentanaOpciones para que sea reutilizable, tanto en el menu como en la pelea (todavia faltan algunas cosas).
 - Ajustamos/mejoramos los limites del mapa y empezamos a tocar el tema de las plataformas.
-* Recordatorio: Hacer las plataformas (animacion,codigo.)*
+*Recordatorio: Hacer las plataformas (animacion,codigo.)*
 
-* Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
+### "subiendo texturas,animaciones de plataformas" - Fecha 26/08
 
-* Para ejecutar este juego en el cmd, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run * 
+- Subimos las texturas y las animaciones de las plataformas.
+
+
+*Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
+
+*Para ejecutar este juego en el cmd, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run* 
 
