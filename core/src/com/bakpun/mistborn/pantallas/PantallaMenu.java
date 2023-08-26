@@ -1,15 +1,16 @@
 package com.bakpun.mistborn.pantallas;
 
+
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.elementos.Texto;
 import com.bakpun.mistborn.io.Entradas;
@@ -20,33 +21,30 @@ import com.bakpun.mistborn.utiles.Render;
 //No se la forma de anadir el sonido cuando se selecciona opcion con el mouse.No me anda tampoco el mouse bien con las colisiones cuando cambio la resolucion.
 
 public class PantallaMenu implements Screen {
-	private final String textos[] = {"Jugar","Opciones","Salir"},cadenasOpciones[] = {"Pantalla Completa","Ventana","Subir Volumen","Bajar Volumen"};
+	private final String textos[] = {"Jugar","Opciones","Salir"};
 	private final float VELOCIDAD_CAMARA = 1.2f;
-	private Texto[] opciones = new Texto[3],txtOpc = new Texto[4];
-	private Texto numeroVolumen;
+	private Texto[] opciones = new Texto[3];
 	private Imagen fondo;
-	private ShapeRenderer figuraBarra,figuraOpcion,boxFs,boxWin/*,colision*/;
+	private ShapeRenderer figuraBarra/*,colision*/;
 	private OrthographicCamera cam,camEstatica;
 	private FillViewport vwEstatica,vwMov;
-	private Sound sfxOpcion;
 	private Entradas entradas;
+	private VentanaOpciones ventanaOpc;
 	private float tiempoMapa = 150f, contMapa = 0f, opacidad = 1f,tiempo,delta;
-	private int seleccion = 1,selecOpciones = 1;
+	private int seleccion = 1;
 	private boolean reiniciarCam = false, terminoPrimeraParte = false,estaSobreOpcion = false, mostrarMenuOpcion = false;
 	
 	public void show() {
-		sfxOpcion = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_OPCION_MENU));
 		entradas = new Entradas();
 		fondo = new Imagen(Recursos.FONDO_MENU);
 		figuraBarra = new ShapeRenderer();
-		figuraOpcion = new ShapeRenderer();
-		boxFs = new ShapeRenderer();
-		boxWin = new ShapeRenderer();
 		//colision = new ShapeRenderer();
 		cam = new OrthographicCamera();	//Camara para el fondo que se mueve.
 		camEstatica = new OrthographicCamera();	//Camara para las opciones del menu (estaticas).
 		vwEstatica = new FillViewport(Config.ANCHO,Config.ALTO,camEstatica);
 		vwMov = new FillViewport(Config.ANCHO,Config.ALTO, cam);
+		ventanaOpc = new VentanaOpciones(false,camEstatica,entradas);
+		Audio.setSonidoMenu();
 		Gdx.input.setInputProcessor(entradas);
 		cargarTextos();
 	}
@@ -68,50 +66,6 @@ public class PantallaMenu implements Screen {
 			mostrarMenuOpcion = false;		//Si toca Escape sale de la pestana de Opciones
 		}	
 	}
-	
-	private void mostrarOpciones() {		//Metodo que encapsula toda la pestana de Opciones
-		dibujarFigura(figuraOpcion,ShapeType.Filled,Config.ANCHO/2-200, Config.ALTO/2-200, 400, 420,0,0,0,0.8f);
-		Render.batch.begin();
-		for (int i = 0; i < txtOpc.length; i++) {
-			txtOpc[i].draw();	
-		}
-		numeroVolumen.draw();
-		Render.batch.end();
-		selecOpciones = chequearEntradas(delta,selecOpciones,1,4);
-		colorearOpcion(txtOpc,selecOpciones);
-		accionesMenuOpciones();
-		selecOpciones = calcularColisionMouse(txtOpc,selecOpciones);
-	}
-
-	private void accionesMenuOpciones() {	//Funciones del apartado Opciones.
-		if(entradas.isEnter() || entradas.isMouseClick()) { 
-			if((selecOpciones==1 && entradas.isEnter()) || (selecOpciones == 1 && (entradas.isMouseClick() && estaSobreOpcion))) {
-				if(!Config.isFullScreen()) {
-					sfxOpcion.play();
-					Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-				}
-			}else if((selecOpciones == 2 && entradas.isEnter()) || (selecOpciones == 2 && (entradas.isMouseClick() && estaSobreOpcion))){
-				if(!Config.isWindowed()) {
-					sfxOpcion.play();
-					Gdx.graphics.setWindowedMode(Config.ANCHO, Config.ALTO);	
-				}
-			}else if((selecOpciones == 3 && entradas.isEnter()) || (selecOpciones == 3 && (entradas.isMouseClick() && estaSobreOpcion))) {
-				if(Render.volumen < 1) {
-					Render.subirVolumen(0.01f);	
-					numeroVolumen.setTexto(String.valueOf((int)(Render.volumen/0.01f)));
-				}
-			}else if((selecOpciones == 4 && entradas.isEnter()) || (selecOpciones == 4 && (entradas.isMouseClick() && estaSobreOpcion))) {
-				if(Render.volumen > 0.01f) {
-					Render.bajarVolumen(0.01f);	
-					numeroVolumen.setTexto(String.valueOf((int)(Render.volumen/0.01f)));
-				}
-			}
-		}
-		
-		//Relleno los cuadrados de Pantalla Completo y/o Ventana.
-		dibujarFigura(boxFs,(Config.isFullScreen())?ShapeType.Filled:ShapeType.Line, Config.ANCHO/2 + 110, txtOpc[0].getY()-20, 20, 20, (float) 212 / 255, (float) 183 / 255, (float) 117 / 255, 1);
-		dibujarFigura(boxWin,(Config.isWindowed())?ShapeType.Filled:ShapeType.Line, Config.ANCHO/2 + 110, txtOpc[1].getY()-20, 20, 20, (float) 212 / 255, (float) 183 / 255, (float) 117 / 255, 1);
-	}
 
 	private void renderizarMenu() {
 		camEstatica.update();
@@ -123,7 +77,7 @@ public class PantallaMenu implements Screen {
 		}
 		Render.batch.end();	
 		if(mostrarMenuOpcion) {
-			mostrarOpciones();	
+			ventanaOpc.mostrarOpciones(delta);	
 		}
 		
 	}
@@ -132,11 +86,6 @@ public class PantallaMenu implements Screen {
 		for (int i = 0; i < opciones.length; i++) {
 			opciones[i] = cargarTexto(opciones[i],50,Color.WHITE,textos[i],150,((i==0)?400:(i==1)?340:280),false);
 		}
-		for (int i = 0; i < txtOpc.length; i++) {
-			Texto[] t = txtOpc;
-			txtOpc[i] = cargarTexto(t[i],35,Color.WHITE,cadenasOpciones[i],(Config.ANCHO/2),((i==0)?Config.ALTO/1.6f:(i==1)?t[i-1].getY()-60:(i==2)?t[i-1].getY()-60:t[i-1].getY()-60),true);
-		}
-		numeroVolumen = cargarTexto(numeroVolumen,35,Color.ORANGE,"100",(Config.ANCHO/2),txtOpc[3].getY()-60,true);
 	}
 
 	private void renderizarFondoMovimiento() {
@@ -155,12 +104,12 @@ public class PantallaMenu implements Screen {
 	private void accionesMenu() {	//Funciones del menu.
 		if(entradas.isEnter() || entradas.isMouseClick()) { 
 			if((seleccion==1 && entradas.isEnter()) || (seleccion == 1 && (entradas.isMouseClick() && estaSobreOpcion))) {
-				sfxOpcion.play();
-				Render.cancionMenu.pause();		//Pauso la cancion del menu.
+				Audio.sonidoMenu.play(Audio.volumen);	//Pauso la cancion del menu.		
+				Audio.cancionMenu.stop();
 				Render.app.setScreen(new PantallaPvP());
 			}else if((seleccion == 2 && entradas.isEnter()) || (seleccion == 2 && (entradas.isMouseClick() && estaSobreOpcion))){
 				mostrarMenuOpcion = true;
-				sfxOpcion.play();
+				Audio.sonidoMenu.play(Audio.volumen);
 			}else if((seleccion == 3 && entradas.isEnter()) || (seleccion == 3 && (entradas.isMouseClick() && estaSobreOpcion))) {
 				Gdx.app.exit();
 			}
@@ -222,7 +171,7 @@ public class PantallaMenu implements Screen {
 		tiempo += delta;
 		if(entradas.isAbajo()) {
 			if(tiempo >= 0.2f) {	//Hay un delay para elegir otra opcion.
-				sfxOpcion.play();
+				Audio.sonidoMenu.play(Audio.volumen);
 				tiempo = 0;
 				seleccion++;	//Si en este contador se supera el MAX_OPC, la seleccion va a ser igual a la primera opcion.
 				if(seleccion > maxOpc) {
@@ -233,7 +182,7 @@ public class PantallaMenu implements Screen {
 		}
 		else if(entradas.isArriba()) {
 			if(tiempo >= 0.2f) {
-				sfxOpcion.play();
+				Audio.sonidoMenu.play(Audio.volumen);
 				tiempo = 0;
 				seleccion--;	//Si en este contador es menor que el MIX_OPC, la seleccion va a ser igual a la ultima opcion.
 				if(seleccion < minOpc) {
@@ -318,17 +267,10 @@ public class PantallaMenu implements Screen {
 		for (int i = 0; i < opciones.length; i++) {
 			opciones[i].dispose();	//BitMapFont
 		}
-		for (int i = 0; i < cadenasOpciones.length; i++) {
-			txtOpc[i].dispose();	//BitMapFont
-		}
-		numeroVolumen.dispose();	//BitMapFont
-		boxWin.dispose();	//Shape
-		boxFs.dispose();	//Shape
 		figuraBarra.dispose();		//Shape
-		figuraOpcion.dispose();		//Shape
 		fondo.getTexture().dispose(); //Texture
-		sfxOpcion.dispose();			//Sound
-		Render.cancionMenu.dispose();	//Music
+		Audio.sonidoMenu.dispose();	//Sound
+		Audio.cancionMenu.dispose();	//Music
 		Render.batch.dispose();		//SpriteBatch
 		this.dispose();
 	}

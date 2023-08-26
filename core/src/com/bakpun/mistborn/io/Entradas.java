@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.bakpun.mistborn.utiles.Config;
 
 public class Entradas implements InputProcessor{
-	//Hay que desarrollar esta clase para las entradas del usuario.
 
 	private boolean abajo,arriba,irDer,irIzq,saltar,mouseClick,enter,escape;
 	private int mouseX=0,mouseY=0;

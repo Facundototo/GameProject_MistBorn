@@ -1,18 +1,15 @@
 package com.bakpun.mistborn.elementos;
 
 import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.bakpun.mistborn.utiles.Render;
 
 public class Imagen {
 
 	private Texture t;
 	private Sprite s;
-	private float tamano;
-	
-	//Tengo que arreglar el flip de nuevo :( por la implementacion de box2d.
 	
 	public Imagen(String ruta) {
 		t = new Texture(ruta);
@@ -38,9 +35,8 @@ public class Imagen {
 		s.scale(tamano);
 	}
 	
-	public void escalarImagen(float ppm) {
-		this.tamano = s.getWidth()/ppm;					//Escala el Sprite en base a los ppm (pixels per meter).
-		s.setSize(s.getWidth()/ppm, s.getHeight()/ppm);
+	public void escalarImagen(float ppm) {			
+		s.setSize(s.getWidth()/ppm, s.getHeight()/ppm);		//Escala el Sprite en base a los ppm (pixels per meter).
 	}
 	
 	public void setTransparencia(float alpha) {	//Opacidad.
@@ -48,7 +44,8 @@ public class Imagen {
 	}
 	
 	public void setPosicion(float x,float y) {	//Posicion x,y.
-		s.setPosition(x, y);
+		s.setCenter(x,y);		//En vez de setPosition que te ponia las coor en el vertice inferior izquierdo, este te lo pone en el centro de la textura. 
+		s.setOriginCenter();	//Lo tuve que adaptar por el flip.
 	}
 	public Texture getTexture() {
 		return this.t;

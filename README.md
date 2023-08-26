@@ -77,10 +77,20 @@ Proyecto final de la materia "programacion sobre redes".
 - Esta todo bien (adaptamos el mouse,las teclas,los sonidos,el bloqueo de las opciones principales), todo funcional.
 - Añadimos el viewport, porque faltaba solo en esta pantalla hacerlo.
 - Ahora tambien se puede saltar la pantalla de carga con el click, tambien modificamos algo en Config y pusimos el ESC en Entradas.
-*Recordatorio: Habria que hacer una clase Audio para manipular todos los sonidos que estaran en el juego.*
 
+* Recordatorio: Habria que hacer una clase Audio para manipular todos los sonidos que estaran en el juego.*
 
-*Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
+### "clase Audio,saltar(box2D),flip y ventana opciones" - Fecha 25/08
+
+- Hicimos la clase Audio, que lamentablemente es static (porque todavia no lo vimos a fondo el concepto), funciona como organizador de todos los sonidos, no como reutilizable.
+- Arreglamos lo del salto del pj en Box2D, que antes estaba mal hecho. Para esto creamos la clase Colision, nos va a servir de mucho.
+- Creamos el enumerador UserData para ponerles un ID a los Bodies, esto para usarlo en la clase Colision.
+- Arreglamos el flip del pj de nuevo!!! (era una boludez).
+- Hicimos una clase VentanaOpciones para que sea reutilizable, tanto en el menu como en la pelea (todavia faltan algunas cosas).
+- Ajustamos/mejoramos los limites del mapa y empezamos a tocar el tema de las plataformas.
+* Recordatorio: Hacer las plataformas (animacion,codigo.)*
+
+* Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
 
 * Para ejecutar este juego en el cmd, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run * 
 
