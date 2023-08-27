@@ -30,7 +30,7 @@ public class Plataforma {
 		plataforma.setUserData(UserData.SALTO_P);
 		//Creo animacion.
 		anima = new Animacion();
-		anima.create((esChica)?Recursos.ANIMACION_PLATAFORMA_CHICA:Recursos.ANIMACION_PLATAFORMA_GRANDE, 3, 1, 0.4f);
+		anima.create((esChica)?Recursos.ANIMACION_PLATAFORMA_CHICA:Recursos.ANIMACION_PLATAFORMA_GRANDE, 3, 1, 0.6f);
 	}
 	
 	public void draw(float delta) {
