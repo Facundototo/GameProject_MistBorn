@@ -20,13 +20,13 @@ public class VentanaOpciones {
 	private Texto numeroVolumen;
 	private Entradas entradas;
 	private OrthographicCamera cam;
-	//Tengo que hacer el boton de salir para la PantallaPvP().
-	private boolean mostrarBotonSalir,estaSobreOpcion;
+	private boolean estaSobreOpcion;
 	private int selecOpciones = 1;
 	private float tiempo;
 	
-	public VentanaOpciones(boolean mostrarBotonSalir,OrthographicCamera cam,Entradas entradas) {
-		this.mostrarBotonSalir = mostrarBotonSalir;
+	//Deberia borrarla y poner todo de nuevo en menu, porque me da problemas ponerla en pantallaPvP().
+	
+	public VentanaOpciones(OrthographicCamera cam,Entradas entradas) {
 		this.cam = cam;
 		this.entradas = entradas;
 		Gdx.input.setInputProcessor(this.entradas);

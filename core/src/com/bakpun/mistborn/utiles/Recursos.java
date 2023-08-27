@@ -13,4 +13,8 @@ public class Recursos {
 	public static final String ANIMACION_QUIETO = "animaciones/animacionesQuieto.png";
 	public static final String ANIMACION_CORRER = "animaciones/animacionCorrer.png";
 	public static final String LOGO_MISTBORN = "fondos/logoMistBorn.png";
+	public static final String PLATAFORMA_GRANDE = "animaciones/plataGrande.png";
+	public static final String PLATAFORMA_CHICA = "animaciones/plataChica.png";
+	public static final String ANIMACION_PLATAFORMA_CHICA = "animaciones/animacionPlataChica.png";
+	public static final String ANIMACION_PLATAFORMA_GRANDE = "animaciones/animacionPlataGrande.png";
 }

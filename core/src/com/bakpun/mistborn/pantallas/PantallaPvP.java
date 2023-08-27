@@ -1,6 +1,6 @@
 package com.bakpun.mistborn.pantallas;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+
 import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bakpun.mistborn.elementos.Fisica;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.elementos.Personaje;
+import com.bakpun.mistborn.elementos.Plataforma;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.utiles.Box2dConfig;
@@ -21,7 +22,6 @@ import com.bakpun.mistborn.utiles.Render;
 
 public class PantallaPvP implements Screen{
 	//Tenemos que hacer las plataformas, ya sea la textura,animacion y el codigo.
-	//Tambien tengo que ver como poner la ventana Opciones cuando se toca ESCAPE,creo que hay que hacer otra camara.
 	private Imagen fondo;
 	private Personaje pj;
 	private OrthographicCamera cam;
@@ -29,44 +29,51 @@ public class PantallaPvP implements Screen{
 	private World mundo;
 	private Box2DDebugRenderer db;
 	private Fisica f;
-	private Body piso,plataforma;
-	private VentanaOpciones ventanaOpc;
+	private Body piso;
 	private Entradas entradas;
-	private boolean mostrarOpciones;
+	private Plataforma plataformas[] = new Plataforma[7];
+	private Vector2[] posicionPlataformas = {new Vector2(400/Box2dConfig.PPM,325/Box2dConfig.PPM),new Vector2(1400/Box2dConfig.PPM,325/Box2dConfig.PPM)
+			,new Vector2(1400/Box2dConfig.PPM,650/Box2dConfig.PPM),new Vector2(500/Box2dConfig.PPM,750/Box2dConfig.PPM),new Vector2(750/Box2dConfig.PPM,500/Box2dConfig.PPM),
+			new Vector2(1800/Box2dConfig.PPM,500/Box2dConfig.PPM),new Vector2(1000/Box2dConfig.PPM,600/Box2dConfig.PPM)};
 	
 	public void show() {
 		mundo = new World(new Vector2(0,-30f),true);
 		f = new Fisica();
 		fondo = new Imagen(Recursos.FONDO_PVP);
 		cam = new OrthographicCamera(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
-		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	//Para posicionar la camara en el centro del fondo. La camara como default esta con coordenadas negativas.
-		cam.update();
+		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
-		crearColisiones();
 		entradas = new Entradas();
-		Gdx.input.setInputProcessor(entradas);
-		pj = new Personaje(Recursos.PERSONAJE_VIN,mundo,entradas);	
-		ventanaOpc = new VentanaOpciones(true, cam,entradas);
+		pj = new Personaje(Recursos.PERSONAJE_VIN,mundo,entradas);
+		for (int i = 0; i < plataformas.length; i++) {
+			plataformas[i] = new Plataforma((i>=4)?true:false,posicionPlataformas[i],mundo);
+		}
 		fondo.escalarImagen(Box2dConfig.PPM);
+		crearLimites();
+		Gdx.input.setInputProcessor(entradas);
 	}
 
 	public void render(float delta) {
-		Render.limpiarPantalla(1,1,1);
+		Render.limpiarPantalla(0,0,0);
+		cam.update();	
 		
-		cam.update();	//Updateo la camara.
 		Render.batch.setProjectionMatrix(cam.combined);
 		
 		Render.batch.begin();
 		fondo.draw();	//Dibujo el fondo.
 		pj.draw(); 	//Updateo al jugador.
+		for (int i = 0; i < plataformas.length; i++) {
+			plataformas[i].draw(delta);
+		}
+		
 		Render.batch.end();
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
-		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
+		//db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
 	}
 	
-	private void crearColisiones() {	
+	private void crearLimites() {	
 		//Limites Horizontales
 		for (int i = 0; i < 2; i++) {
 			f.setBody(BodyType.StaticBody, new Vector2(cam.viewportWidth/2,(i==0)?155/Box2dConfig.PPM:1080/Box2dConfig.PPM));
@@ -84,27 +91,18 @@ public class PantallaPvP implements Screen{
 		}
 		//Limites Verticales
 		for (int i = 0; i < 2; i++) {
-			f.setBody(BodyType.StaticBody, new Vector2((i==0)?1/Box2dConfig.PPM:1920/Box2dConfig.PPM,cam.viewportHeight/2));
+			f.setBody(BodyType.StaticBody, new Vector2((i==0)?30/Box2dConfig.PPM:1895/Box2dConfig.PPM,cam.viewportHeight/2));
 			f.createChain(new Vector2(0,-(((Config.ALTO/2)-155)/Box2dConfig.PPM)),new Vector2(0,(Config.ALTO/2)/Box2dConfig.PPM));
 			f.setFixture(f.getChain(), 100, 1f, 0);
 			f.createBody(mundo);
 			f.getChain().dispose();
 		}
-		//Plataforma.
-		f.setBody(BodyType.KinematicBody,new Vector2(cam.viewportWidth/2,300/Box2dConfig.PPM));
-		f.createPolygon(80/Box2dConfig.PPM, 16/Box2dConfig.PPM);
-		f.setFixture(f.getPolygon(), 10, 0f, 0);
-		plataforma = mundo.createBody(f.getBody());
-		plataforma.createFixture(f.getFixture());
-		plataforma.setUserData(UserData.SALTO_P);	//ID para la colision.
 		
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		vw.update(width, height);
-		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
-	    cam.update();
 	}
 
 	@Override

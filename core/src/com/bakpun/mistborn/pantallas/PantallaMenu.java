@@ -43,7 +43,7 @@ public class PantallaMenu implements Screen {
 		camEstatica = new OrthographicCamera();	//Camara para las opciones del menu (estaticas).
 		vwEstatica = new FillViewport(Config.ANCHO,Config.ALTO,camEstatica);
 		vwMov = new FillViewport(Config.ANCHO,Config.ALTO, cam);
-		ventanaOpc = new VentanaOpciones(false,camEstatica,entradas);
+		ventanaOpc = new VentanaOpciones(camEstatica,entradas);
 		Audio.setSonidoMenu();
 		Gdx.input.setInputProcessor(entradas);
 		cargarTextos();
