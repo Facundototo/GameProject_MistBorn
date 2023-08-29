@@ -6,6 +6,10 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "faroles" - Fecha 29/08
+
+- Pusimos faroles en el background.  
+
 ### "clase Plataforma,background y README.md" - Fecha 26/08
 
 - Hicimos la clase Plataforma y ya estan implementadas las mismas.
