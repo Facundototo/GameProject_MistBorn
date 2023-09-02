@@ -6,6 +6,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "empezando HUD" - Fecha 2/09
+
+- Empezamos a hacer el HUD para la PantallaPvP. (investigamos acerca de Scene2D UI).
+- Hicimos y añadimos icono y barra de salud.
+- Creamos las carpetas en assets, hud y skin.
+
 ### "faroles" - Fecha 29/08
 
 - Pusimos faroles en el background.  

@@ -17,4 +17,8 @@ public class Recursos {
 	public static final String PLATAFORMA_CHICA = "animaciones/plataChica.png";
 	public static final String ANIMACION_PLATAFORMA_CHICA = "animaciones/animacionPlataChica.png";
 	public static final String ANIMACION_PLATAFORMA_GRANDE = "animaciones/animacionPlataGrande.png";
+	public static final String SKIN = "skin/uiskin.json";
+	public static final String ICONO_CORAZON = "hud/iconoCorazon.png";
+	public static final String MARCO_VIDA = "hud/barraVidaMarco.PNG";
+	public static final String VIDA = "hud/barraVida.PNG";
 }

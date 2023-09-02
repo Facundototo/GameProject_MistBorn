@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Imagen;
@@ -18,7 +21,7 @@ import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
-//No se la forma de anadir el sonido cuando se selecciona opcion con el mouse.No me anda tampoco el mouse bien con las colisiones cuando cambio la resolucion.
+//Nos conviene cambiar todo el menu con Scene2dUI.Por nuestro bien.
 
 public class PantallaMenu implements Screen {
 	private final String textos[] = {"Jugar","Opciones","Salir"};

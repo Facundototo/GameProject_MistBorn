@@ -18,7 +18,7 @@ public class Colision implements ContactListener{
 		Body bodyB = contact.getFixtureB().getBody();
 		
 		if(bodyA.getUserData() == UserData.PJ && bodyB.getUserData() == UserData.SALTO_P) {		//Con esos bodies, me fijo si son los que quiero que choquen.
-			puedeSaltar = true;		
+			puedeSaltar = true;	
 		}else if(bodyB.getUserData() == UserData.PJ && bodyA.getUserData() == UserData.SALTO_P) {//En este caso es cuando puede volver a saltar el pj.
 			puedeSaltar = true; 
 		}
