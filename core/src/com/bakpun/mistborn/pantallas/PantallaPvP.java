@@ -74,7 +74,7 @@ public class PantallaPvP implements Screen{
 		hud.draw(delta);	//Dibujo el hud.
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
-		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
+		//db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
 	}
 	
 	private void crearLimites() {	

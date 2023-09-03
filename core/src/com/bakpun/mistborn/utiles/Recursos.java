@@ -21,4 +21,7 @@ public class Recursos {
 	public static final String ICONO_CORAZON = "hud/iconoCorazon.png";
 	public static final String MARCO_VIDA = "hud/barraVidaMarco.PNG";
 	public static final String VIDA = "hud/barraVida.PNG";
+	public static final String PRIMER_SALTO = "animaciones/salto1.png";
+	public static final String SEGUNDO_SALTO = "animaciones/salto2.png";
+	public static final String CAIDA_SALTO = "animaciones/salto3.png";
 }

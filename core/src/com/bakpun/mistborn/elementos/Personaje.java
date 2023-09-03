@@ -2,6 +2,8 @@ package com.bakpun.mistborn.elementos;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -21,9 +23,9 @@ public class Personaje {
 	private Vector2 movimiento;
 	private Fisica f;
 	private Colision c;
-	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto;
+	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,primerSalto,segundoSalto,caidaSalto;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
-
+	private TextureRegion saltos[] = new TextureRegion[3];
 	
 	public Personaje(String rutaPj,World mundo,Entradas entradas) {
 		movimiento = new Vector2();
@@ -61,14 +63,18 @@ public class Personaje {
 		
 		saltar = (Gdx.input.isKeyJustPressed(Keys.SPACE) && c.isPuedeSaltar());
 		puedeMoverse = (entradas.isIrDer() != entradas.isIrIzq());	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
-		estaQuieto = ((!entradas.isIrDer() == !entradas.isIrIzq()) || !puedeMoverse);
-		estaCorriendo = ((entradas.isIrDer() || entradas.isIrIzq()) && puedeMoverse);
+		estaQuieto = ((!entradas.isIrDer() == !entradas.isIrIzq()) || !puedeMoverse && c.isPuedeSaltar());
+		estaCorriendo = ((entradas.isIrDer() || entradas.isIrIzq()) && puedeMoverse && c.isPuedeSaltar());
+		primerSalto = movimiento.y > IMPULSO_Y - 8 && movimiento.y <= IMPULSO_Y;
+		segundoSalto = movimiento.y > 0 && movimiento.y <= IMPULSO_Y - 8;
+		caidaSalto = movimiento.y < 0;
 		
 		calcularSalto();	//Calcula el salto con la gravedad.
 		calcularMovimiento();	//Calcula el movimiento.
 		
 		pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
 	
+		System.out.println(movimiento.y);
 		spr.setPosicion(pj.getPosition().x, pj.getPosition().y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
 		animar();
@@ -76,12 +82,34 @@ public class Personaje {
 	
 	private void animar() {
 		if(estaQuieto) {	//Si esta quieto muestra el fotograma actual de la animacionQuieto. 
-			spr.draw(animacionQuieto.getCurrentFrame());
+			if(!c.isPuedeSaltar()) {
+				spr.draw(saltos[0]);
+			}else {
+				spr.draw(animacionQuieto.getCurrentFrame());
+			}
 		}else if(estaCorriendo) { 	//Si esta corriendo muestra el fotograma actual de la animacionCorrer.
 			if(entradas.isIrDer()) {
 				spr.draw(animacionCorrer.getCurrentFrame(),false);
 			}else {
 				spr.draw(animacionCorrer.getCurrentFrame(),true);
+			}
+		}else if(primerSalto) {
+			if(entradas.isIrDer()) {
+				spr.draw(saltos[0],false);
+			}else {
+				spr.draw(saltos[0],true);
+			}
+		}else if(segundoSalto) {
+			if(entradas.isIrDer()) {
+				spr.draw(saltos[1],false);
+			}else {
+				spr.draw(saltos[1],true);
+			}
+		}else if(caidaSalto) {
+			if(entradas.isIrDer()) {
+				spr.draw(saltos[2],false);
+			}else {
+				spr.draw(saltos[2],true);
 			}
 		}	
 	}
@@ -95,6 +123,10 @@ public class Personaje {
 		animacionQuieto.create(Recursos.ANIMACION_QUIETO, 4,1, duracionQuieto);
 		animacionCorrer = new Animacion();
 		animacionCorrer.create(Recursos.ANIMACION_CORRER, 4,1, duracionCorrer);	
+		for (int i = 0; i < saltos.length; i++) {
+			saltos[i] = new TextureRegion(new Texture((i==0)?Recursos.PRIMER_SALTO:(i==1)?Recursos.SEGUNDO_SALTO:Recursos.CAIDA_SALTO));
+		}
+		
 	}
 	private void calcularSalto() {
 		if(saltar) {

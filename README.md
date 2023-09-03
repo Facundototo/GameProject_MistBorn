@@ -6,6 +6,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "agregando animacion de salto" - Fecha 3/09
+
+- Hicimos tres texturas para el salto.
+- Las cargamos y las implementamos en el codigo.
+- Tambien añadimos archivos XCF faltantes.
+
 ### "empezando HUD" - Fecha 2/09
 
 - Empezamos a hacer el HUD para la PantallaPvP. (investigamos acerca de Scene2D UI).
