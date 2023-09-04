@@ -58,10 +58,10 @@ com_crashlytics_export_strings.xml
 /html/nbproject/private/
 /ios/nbproject/private/
 
-/build/
+
 /android/build/
 /core/build/
-/desktop/build/
+
 /html/build/
 /ios/build/
 
@@ -94,10 +94,7 @@ nb-configuration.xml
 /local.properties
 .gradle/
 gradle-app.setting
-/build/
 /android/build/
-/core/build/
-/desktop/build/
 /html/build/
 /ios/build/
 

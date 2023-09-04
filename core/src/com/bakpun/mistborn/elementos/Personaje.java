@@ -65,53 +65,40 @@ public class Personaje {
 		puedeMoverse = (entradas.isIrDer() != entradas.isIrIzq());	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
 		estaQuieto = ((!entradas.isIrDer() == !entradas.isIrIzq()) || !puedeMoverse && c.isPuedeSaltar());
 		estaCorriendo = ((entradas.isIrDer() || entradas.isIrIzq()) && puedeMoverse && c.isPuedeSaltar());
-		primerSalto = movimiento.y > IMPULSO_Y - 8 && movimiento.y <= IMPULSO_Y;
-		segundoSalto = movimiento.y > 0 && movimiento.y <= IMPULSO_Y - 8;
-		caidaSalto = movimiento.y < 0;
+		primerSalto = (movimiento.y > IMPULSO_Y - 8 && movimiento.y <= IMPULSO_Y);
+		segundoSalto = (movimiento.y > 0 && movimiento.y <= IMPULSO_Y - 8);
+		caidaSalto = (movimiento.y < 0);
 		
 		calcularSalto();	//Calcula el salto con la gravedad.
 		calcularMovimiento();	//Calcula el movimiento.
 		
 		pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
 	
-		System.out.println(movimiento.y);
 		spr.setPosicion(pj.getPosition().x, pj.getPosition().y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
 		animar();
 	}
 	
 	private void animar() {
-		if(estaQuieto) {	//Si esta quieto muestra el fotograma actual de la animacionQuieto. 
-			if(!c.isPuedeSaltar()) {
+		
+		if(estaQuieto) {
+			if(!c.isPuedeSaltar()) {		//si estaQuieto pero salta, hace la animacion de salto.
 				spr.draw(saltos[0]);
 			}else {
 				spr.draw(animacionQuieto.getCurrentFrame());
 			}
 		}else if(estaCorriendo) { 	//Si esta corriendo muestra el fotograma actual de la animacionCorrer.
-			if(entradas.isIrDer()) {
-				spr.draw(animacionCorrer.getCurrentFrame(),false);
-			}else {
-				spr.draw(animacionCorrer.getCurrentFrame(),true);
-			}
-		}else if(primerSalto) {
-			if(entradas.isIrDer()) {
-				spr.draw(saltos[0],false);
-			}else {
-				spr.draw(saltos[0],true);
-			}
-		}else if(segundoSalto) {
-			if(entradas.isIrDer()) {
-				spr.draw(saltos[1],false);
-			}else {
-				spr.draw(saltos[1],true);
-			}
+			spr.draw(animacionCorrer.getCurrentFrame());
+		}else if(primerSalto) {			
+			spr.draw(saltos[0]);		
+		}else if(segundoSalto) {		//saltos[] contiene las diferentes texturas, se van cambiando en base a la altura, o a la caida,
+			spr.draw(saltos[1]);		//por eso no lo hice con la clase Animacion, porque no es constante esto.
 		}else if(caidaSalto) {
-			if(entradas.isIrDer()) {
-				spr.draw(saltos[2],false);
-			}else {
-				spr.draw(saltos[2],true);
-			}
-		}	
+			spr.draw(saltos[2]);
+		}
+		if(!estaQuieto) {			//cuando !estaQuieto va a poder flipearse el pj, porque sino se queda mirando para un lado que no es.
+			spr.flip((entradas.isIrDer())?false:true);
+		}
 	}
 
 	public void dispose() {

@@ -10,6 +10,7 @@ public class Imagen {
 
 	private Texture t;
 	private Sprite s;
+	private TextureRegion frameActual;
 	
 	public Imagen(String ruta) {
 		t = new Texture(ruta);
@@ -20,14 +21,15 @@ public class Imagen {
 		s.draw(Render.batch);
 	}
 	
-	public void draw(TextureRegion frameActual) {		//Medio que la sobrecargue mucho pero creo que no queda otra.
+	public void draw(TextureRegion frameActual) {
+		this.frameActual = frameActual;
 		s.setRegion(frameActual);
-		s.draw(Render.batch);	
+		s.draw(Render.batch);
 	}
 	
-	public void draw(TextureRegion frameActual,boolean flip) { //Dibuja el Sprite con la animacion y flipea si es true.
+	public void flip(boolean flip) {
 		s.setScale((flip)?-1:1, 1);				//resto el tamano para quede invertida la textura.
-		s.setRegion(frameActual);
+		s.setRegion(this.frameActual);
 		s.draw(Render.batch);	
 	}
 	

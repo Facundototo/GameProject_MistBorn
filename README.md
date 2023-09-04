@@ -2,9 +2,18 @@
 Proyecto final de la materia "programacion sobre redes". 
 
 *Los objetivos actuales estaran escritos en el codigo, a medida que los vayamos haciendo los borraremos y pondremos otros.*
-*Para ejecutar este juego en el cmd, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run* 
+
+*Ejecutar este juego: 
+- Ejecutar el archivo MistBorn.bat en la carpeta raiz.
+- Por consola, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run. * 
 
 ## Commits (del mas actual al mas antiguo)
+
+### "modificando Imagen,gitignore y creando .bat"
+
+- Modificamos la clase Imagen y Personaje para que el codigo quede mas limpio.
+- Modificamos el gitignore (habia cosas que no queria que me oculte al subirlo).
+- Creamos un .bat para ejecutar el juego con doble click (y no por consola).
 
 ### "agregando animacion de salto" - Fecha 3/09
 
