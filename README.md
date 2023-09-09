@@ -9,7 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
-### "modificando Imagen,gitignore y creando .bat"
+### "barra de vida hecho" - Fecha 9/09
+
+- Añadimos y diseñamos la barra de vida.
+- La implementamos en el codigo con Scene2DUI. 
+- Añadimos el archivo respectivo (GIMP).
+
+### "modificando Imagen,gitignore y creando .bat" - Fecha 4/09
 
 - Modificamos la clase Imagen y Personaje para que el codigo quede mas limpio.
 - Modificamos el gitignore (habia cosas que no queria que me oculte al subirlo).

@@ -1,11 +1,14 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.bakpun.mistborn.utiles.Recursos;
 
@@ -13,8 +16,9 @@ public class Hud {
 
 	private Stage stage;
 	private Table tabla;
-	private Skin skin;
-	Image marcoVida,vida,iconoCorazon;
+	private Image marcoVida;
+	private float vida,escalado = 1.5f;
+	private ShapeRenderer shape;
 	
 	//El Stage tiene su propia cam y viewport.
 	
@@ -23,33 +27,32 @@ public class Hud {
 	public Hud() {
 		stage = new Stage();
 		tabla = new Table();
-		skin = new Skin(Gdx.files.internal(Recursos.SKIN));
+		shape = new ShapeRenderer();
 		
 		tabla.setFillParent(true);
-		stage.addActor(tabla);
-		tabla.setDebug(true);
-		
 		marcoVida = new Image(new Texture(Recursos.MARCO_VIDA));
-		marcoVida.setSize(200, 30);
-		vida = new Image(new Texture(Recursos.VIDA));
-		vida.setSize(200, 30);
-		iconoCorazon = new Image(new Texture(Recursos.ICONO_CORAZON));
-		iconoCorazon.setSize(40, 40);
 		
+		tabla.top().left().pad(30);		//Le pongo un padding de 30 px.
+		tabla.add(marcoVida).size(marcoVida.getWidth()*escalado, marcoVida.getHeight()*escalado);
+		this.vida = 182*escalado;
 		
-		tabla.add(marcoVida);
-		tabla.add(vida);
-		tabla.add(iconoCorazon);
-		
-		stage.addActor(marcoVida);
-		stage.addActor(vida);
-		stage.addActor(iconoCorazon);
+		//tabla.debug();
+		stage.addActor(tabla);
 	}
 	
 	public void draw(float delta) {
-		if(Gdx.input.isKeyPressed(Keys.S)) {
-			vida.setWidth(vida.getWidth()-1);
+		// Este if es para probar si anda la vida.
+		if(Gdx.input.isKeyPressed(Keys.S) && vida > 19*escalado) {
+			vida -= 1f;
+		}else if(Gdx.input.isKeyPressed(Keys.W) && vida < 182*escalado) {
+			vida += 1f;	
 		}
+		
+		shape.begin(ShapeType.Filled);
+		shape.rect(marcoVida.getX()+12*escalado, marcoVida.getY(), vida, marcoVida.getHeight());
+		shape.setColor(Color.RED);
+		shape.end();
+		
 		stage.act(delta);
 		stage.draw();
 	}
