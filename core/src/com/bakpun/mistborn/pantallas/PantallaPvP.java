@@ -13,10 +13,11 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bakpun.mistborn.elementos.Fisica;
 import com.bakpun.mistborn.elementos.Imagen;
-import com.bakpun.mistborn.elementos.Personaje;
 import com.bakpun.mistborn.elementos.Plataforma;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.personajes.Personaje;
+import com.bakpun.mistborn.personajes.Vin;
 import com.bakpun.mistborn.utiles.Box2dConfig;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
@@ -50,7 +51,7 @@ public class PantallaPvP implements Screen{
 		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
-		pj = new Personaje(Recursos.PERSONAJE_VIN,mundo,entradas);
+		pj = new Vin(mundo,entradas);
 		
 		crearPlataformas();
 		crearLimites();
@@ -74,7 +75,7 @@ public class PantallaPvP implements Screen{
 		hud.draw(delta);	//Dibujo el hud.
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
-		//db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
+		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
 	}
 	
 	private void crearLimites() {	

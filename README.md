@@ -9,6 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "adaptando clase Personaje a herencia" - Fecha 9/09
+
+- En la clase Personaje (abstract), cambiamos lo debido para que se creen bien los diferentes Personajes que va a tener el juego.
+- Creamos la clase Vin, la que seria uno de los personajes del juego.
+- Cambiamos los nombres de los archivos, tambien para organizar (herencia).
+- Cambiamos las rutas de las animaciones en la clase Recursos, ahora van a ser String[].
+
 ### "barra de vida hecho" - Fecha 9/09
 
 - Añadimos y diseñamos la barra de vida.

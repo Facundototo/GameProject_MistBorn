@@ -1,6 +1,7 @@
-package com.bakpun.mistborn.elementos;
+package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,14 +9,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
+import com.bakpun.mistborn.elementos.Animacion;
+import com.bakpun.mistborn.elementos.Fisica;
+import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.io.Colision;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.utiles.Box2dConfig;
-import com.bakpun.mistborn.utiles.Recursos;
 
-public class Personaje {
+public abstract class Personaje {
+	
 	private final float VELOCIDAD_X = 15f, IMPULSO_Y = 20f;
+	
 	private Animacion animacionQuieto,animacionCorrer;
 	private Imagen spr;
 	private Entradas entradas;
@@ -23,11 +28,17 @@ public class Personaje {
 	private Vector2 movimiento;
 	private Fisica f;
 	private Colision c;
+	
+	private TextureRegion saltos[] = new TextureRegion[3];
+	private String animacionSaltos[] = new String[3];
+	private String animacionEstados[] = new String[2];
+	
 	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,primerSalto,segundoSalto,caidaSalto;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
-	private TextureRegion saltos[] = new TextureRegion[3];
-	
-	public Personaje(String rutaPj,World mundo,Entradas entradas) {
+
+	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas) {
+		this.animacionSaltos = animacionSaltos;
+		this.animacionEstados = animacionEstados;
 		movimiento = new Vector2();
 		this.entradas = entradas;
 		f = new Fisica();
@@ -107,11 +118,11 @@ public class Personaje {
 	
 	private void crearAnimaciones() {
 		animacionQuieto = new Animacion();
-		animacionQuieto.create(Recursos.ANIMACION_QUIETO, 4,1, duracionQuieto);
+		animacionQuieto.create(animacionEstados[0], 4,1, duracionQuieto);
 		animacionCorrer = new Animacion();
-		animacionCorrer.create(Recursos.ANIMACION_CORRER, 4,1, duracionCorrer);	
+		animacionCorrer.create(animacionEstados[1], 4,1, duracionCorrer);	
 		for (int i = 0; i < saltos.length; i++) {
-			saltos[i] = new TextureRegion(new Texture((i==0)?Recursos.PRIMER_SALTO:(i==1)?Recursos.SEGUNDO_SALTO:Recursos.CAIDA_SALTO));
+			saltos[i] = new TextureRegion(new Texture((i==0)?animacionSaltos[i]:(i==1)?animacionSaltos[i]:animacionSaltos[i]));
 		}
 		
 	}
