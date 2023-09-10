@@ -26,14 +26,14 @@ import com.bakpun.mistborn.utiles.Render;
 public class PantallaPvP implements Screen{
 	//Tenemos que hacer las plataformas, ya sea la textura,animacion y el codigo.
 	private Imagen fondo;
-	private Personaje pj;
+	private Personaje pj,pj2;
 	private OrthographicCamera cam;
 	private Viewport vw;
 	private World mundo;
 	private Box2DDebugRenderer db;
 	private Fisica f;
 	private Body piso;
-	private Entradas entradas;
+	private Entradas entradasPj;
 	private Plataforma plataformas[] = new Plataforma[7];
 	private Vector2[] posicionPlataformas = {new Vector2(400/Box2dConfig.PPM,325/Box2dConfig.PPM),new Vector2(1400/Box2dConfig.PPM,325/Box2dConfig.PPM)
 			,new Vector2(1400/Box2dConfig.PPM,650/Box2dConfig.PPM),new Vector2(500/Box2dConfig.PPM,750/Box2dConfig.PPM),new Vector2(750/Box2dConfig.PPM,500/Box2dConfig.PPM),
@@ -51,11 +51,11 @@ public class PantallaPvP implements Screen{
 		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
-		pj = new Vin(mundo,entradas);
+		pj = new Vin(mundo,entradasPj,true);
+		pj2 = new Vin(mundo,entradasPj,false);
 		
 		crearPlataformas();
 		crearLimites();
-		
 	}
 
 	public void render(float delta) {
@@ -67,6 +67,7 @@ public class PantallaPvP implements Screen{
 		Render.batch.begin();
 		fondo.draw();	//Dibujo el fondo.
 		pj.draw(); 	//Updateo al jugador.
+		pj2.draw();
 		for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
 		}
@@ -131,6 +132,7 @@ public class PantallaPvP implements Screen{
 	public void dispose() {
 		fondo.getTexture().dispose();	//Texture
 		pj.dispose();	//Texture.
+		pj2.dispose();
 		f.dispose();
 		Render.batch.dispose();		//SpriteBatch.
 		this.dispose();
@@ -138,9 +140,9 @@ public class PantallaPvP implements Screen{
 	
 	private void creandoInputs() {
 		hud = new Hud();
-		entradas = new Entradas();
+		entradasPj = new Entradas();
 		im = new InputMultiplexer();	//Hago 2 input, una para el moviemiento del pj, otro para el SceneUI.
-		im.addProcessor(entradas);
+		im.addProcessor(entradasPj);
 		im.addProcessor(hud.getStage());
 		Gdx.input.setInputProcessor(im);
 	}

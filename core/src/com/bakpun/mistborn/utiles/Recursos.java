@@ -11,6 +11,7 @@ public class Recursos {
 	public static final String FUENTE_MENU = "fuentes/Enchanted Land.otf";
 	public static final String SONIDO_OPCION_MENU = "sonidos/cambiarOpcion.mp3";
 	public static final String CANCION_MENU = "sonidos/cancionMenu.mp3";
+	public static final String SONIDO_PJ_CORRIENDO = "sonidos/corriendo.mp3";
 
 	public static final String SKIN = "skin/uiskin.json";
 	public static final String MARCO_VIDA = "hud/corazonMarco.png";

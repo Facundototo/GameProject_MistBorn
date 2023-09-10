@@ -6,16 +6,22 @@ import com.bakpun.mistborn.utiles.Config;
 
 public class Entradas implements InputProcessor{
 
-	private boolean abajo,arriba,irDer,irIzq,saltar,mouseClick,enter,escape;
+	private boolean abajo,arriba,irDerD,irIzqA,saltar,mouseClick,enter,escape,irDerRight,irIzqLeft;
 	private int mouseX=0,mouseY=0;
 	
 	public boolean keyDown(int keycode) {
 		
-		if(keycode == Keys.D || keycode == Keys.RIGHT) {
-			irDer = true;
+		if(keycode == Keys.D) {
+			irDerD = true;
 		}
-		if(keycode == Keys.A || keycode == Keys.LEFT) {
-			irIzq = true;
+		if(keycode == Keys.A) {
+			irIzqA = true;
+		}
+		if(keycode == Keys.LEFT) {
+			irIzqLeft = true;
+		}
+		if(keycode == Keys.RIGHT) {
+			irDerRight = true;
 		}
 		if(keycode == Keys.SPACE) {
 			saltar = true;
@@ -36,11 +42,17 @@ public class Entradas implements InputProcessor{
 	}
 
 	public boolean keyUp(int keycode) {
-		if(keycode == Keys.D || keycode == Keys.RIGHT) {
-			irDer = false;
+		if(keycode == Keys.D) {
+			irDerD = false;
 		}
-		if(keycode == Keys.A || keycode == Keys.LEFT) {
-			irIzq = false;
+		if(keycode == Keys.A) {
+			irIzqA = false;
+		}
+		if(keycode == Keys.LEFT) {
+			irIzqLeft = false;
+		}
+		if(keycode == Keys.RIGHT) {
+			irDerRight = false;
 		}
 		if(keycode == Keys.SPACE) {
 			saltar = false;
@@ -101,11 +113,17 @@ public class Entradas implements InputProcessor{
 		return false;
 	}
 	
-	public boolean isIrDer() {
-		return this.irDer;
+	public boolean isIrDerD() {
+		return this.irDerD;
 	}
-	public boolean isIrIzq() {
-		return this.irIzq;
+	public boolean isIrIzqA() {
+		return this.irIzqA;
+	}
+	public boolean isIrDerRight() {
+		return this.irDerRight;
+	}
+	public boolean isIrIzqLeft() {
+		return this.irIzqLeft;
 	}
 	public boolean isEspacio() {
 		return this.saltar;

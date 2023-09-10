@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.elementos.Animacion;
+import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Fisica;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.UserData;
@@ -33,15 +34,20 @@ public abstract class Personaje {
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
 	
-	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,primerSalto,segundoSalto,caidaSalto;
+	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
+	private boolean reproducirSonidoCorrer;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
 
-	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas) {
+	//Tengo un problema al crear el segundo personaje, no salta y tampoco se anima.
+	
+	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,boolean ladoDerecho) {
 		this.animacionSaltos = animacionSaltos;
 		this.animacionEstados = animacionEstados;
+		this.ladoDerecho = ladoDerecho;
 		movimiento = new Vector2();
 		this.entradas = entradas;
 		f = new Fisica();
+		Audio.setSonidoPjCorriendo();
 		Gdx.input.setInputProcessor(this.entradas);
  		spr = new Imagen(rutaPj);
  		spr.escalarImagen(12);
@@ -52,7 +58,7 @@ public abstract class Personaje {
 	}
 	
 	private void crearBody(World mundo) {
-		f.setBody(BodyType.DynamicBody,new Vector2(10,5));
+		f.setBody(BodyType.DynamicBody,new Vector2((!ladoDerecho)?10:20,5));
 		f.createPolygon(spr.getTexture().getWidth()/Box2dConfig.PPM, spr.getTexture().getHeight()/Box2dConfig.PPM);		//Uso la clase Fisica.
 		f.setFixture(f.getPolygon(), 60, 0, 0);
 		pj = mundo.createBody(f.getBody());
@@ -72,10 +78,14 @@ public abstract class Personaje {
 		
 		update();
 		
-		saltar = (Gdx.input.isKeyJustPressed(Keys.SPACE) && c.isPuedeSaltar());
-		puedeMoverse = (entradas.isIrDer() != entradas.isIrIzq());	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
-		estaQuieto = ((!entradas.isIrDer() == !entradas.isIrIzq()) || !puedeMoverse && c.isPuedeSaltar());
-		estaCorriendo = ((entradas.isIrDer() || entradas.isIrIzq()) && puedeMoverse && c.isPuedeSaltar());
+		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.
+		
+		correrDerecha = (!ladoDerecho)?entradas.isIrDerD():entradas.isIrDerRight();	
+		correrIzquierda = (!ladoDerecho)?entradas.isIrIzqA():entradas.isIrIzqLeft();
+		saltar = (((!ladoDerecho)?Gdx.input.isKeyJustPressed(Keys.SPACE):Gdx.input.isKeyJustPressed(Keys.UP)) && c.isPuedeSaltar());
+		puedeMoverse = (correrDerecha != correrIzquierda);	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
+		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse && c.isPuedeSaltar());
+		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse && c.isPuedeSaltar());
 		primerSalto = (movimiento.y > IMPULSO_Y - 8 && movimiento.y <= IMPULSO_Y);
 		segundoSalto = (movimiento.y > 0 && movimiento.y <= IMPULSO_Y - 8);
 		caidaSalto = (movimiento.y < 0);
@@ -88,8 +98,24 @@ public abstract class Personaje {
 		spr.setPosicion(pj.getPosition().x, pj.getPosition().y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
 		animar();
+		reproducirSFX();
 	}
 	
+	//Metodo que administra los sonidos de los pj, salto,golpe,disparo,etc.
+	private void reproducirSFX() {
+		if(estaCorriendo) {
+			if(!reproducirSonidoCorrer) {
+				Audio.pjCorriendo.play(0.2f);
+				reproducirSonidoCorrer = true;
+			}
+		}else {
+			if(reproducirSonidoCorrer) {
+				Audio.pjCorriendo.stop();
+				reproducirSonidoCorrer = false;
+			}
+		}
+	}
+
 	private void animar() {
 		
 		if(estaQuieto) {
@@ -100,7 +126,7 @@ public abstract class Personaje {
 			}
 		}else if(estaCorriendo) { 	//Si esta corriendo muestra el fotograma actual de la animacionCorrer.
 			spr.draw(animacionCorrer.getCurrentFrame());
-		}else if(primerSalto) {			
+		}else if(primerSalto) {		
 			spr.draw(saltos[0]);		
 		}else if(segundoSalto) {		//saltos[] contiene las diferentes texturas, se van cambiando en base a la altura, o a la caida,
 			spr.draw(saltos[1]);		//por eso no lo hice con la clase Animacion, porque no es constante esto.
@@ -108,7 +134,7 @@ public abstract class Personaje {
 			spr.draw(saltos[2]);
 		}
 		if(!estaQuieto) {			//cuando !estaQuieto va a poder flipearse el pj, porque sino se queda mirando para un lado que no es.
-			spr.flip((entradas.isIrDer())?false:true);
+			spr.flip((correrDerecha)?false:true);
 		}
 	}
 
@@ -135,9 +161,9 @@ public abstract class Personaje {
 	}
 	private void calcularMovimiento() {
 		if(puedeMoverse) {
-			if(entradas.isIrDer()) {
+			if(correrDerecha) {
 				movimiento.x = VELOCIDAD_X;
-			} else if (entradas.isIrIzq()){
+			} else if (correrIzquierda){
 				movimiento.x = -VELOCIDAD_X;
 			}
 		}

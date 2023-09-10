@@ -6,9 +6,9 @@ import com.bakpun.mistborn.utiles.Recursos;
 
 public class Vin extends Personaje{
 
-	public Vin(World mundo, Entradas entradas) {
+	public Vin(World mundo, Entradas entradas,boolean ladoDerecho) {
 		//Le paso al constructor de Personaje, los saltos, y los estados (quieto,corriendo).
-		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas);
+		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas,ladoDerecho);
 	}
 
 }

@@ -9,6 +9,14 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "sonido corriendo, 2 pjs en pantalla y viewport HUD" - Fecha 10/09
+
+- Añadimos un sonido cuando esta corriendo y lo implementamos en el codigo.
+- Hicimos otros ajustes para que ya se puedan visualizar 2 pj en la pantalla (con algunas fallas a resolver).
+- Pusimos un viewport al stage de HUD, ya que modificaba el que tenia la clase PantallaPvP, ahora ya anda joya.
+
+*Aclaracion: Respecto a los 2 pj en pantalla, es para probar las colisiones y demas cosas, despues cuando veamos Redes, eso se modificara.*
+
 ### "adaptando clase Personaje a herencia" - Fecha 9/09
 
 - En la clase Personaje (abstract), cambiamos lo debido para que se creen bien los diferentes Personajes que va a tener el juego.
