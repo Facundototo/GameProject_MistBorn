@@ -16,8 +16,8 @@ public class Audio {
 	public static void setVolumen(float num) {
 		volumen += num;
 		cancionMenu.setVolume(volumen);
-		pjCorriendo.setVolume(pjCorriendo.play(), volumen);
-		//sonidoMenu.setVolume(sonidoMenu.play(),volumen);		//Lo dejo asi porque no estoy muy seguro de como hacerlo.
+		sonidoMenu.setVolume(sonidoMenu.play(),volumen);
+		//pjCorriendo.setVolume(pjCorriendo.play(), volumen);  		//Lo dejo asi porque no estoy muy seguro de como hacerlo.
 	}
 	
 	public static void setCancionMenu() {

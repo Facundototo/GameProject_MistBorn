@@ -1,6 +1,6 @@
 package com.bakpun.mistborn.pantallas;
-import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,7 +15,9 @@ import com.bakpun.mistborn.elementos.Fisica;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.elementos.Plataforma;
 import com.bakpun.mistborn.enums.UserData;
+import com.bakpun.mistborn.io.Colision;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.personajes.Ham;
 import com.bakpun.mistborn.personajes.Personaje;
 import com.bakpun.mistborn.personajes.Vin;
 import com.bakpun.mistborn.utiles.Box2dConfig;
@@ -24,26 +26,28 @@ import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
 public class PantallaPvP implements Screen{
-	//Tenemos que hacer las plataformas, ya sea la textura,animacion y el codigo.
+
 	private Imagen fondo;
-	private Personaje pj,pj2;
+	private Personaje pj1,pj2;
 	private OrthographicCamera cam;
 	private Viewport vw;
 	private World mundo;
 	private Box2DDebugRenderer db;
 	private Fisica f;
 	private Body piso;
-	private Entradas entradasPj;
+	private Entradas entradasPj1,entradasPj2;
 	private Plataforma plataformas[] = new Plataforma[7];
 	private Vector2[] posicionPlataformas = {new Vector2(400/Box2dConfig.PPM,325/Box2dConfig.PPM),new Vector2(1400/Box2dConfig.PPM,325/Box2dConfig.PPM)
 			,new Vector2(1400/Box2dConfig.PPM,650/Box2dConfig.PPM),new Vector2(500/Box2dConfig.PPM,750/Box2dConfig.PPM),new Vector2(750/Box2dConfig.PPM,500/Box2dConfig.PPM),
 			new Vector2(1750/Box2dConfig.PPM,500/Box2dConfig.PPM),new Vector2(1000/Box2dConfig.PPM,600/Box2dConfig.PPM)};
 	private InputMultiplexer im;
 	private Hud hud;
+	private Colision colisionMundo;		//Colision global, la unica en todo el juego.
 	
 	public void show() {
-		creandoInputs();
 		mundo = new World(new Vector2(0,-30f),true);
+		creandoInputs();
+		hud = new Hud();
 		f = new Fisica();
 		fondo = new Imagen(Recursos.FONDO_PVP);
 		fondo.escalarImagen(Box2dConfig.PPM);
@@ -51,8 +55,8 @@ public class PantallaPvP implements Screen{
 		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
-		pj = new Vin(mundo,entradasPj,true);
-		pj2 = new Vin(mundo,entradasPj,false);
+		pj1 = new Vin(mundo,entradasPj1,colisionMundo,false);
+		pj2 = new Ham(mundo,entradasPj2,colisionMundo,true);
 		
 		crearPlataformas();
 		crearLimites();
@@ -66,8 +70,8 @@ public class PantallaPvP implements Screen{
 		
 		Render.batch.begin();
 		fondo.draw();	//Dibujo el fondo.
-		pj.draw(); 	//Updateo al jugador.
-		pj2.draw();
+		pj1.draw(); 	//Updateo al jugador.
+		pj2.draw();		//Updateo al jugador2.
 		for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
 		}
@@ -131,20 +135,24 @@ public class PantallaPvP implements Screen{
 	@Override
 	public void dispose() {
 		fondo.getTexture().dispose();	//Texture
-		pj.dispose();	//Texture.
-		pj2.dispose();
-		f.dispose();
+		pj1.dispose();	//Texture.
+		pj2.dispose();	//Texture.
+		f.dispose();	
 		Render.batch.dispose();		//SpriteBatch.
 		this.dispose();
 	}
 	
 	private void creandoInputs() {
-		hud = new Hud();
-		entradasPj = new Entradas();
-		im = new InputMultiplexer();	//Hago 2 input, una para el moviemiento del pj, otro para el SceneUI.
-		im.addProcessor(entradasPj);
-		im.addProcessor(hud.getStage());
-		Gdx.input.setInputProcessor(im);
+		colisionMundo = new Colision();
+		entradasPj1 = new Entradas();		//Creo 2 entradas, porque sino se superponen.
+        entradasPj2 = new Entradas();
+		im = new InputMultiplexer();
+		
+		im.addProcessor(entradasPj1);		//Multiplexor porque hay mas de un input.
+		im.addProcessor(entradasPj2);
+		
+		Gdx.input.setInputProcessor(im);		//Seteo entradas.
+		mundo.setContactListener(colisionMundo); 
 	}
 
 	private void crearPlataformas() {

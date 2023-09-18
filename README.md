@@ -9,6 +9,11 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "asunto personajes resuelto" - Fecha 18/09
+
+- Resolvimos o mas bien el profe nos ayudo a resolver el error que teniamos con los saltos y las entradas de los Personajes.
+- Ahora ya andan perfecto los 2 personajes y creamos otra clase hija para testearlo, faltaria hacer las texturas correspondientes. 
+
 ### "sonido corriendo, 2 pjs en pantalla y viewport HUD" - Fecha 10/09
 
 - Añadimos un sonido cuando esta corriendo y lo implementamos en el codigo.
