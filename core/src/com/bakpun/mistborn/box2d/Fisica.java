@@ -1,4 +1,4 @@
-package com.bakpun.mistborn.elementos;
+package com.bakpun.mistborn.box2d;
 
 
 import com.badlogic.gdx.math.Vector2;

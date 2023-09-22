@@ -9,6 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "empezando con la PantallaSeleccionPj" - Fecha 21/09
+
+- Empezamos con la pantalla de seleccion de los personajes, cuando ponen "Jugar" en el menu.
+- Hicimos el esqueleto de como va a ser el diseño de la pantalla, utilizando Scene2DUI.
+- Creamos un enum para guardar todos los textos de la info de los Pj.
+- Por ultimo, creamos otro package para poner todo lo relacionado a Box2D.
+
 ### "asunto personajes resuelto" - Fecha 18/09
 
 - Resolvimos o mas bien el profe nos ayudo a resolver el error que teniamos con los saltos y las entradas de los Personajes.

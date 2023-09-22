@@ -1,4 +1,4 @@
-package com.bakpun.mistborn.io;
+package com.bakpun.mistborn.box2d;
 
 import java.util.ArrayList;
 

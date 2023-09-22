@@ -1,4 +1,4 @@
-package com.bakpun.mistborn.pantallas;
+package com.bakpun.mistborn.elementos;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

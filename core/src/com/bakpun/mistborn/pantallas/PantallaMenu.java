@@ -107,7 +107,7 @@ public class PantallaMenu implements Screen {
 			if((seleccion==1 && entradas.isEnter()) || (seleccion == 1 && (entradas.isMouseClick() && estaSobreOpcion))) {
 				Audio.sonidoMenu.play(Audio.volumen);	//Pauso la cancion del menu.		
 				Audio.cancionMenu.stop();
-				Render.app.setScreen(new PantallaPvP());
+				Render.app.setScreen(new PantallaSeleccion());
 			}else if((seleccion == 2 && entradas.isEnter()) || (seleccion == 2 && (entradas.isMouseClick() && estaSobreOpcion))){
 				mostrarMenuOpcion = true;
 				Audio.sonidoMenu.play(Audio.volumen);

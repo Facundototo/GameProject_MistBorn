@@ -9,14 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
+import com.bakpun.mistborn.box2d.Box2dConfig;
+import com.bakpun.mistborn.box2d.Colision;
+import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
 import com.bakpun.mistborn.elementos.Audio;
-import com.bakpun.mistborn.elementos.Fisica;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.UserData;
-import com.bakpun.mistborn.io.Colision;
 import com.bakpun.mistborn.io.Entradas;
-import com.bakpun.mistborn.utiles.Box2dConfig;
 
 public abstract class Personaje {
 	
