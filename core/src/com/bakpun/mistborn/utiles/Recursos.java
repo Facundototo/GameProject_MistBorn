@@ -25,4 +25,9 @@ public class Recursos {
 	public static final String[] ANIMACIONES_ESTADOS_VIN = {"animaciones/animacionesQuietoVin.png","animaciones/animacionCorrerVin.png"};
 	public static final String[] SALTOS_VIN = {"animaciones/salto1Vin.png","animaciones/salto2Vin.png","animaciones/salto3Vin.png"};
 	public static final String CABEZA_VIN = "animaciones/cabezaVin.png";
+	
+	public static final String PERSONAJE_HAM = "animaciones/PjHam.png";
+	public static final String[] ANIMACIONES_ESTADOS_HAM = {"animaciones/animacionesQuietoHam.png","animaciones/animacionCorrerHam.png"};
+	public static final String[] SALTOS_HAM = {"animaciones/salto1Ham.png","animaciones/salto2Ham.png","animaciones/salto3Ham.png"};
+	public static final String CABEZA_HAM = "animaciones/cabezaVin.png";
 }

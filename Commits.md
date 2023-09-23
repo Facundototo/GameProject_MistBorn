@@ -9,6 +9,11 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "Agregando al nuevo personaje, Ham" - Fecha 23/09
+
+- Hicimos e implementamos las nuevas texturas que corresponden a el segundo personaje del juego.
+- Animaciones: correr, salto y quieto.
+
 ### "lidiando con Scene2DUI Y locale" - Fecha 22/09
 
 - Nos pasamos viendo como seguir haciendo la PantallaSeleccion, añadimos ImageButton y queriamos usar SkinComposer pero salio todo mal y lo dejamos para otro momento.

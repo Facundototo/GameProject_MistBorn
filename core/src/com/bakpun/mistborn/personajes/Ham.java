@@ -8,7 +8,7 @@ import com.bakpun.mistborn.utiles.Recursos;
 public final class Ham extends Personaje{
 
 	public Ham(World mundo, Entradas entradas,Colision c,boolean ladoDerecho) {
-		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas,c,ladoDerecho);
+		super(Recursos.PERSONAJE_HAM,Recursos.SALTOS_HAM,Recursos.ANIMACIONES_ESTADOS_HAM, mundo, entradas,c,ladoDerecho);
 	}
 
 }
