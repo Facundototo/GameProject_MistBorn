@@ -9,6 +9,14 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "lidiando con Scene2DUI Y locale" - Fecha 22/09
+
+- Nos pasamos viendo como seguir haciendo la PantallaSeleccion, añadimos ImageButton y queriamos usar SkinComposer pero salio todo mal y lo dejamos para otro momento.
+- Creamos una carpeta locale para la traduccion del juego al Ingles o Español (si java detecta el pais, se cambia) y para manejar mejor la informacion de los personajes en la PantallaSeleccion mas que nada.
+- Pusimos el bundle en el Render para que se use 1 solo en todo el juego (static). 
+- Implementamos como va a ser el enum InfoPersonaje, ya sea para la info del personaje,valga la redundancia, y para reflection cuando hagamos lo de la seleccion del personaje. Tiene bastantes cosas.
+- Añadimos el Desafios.MD.
+
 ### "empezando con la PantallaSeleccionPj" - Fecha 21/09
 
 - Empezamos con la pantalla de seleccion de los personajes, cuando ponen "Jugar" en el menu.

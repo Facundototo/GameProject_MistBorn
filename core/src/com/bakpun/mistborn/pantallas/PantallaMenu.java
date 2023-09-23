@@ -2,14 +2,13 @@ package com.bakpun.mistborn.pantallas;
 
 
 import com.badlogic.gdx.Gdx;
-
-
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Imagen;
@@ -22,7 +21,7 @@ import com.bakpun.mistborn.utiles.Render;
 //Nos conviene cambiar todo el menu con Scene2dUI.Por nuestro bien.
 
 public class PantallaMenu implements Screen {
-	private final String textos[] = {"Jugar","Opciones","Salir"};
+	private String textos[] = {"Jugar","Opciones","Salir"};
 	private final float VELOCIDAD_CAMARA = 1.2f;
 	private Texto[] opciones = new Texto[3];
 	private Imagen fondo;
@@ -48,6 +47,7 @@ public class PantallaMenu implements Screen {
 		Audio.setSonidoMenu();
 		Gdx.input.setInputProcessor(entradas);
 		cargarTextos();
+		I18NBundle bundle = I18NBundle.createBundle(Gdx.files.internal("locale/locale"));
 	}
 
 	public void render(float delta) {

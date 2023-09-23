@@ -24,4 +24,5 @@ public class Recursos {
 	public static final String PERSONAJE_VIN = "animaciones/PjVin.png";
 	public static final String[] ANIMACIONES_ESTADOS_VIN = {"animaciones/animacionesQuietoVin.png","animaciones/animacionCorrerVin.png"};
 	public static final String[] SALTOS_VIN = {"animaciones/salto1Vin.png","animaciones/salto2Vin.png","animaciones/salto3Vin.png"};
+	public static final String CABEZA_VIN = "animaciones/cabezaVin.png";
 }
