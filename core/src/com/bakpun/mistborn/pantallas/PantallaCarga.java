@@ -11,7 +11,7 @@ import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
-public class PantallaCarga implements Screen {
+public final class PantallaCarga implements Screen {
 	private Imagen logo;
 	private float a = 0f,contEspera = 0f;
 	private int espera = 3;

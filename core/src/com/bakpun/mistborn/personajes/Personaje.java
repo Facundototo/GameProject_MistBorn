@@ -54,7 +54,7 @@ public abstract class Personaje {
 	}
 	
 	private void crearBody(World mundo) {
-		f.setBody(BodyType.DynamicBody,new Vector2((!ladoDerecho)?10:20,10));
+		f.setBody(BodyType.DynamicBody,new Vector2((!ladoDerecho)?10:20,5));
 		f.createPolygon(spr.getTexture().getWidth()/Box2dConfig.PPM, spr.getTexture().getHeight()/Box2dConfig.PPM);		//Uso la clase Fisica.
 		f.setFixture(f.getPolygon(), 60, 0, 0);
 		pj = mundo.createBody(f.getBody());

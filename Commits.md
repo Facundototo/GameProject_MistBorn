@@ -9,6 +9,16 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "ultimo commit antes de la entrega TP 2" - Fecha 24/09
+
+- Terminamos el diseño de los widgets de Scene2DUI, utilizando Skin Composer. (nos llegamos a hacer el fondo). (PantallaSeleccion).
+- Pusimos el boton de la cabeza de Ham. Y tambien la informacion (texto,imagen,nombre) se adecuan a la opcion que selecciona el usuario. (PantallaSeleccion).
+- Respecto a añadir fuentes, creamos la clase SkinFreeTypeLoader y el enum Fuente, todo esto para que sea mas optimo para las Pantallas.
+- Creamos las clases de los Pj faltantes, aunque faltan las texturas que le corresponden a cada uno, pero para ya tenerlo.
+- Utilizamos Actions (clase de Scene2DUI) para hacer efectos (fadeIn,fadeOut).
+- La cancion del menu ahora estara activa hasta la PantallaSeleccion.
+- Hicimos un chequeo final de la mayoria de las Clases.
+
 ### "definiendo seleccion y resoluciones" - Fecha 23/09
 
 - Terminamos de resolver el tema que teniamos con las Tables en la PantallaSeleccion, quedo bien.

@@ -20,7 +20,7 @@ import com.bakpun.mistborn.utiles.Render;
 
 //Nos conviene cambiar todo el menu con Scene2dUI.
 
-public class PantallaMenu implements Screen {
+public final class PantallaMenu implements Screen {
 	private String textos[] = {"Jugar","Opciones","Salir"};
 	private final float VELOCIDAD_CAMARA = 1.2f;
 	private Texto[] opciones = new Texto[3];
@@ -105,7 +105,6 @@ public class PantallaMenu implements Screen {
 		if(entradas.isEnter() || entradas.isMouseClick()) { 
 			if((seleccion==1 && entradas.isEnter()) || (seleccion == 1 && (entradas.isMouseClick() && estaSobreOpcion))) {
 				Audio.sonidoMenu.play(Audio.volumen);	//Pauso la cancion del menu.		
-				Audio.cancionMenu.stop();
 				Render.app.setScreen(new PantallaSeleccion());
 			}else if((seleccion == 2 && entradas.isEnter()) || (seleccion == 2 && (entradas.isMouseClick() && estaSobreOpcion))){
 				mostrarMenuOpcion = true;

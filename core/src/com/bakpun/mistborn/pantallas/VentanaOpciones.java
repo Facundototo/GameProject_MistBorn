@@ -13,7 +13,7 @@ import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
-public class VentanaOpciones {
+public final class VentanaOpciones {
 	private Texto[] txtOpc = new Texto[4];
 	private String[] cadenasOpciones = {"Pantalla Completa","Ventana","Subir Volumen","Bajar Volumen"};;
 	private ShapeRenderer figuraOpcion,boxFs,boxWin;

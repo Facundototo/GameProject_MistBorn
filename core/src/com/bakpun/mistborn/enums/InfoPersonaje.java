@@ -8,9 +8,9 @@ public enum InfoPersonaje {
 	//Contiene la informacion de los personajes en la PantallaSeleccion.
 	
 	VIN("seleccion.vin","Vin",Recursos.PERSONAJE_VIN,Recursos.CABEZA_VIN),
-	HAM("seleccion.ham","Ham",Recursos.PERSONAJE_VIN,Recursos.CABEZA_VIN),
+	HAM("seleccion.ham","Ham",Recursos.PERSONAJE_HAM,Recursos.CABEZA_HAM),
 	LESTIBOURNES("seleccion.lestibournes","Lestibournes",Recursos.PERSONAJE_VIN,Recursos.CABEZA_VIN),
-	DOCKSON("seleccion.dockson","Dockson",Recursos.PERSONAJE_VIN,Recursos.CABEZA_VIN);
+	DOCKSON("seleccion.dockson","Dockson",Recursos.PERSONAJE_HAM,Recursos.CABEZA_HAM);
 	
 	private String infoPj,nombreClasePj,rutaTexturaPj,rutaIconoPj;
 	

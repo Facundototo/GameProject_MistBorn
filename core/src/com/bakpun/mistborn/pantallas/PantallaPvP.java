@@ -26,7 +26,7 @@ import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
-public class PantallaPvP implements Screen{
+public final class PantallaPvP implements Screen{
 
 	private Imagen fondo;
 	private Personaje pj1,pj2;

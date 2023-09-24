@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -20,20 +21,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.bakpun.mistborn.elementos.Audio;
+import com.bakpun.mistborn.elementos.SkinFreeTypeLoader;
+import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.enums.InfoPersonaje;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.utiles.Config;
-import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
-public class PantallaSeleccion implements Screen{
+public final class PantallaSeleccion implements Screen{
 	private int seleccion = 0,cantMaxPersonajes = 4;
 	private InputMultiplexer im;
 	private Entradas entradas;
 	private Stage stage;
 	private Table tabla,botones,imagenPj,infoPj;
-	private Skin skin = new Skin(Gdx.files.internal(Recursos.SKIN));
-	private Image pj;
+	private Skin skin;
+	private Image imgPj[] = new Image[cantMaxPersonajes];
 	private ImageButton botonesPj[] = new ImageButton[cantMaxPersonajes];
 	private Window informacion;
 	private Label txtInfo,nombrePj,avisoSeleccion;
@@ -47,14 +50,15 @@ public class PantallaSeleccion implements Screen{
 	// - Tambien tendriamos que informarnos mas sobre el Table, porque no lo estamos utilizando del todo. HECHO
 	//  - Hacer que los botones pasen a ser ImageButton. HECHO  
 	//  - Crear un Label que diga TOQUE ENTER PARA ACEPTAR ELECCION, se mande la PantallaPvP. HECHO
+	// 	- Poner la cabeza Ham en el boton, y cambiar tamb la Imagen. HECHO
+	//  - Cambiar el tamano de las letras y el estilo.	HECHO
 	
-	//  - Cambiar el tamano de las letras y el estilo.
 	//  - Hacer los disenos de esta pantalla (fondo,fondoPj,Window de la informacionPj).
 	//  - Reflection para la creacion de la instancia Personaje.
-	// 	- Poner la cabeza Ham en el boton, y cambiar tamb la Imagen.
-
 	
+
 	public PantallaSeleccion() {
+		skin = SkinFreeTypeLoader.cargar();		//Cargo el codigo que hay que copiar para usar FreeTypeFont en Scene2DUI.
 		stage = new Stage(new FillViewport(Config.ANCHO,Config.ALTO));
 		tabla = new Table();
 		botones = new Table();
@@ -62,67 +66,81 @@ public class PantallaSeleccion implements Screen{
 		infoPj = new Table();
 		entradas = new Entradas();
 		im = new InputMultiplexer();
-		txtInfo = new Label("",skin);
-		nombrePj = new Label("",skin);
-		avisoSeleccion = new Label(Render.bundle.get("seleccion.avisoenter"),skin);
+		txtInfo = new Label("",Fuente.PIXELINFO.getStyle(skin));
+		nombrePj = new Label("",Fuente.PIXELTEXTO.getStyle(skin));
+		avisoSeleccion = new Label(Render.bundle.get("seleccion.avisoenter"),Fuente.PIXELTEXTO.getStyle(skin));
 		informacion = new Window(Render.bundle.get("seleccion.txtinfo"),skin);
-		pj = new Image(new Texture(Recursos.PERSONAJE_VIN));
+		for (int i = 0; i < imgPj.length; i++) {
+			imgPj[i] = new Image(new Texture(InfoPersonaje.values()[i].getRutaTextura()));
+		}
 	}
-	
+
 	public void show() {
 		im.addProcessor(entradas);
 		im.addProcessor(stage);
 		Gdx.input.setInputProcessor(im);
 		
-		tabla.setFillParent(true);		//La tabla ocupa toda la pantalla.
+		//Decimos si las tablas ocupan (true) o no (false) toda la pantalla.
+		tabla.setFillParent(true);		
 		botones.setFillParent(false);
 		imagenPj.setFillParent(false);
 		infoPj.setFillParent(false);
 		
+		//Aca se establece 3 columnas con un cierto ancho y alto.
 		tabla.columnDefaults(0).width(Config.ANCHO / 3f).height(Config.ALTO);
 		tabla.columnDefaults(1).width(Config.ANCHO / 3f);
 		tabla.columnDefaults(2).width(Config.ANCHO / 3f).height(Config.ALTO);
 		
+		//Creacion de tablas.
 		crearTablaInformacion();
-		crearTablaImagen();
 		crearTablaBotones();
 		
+		//Anadirlas a la contenedora.
 		tabla.add(imagenPj);
 		tabla.add(botones).bottom().padBottom(30);
 		tabla.add(infoPj);
 		
-		avisoSeleccion.setPosition(Config.ANCHO/2, Config.ALTO/1.2f,Align.center);
-		stage.addActor(avisoSeleccion);
-		stage.addActor(tabla);
+		configAvisoSeleccion();
 		
+		stage.addActor(tabla);	//Anadir la contenedora al stage.
 	}
-	private void crearTablaImagen() {
-		imagenPj.add(pj).size(Config.ANCHO/4, Config.ALTO/3);
-		imagenPj.row();
-		imagenPj.add(nombrePj).padTop(20);
-	}
-
-
-	private void crearTablaInformacion() {
-		txtInfo.setWrap(true);
-		txtInfo.setAlignment(Align.top);
-		infoPj.add(informacion).size(Config.ANCHO/4,Config.ALTO/2);
-	}
-
 
 	public void render(float delta) {
-		Render.limpiarPantalla(0, 0, 0);
+		Render.limpiarPantalla((float) 101/255,(float) 90/255,(float) 105/255);
 		
 		calcularTeclas(delta);		//Metodo para el uso del teclado (entradas).
 		marcarOpcionSeleccionada();	//Aplicar efectos para la opcion seleccionada.
 		
 		if(entradas.isEnter()) {
-			Render.app.setScreen(new PantallaPvP());
+			cambiarPantallaFadeOut();
 		}
-		
 		stage.act(delta);
 		stage.draw();
 		
+	}
+	
+	private void cambiarPantallaFadeOut() {
+		stage.addAction(Actions.sequence(Actions.fadeOut(2),Actions.run(new Runnable() {   
+			  @Override
+	            public void run() {					//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
+					Audio.cancionMenu.stop();
+	                Render.app.setScreen(new PantallaPvP());
+	            }})));
+	}
+
+	private void configAvisoSeleccion() {
+		avisoSeleccion.setPosition(Config.ANCHO/2, Config.ALTO/1.2f,Align.center);		//Le asigno la posicion.
+		avisoSeleccion.addAction(Actions.forever(Actions.sequence(						
+			    Actions.fadeIn(0.5f),Actions.fadeOut(0.5f),				//Aca se hace la secuencia del fade, aplicandole un delay para que funcione.
+			    Actions.delay(0.2f))));
+		
+		stage.addActor(avisoSeleccion);			//Lo anado al stage por separado de la contenedora.
+	}
+	
+	private void crearTablaInformacion() {
+		txtInfo.setWrap(true);
+		txtInfo.setAlignment(Align.top);
+		infoPj.add(informacion).size(Config.ANCHO/4,Config.ALTO/2);
 	}
 	
 	private void crearTablaBotones() {
@@ -183,13 +201,18 @@ public class PantallaSeleccion implements Screen{
 	private void mostrarInformacion(int indice) {		//Metodo que muestra la informacion en base a la opcion seleccionada.
 		pjSeleccionado = InfoPersonaje.values()[indice];
 		
-		txtInfo.setText(pjSeleccionado.getInfo());		//Agarro la informacion del pjSeleccionado,retorna la key del locale.
-		nombrePj.setText(pjSeleccionado.getNombre());	//Aca tambien.
+		//Limpio la informacion anterior.
+		imagenPj.clear();
+		informacion.clear();
 		
-		informacion.clear();							//Limpio la informacion anterior.
-        informacion.add(txtInfo).pad(20).expand().fill().top();		//Anado la otra info.
+		txtInfo.setText(pjSeleccionado.getInfo());		//Agarro la informacion del pjSeleccionado,retorna la key del locale.
+		nombrePj.setText(pjSeleccionado.getNombre());   //Aca tambien.
+		
+		//Anado la otra info.
+		imagenPj.add(imgPj[indice]).size(Config.ANCHO/4, Config.ALTO/3).row();
+		imagenPj.add(nombrePj).padTop(30);				//Aca creo la tabla imagenPj porque no se cambia luego la imagen, como pasa con el texto.
+		informacion.add(txtInfo).pad(20).expand().fill().top();		
 	}
-
 
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
