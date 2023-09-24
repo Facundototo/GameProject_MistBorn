@@ -9,6 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "definiendo seleccion y resoluciones" - Fecha 23/09
+
+- Terminamos de resolver el tema que teniamos con las Tables en la PantallaSeleccion, quedo bien.
+- Ajustamos el fondo de la PantallaPvP para las diferentes resoluciones.
+- Para el punto anterior,tuvimos que modificar la clase Imagen.
+- Añadimos un archivo.xcf que faltaba.
+
 ### "Agregando al nuevo personaje, Ham" - Fecha 23/09
 
 - Hicimos e implementamos las nuevas texturas que corresponden a el segundo personaje del juego.

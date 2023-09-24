@@ -44,6 +44,9 @@ public class PantallaPvP implements Screen{
 	private InputMultiplexer im;
 	private Hud hud;
 	private Colision colisionMundo;		//Colision global, la unica en todo el juego.
+
+	
+	//Para que quede bien, me faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
 	
 	public void show() {
 		mundo = new World(new Vector2(0,-30f),true);
@@ -51,7 +54,7 @@ public class PantallaPvP implements Screen{
 		hud = new Hud();
 		f = new Fisica();
 		fondo = new Imagen(Recursos.FONDO_PVP);
-		fondo.escalarImagen(Box2dConfig.PPM);
+		fondo.setTamano(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
 		cam = new OrthographicCamera(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
 		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
@@ -82,33 +85,6 @@ public class PantallaPvP implements Screen{
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
 		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
-	}
-	
-	private void crearLimites() {	
-		//Limites Horizontales
-		for (int i = 0; i < 2; i++) {
-			f.setBody(BodyType.StaticBody, new Vector2(cam.viewportWidth/2,(i==0)?155/Box2dConfig.PPM:1080/Box2dConfig.PPM));
-			f.createChain(new Vector2(-((Config.ANCHO/2)/Box2dConfig.PPM),0), new Vector2((Config.ANCHO/2)/Box2dConfig.PPM,0));
-			f.setFixture(f.getChain(), 100, 1f, 0);
-			if(i==0) {
-				piso = mundo.createBody(f.getBody());
-				piso.createFixture(f.getFixture());
-				piso.setUserData(UserData.SALTO_P); //ID para la colision.
-			}else {
-				f.createBody(mundo);
-			}
-			f.getChain().dispose();
-			
-		}
-		//Limites Verticales
-		for (int i = 0; i < 2; i++) {
-			f.setBody(BodyType.StaticBody, new Vector2((i==0)?30/Box2dConfig.PPM:1895/Box2dConfig.PPM,cam.viewportHeight/2));
-			f.createChain(new Vector2(0,-(((Config.ALTO/2)-155)/Box2dConfig.PPM)),new Vector2(0,(Config.ALTO/2)/Box2dConfig.PPM));
-			f.setFixture(f.getChain(), 100, 1f, 0);
-			f.createBody(mundo);
-			f.getChain().dispose();
-		}
-		
 	}
 
 	@Override
@@ -160,6 +136,33 @@ public class PantallaPvP implements Screen{
 		for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i] = new Plataforma((i>=4)?true:false,posicionPlataformas[i],mundo);
 		}
+	}
+	
+	private void crearLimites() {	
+		//Limites Horizontales
+		for (int i = 0; i < 2; i++) {
+			f.setBody(BodyType.StaticBody, new Vector2(cam.viewportWidth/2,(i==0)?155/Box2dConfig.PPM:(Config.ALTO-20)/Box2dConfig.PPM));
+			f.createChain(new Vector2(-((Config.ANCHO/2)/Box2dConfig.PPM),0), new Vector2((Config.ANCHO/2)/Box2dConfig.PPM,0));
+			f.setFixture(f.getChain(), 100, 1f, 0);
+			if(i==0) {
+				piso = mundo.createBody(f.getBody());
+				piso.createFixture(f.getFixture());
+				piso.setUserData(UserData.SALTO_P); //ID para la colision.
+			}else {
+				f.createBody(mundo);
+			}
+			f.getChain().dispose();
+			
+		}
+		//Limites Verticales
+		for (int i = 0; i < 2; i++) {
+			f.setBody(BodyType.StaticBody, new Vector2((i==0)?30/Box2dConfig.PPM:(Config.ANCHO-20)/Box2dConfig.PPM,cam.viewportHeight/2));
+			f.createChain(new Vector2(0,-(((Config.ALTO/2)-155)/Box2dConfig.PPM)),new Vector2(0,(Config.ALTO/2)/Box2dConfig.PPM));
+			f.setFixture(f.getChain(), 100, 1f, 0);
+			f.createBody(mundo);
+			f.getChain().dispose();
+		}
+		
 	}
 	
 }

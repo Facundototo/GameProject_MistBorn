@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.enums.InfoPersonaje;
 import com.bakpun.mistborn.io.Entradas;
@@ -43,19 +44,22 @@ public class PantallaSeleccion implements Screen{
 	
 	//Terminar esta PantallaSeleccion (no estan ordenados por prioridad):
 	//  - Hacer el enum para mostrar la informacion, aca tendria que ver lo de la traduccion. HECHO
+	// - Tambien tendriamos que informarnos mas sobre el Table, porque no lo estamos utilizando del todo. HECHO
+	//  - Hacer que los botones pasen a ser ImageButton. HECHO  
+	//  - Crear un Label que diga TOQUE ENTER PARA ACEPTAR ELECCION, se mande la PantallaPvP. HECHO
+	
 	//  - Cambiar el tamano de las letras y el estilo.
 	//  - Hacer los disenos de esta pantalla (fondo,fondoPj,Window de la informacionPj).
-	//  - Hacer que los botones pasen a ser ImageButton. HECHO  
 	//  - Reflection para la creacion de la instancia Personaje.
-	//  - Crear un Label que diga TOQUE ENTER PARA ACEPTAR ELECCION, se mande la PantallaPvP.	
-	// - Tambien tendriamos que informarnos mas sobre el Table, porque no lo estamos utilizando del todo.
-	
+	// 	- Poner la cabeza Ham en el boton, y cambiar tamb la Imagen.
+
 	
 	public PantallaSeleccion() {
 		stage = new Stage(new FillViewport(Config.ANCHO,Config.ALTO));
-		tabla = new Table().debug();
+		tabla = new Table();
 		botones = new Table();
 		imagenPj = new Table();
+		infoPj = new Table();
 		entradas = new Entradas();
 		im = new InputMultiplexer();
 		txtInfo = new Label("",skin);
@@ -65,7 +69,6 @@ public class PantallaSeleccion implements Screen{
 		pj = new Image(new Texture(Recursos.PERSONAJE_VIN));
 	}
 	
-	
 	public void show() {
 		im.addProcessor(entradas);
 		im.addProcessor(stage);
@@ -74,35 +77,39 @@ public class PantallaSeleccion implements Screen{
 		tabla.setFillParent(true);		//La tabla ocupa toda la pantalla.
 		botones.setFillParent(false);
 		imagenPj.setFillParent(false);
+		infoPj.setFillParent(false);
 		
-		txtInfo.setWrap(true);
-		nombrePj.setPosition(250, 150);
+		tabla.columnDefaults(0).width(Config.ANCHO / 3f).height(Config.ALTO);
+		tabla.columnDefaults(1).width(Config.ANCHO / 3f);
+		tabla.columnDefaults(2).width(Config.ANCHO / 3f).height(Config.ALTO);
 		
+		crearTablaInformacion();
+		crearTablaImagen();
+		crearTablaBotones();
 		
-		pj.setSize(500, 500);
-		pj.setPosition(100, 300);
-		
-		imagenPj.add(pj).size(400, 400);
-		imagenPj.row();
-		imagenPj.add(nombrePj);
-		
-		informacion.setPosition(1300, 300);
-		informacion.setSize(500, 700);
-		informacion.setMovable(false);
-		
-		crearBotones();
-		//stage.addActor(nombrePj);
-		stage.addActor(informacion);
-		//stage.addActor(pj);
-		
-		tabla.left();
 		tabla.add(imagenPj);
-		tabla.center();
-		tabla.add(botones).expandY().bottom().padBottom(20);
+		tabla.add(botones).bottom().padBottom(30);
+		tabla.add(infoPj);
 		
+		avisoSeleccion.setPosition(Config.ANCHO/2, Config.ALTO/1.2f,Align.center);
+		stage.addActor(avisoSeleccion);
 		stage.addActor(tabla);
 		
 	}
+	private void crearTablaImagen() {
+		imagenPj.add(pj).size(Config.ANCHO/4, Config.ALTO/3);
+		imagenPj.row();
+		imagenPj.add(nombrePj).padTop(20);
+	}
+
+
+	private void crearTablaInformacion() {
+		txtInfo.setWrap(true);
+		txtInfo.setAlignment(Align.top);
+		infoPj.add(informacion).size(Config.ANCHO/4,Config.ALTO/2);
+	}
+
+
 	public void render(float delta) {
 		Render.limpiarPantalla(0, 0, 0);
 		
@@ -118,7 +125,7 @@ public class PantallaSeleccion implements Screen{
 		
 	}
 	
-	private void crearBotones() {
+	private void crearTablaBotones() {
 		for (int i = 0; i < botonesPj.length; i++) {
 			
 			TextureRegionDrawable trd = new TextureRegionDrawable(new Texture(InfoPersonaje.values()[i].getRutaIcono()));

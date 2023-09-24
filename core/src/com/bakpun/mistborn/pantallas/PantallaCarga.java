@@ -22,7 +22,7 @@ public class PantallaCarga implements Screen {
 	
 	public void show() {
 		logo = new Imagen(Recursos.LOGO_MISTBORN);
-		logo.ajustarTamano(-0.5f);
+		logo.escalarSprite(-0.5f);
 		camZoom = new OrthographicCamera();
 		camZoom.position.set(new Vector2(logo.getTexture().getWidth()/2,logo.getTexture().getHeight()/2), 0);
 		vw = new FillViewport(Config.ANCHO,Config.ALTO,camZoom);

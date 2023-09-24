@@ -48,7 +48,7 @@ public abstract class Personaje {
 		f = new Fisica();
 		Audio.setSonidoPjCorriendo();
  		spr = new Imagen(rutaPj);
- 		spr.escalarImagen(12);
+ 		spr.setEscalaBox2D(12);
 		crearAnimaciones();
 		crearBody(mundo);
 	}

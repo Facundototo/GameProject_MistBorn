@@ -19,7 +19,7 @@ public class Plataforma {
 	
 	public Plataforma(boolean esChica,Vector2 posXY,World mundo) {
 		spr = new Imagen((esChica)?Recursos.PLATAFORMA_CHICA:Recursos.PLATAFORMA_GRANDE);	//Cargo el Sprite con la textura chica o grande,depende.
-		spr.escalarImagen(15);
+		spr.setEscalaBox2D(16);
 		
 		//Creo el body.
 		f = new Fisica();									

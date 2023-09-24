@@ -2,6 +2,7 @@ package com.bakpun.mistborn.elementos;
 
 import com.badlogic.gdx.graphics.Texture;
 
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.bakpun.mistborn.utiles.Render;
@@ -33,12 +34,16 @@ public class Imagen {
 		s.draw(Render.batch);	
 	}
 	
-	public void ajustarTamano(float tamano) {	//Tamano.
+	public void escalarSprite(float tamano) {	//Tamano.
 		s.scale(tamano);
 	}
 	
-	public void escalarImagen(float ppm) {			
-		s.setSize(s.getWidth()/ppm, s.getHeight()/ppm);		//Escala el Sprite en base a los ppm (pixels per meter).
+	public void setEscalaBox2D(float ppm) {
+		s.setSize(s.getWidth()/ppm, s.getHeight()/ppm);
+	}
+	
+	public void setTamano(float ancho,float alto) {			
+		s.setSize(ancho, alto);		//Escala el Sprite en base a los ppm (pixels per meter).
 	}
 	
 	public void setTransparencia(float alpha) {	//Opacidad.
