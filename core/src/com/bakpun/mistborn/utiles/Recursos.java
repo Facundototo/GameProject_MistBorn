@@ -6,10 +6,14 @@ public class Recursos {
 	
 	public static final String FONDO_MENU = "fondos/backgroundMenu.jpg";		
 	public static final String FONDO_PVP = "fondos/background.png";
+	public static final String FONDO_SELECCION = "fondos/backgroundSeleccion.png";
 	public static final String LOGO_MISTBORN = "fondos/logoMistBorn.png";
+
 
 	public static final String FUENTE_MENU = "fuentes/Enchanted Land.otf";
 	public static final String SONIDO_OPCION_MENU = "sonidos/cambiarOpcion.mp3";
+	public static final String SONIDO_SELECCION = "sonidos/cambiarSeleccion.wav";
+	public static final String SELECCION_ELEGIDA = "sonidos/seleccionElegida.wav";
 	public static final String CANCION_MENU = "sonidos/cancionMenu.mp3";
 	public static final String SONIDO_PJ_CORRIENDO = "sonidos/corriendo.mp3";
 
@@ -30,4 +34,6 @@ public class Recursos {
 	public static final String[] ANIMACIONES_ESTADOS_HAM = {"animaciones/animacionesQuietoHam.png","animaciones/animacionCorrerHam.png"};
 	public static final String[] SALTOS_HAM = {"animaciones/salto1Ham.png","animaciones/salto2Ham.png","animaciones/salto3Ham.png"};
 	public static final String CABEZA_HAM = "animaciones/cabezaHam.png";
+	
+	
 }

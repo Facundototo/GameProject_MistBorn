@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "agregando sonidos y fondo PantallaSeleccion" - Fecha 26/09
+
+- Creamos e implementamos un background en la PantallaSeleccion.
+- Añadimos SFX para cuando cambia de seleccion y toca ENTER.
+- Adjuntamos el archivo XCF del background.
+
 ### "ultimo commit antes de la entrega TP 2" - Fecha 24/09
 
 - Terminamos el diseño de los widgets de Scene2DUI, utilizando Skin Composer. (nos llegamos a hacer el fondo). (PantallaSeleccion).

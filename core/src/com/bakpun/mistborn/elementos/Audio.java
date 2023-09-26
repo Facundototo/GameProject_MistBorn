@@ -9,7 +9,7 @@ public class Audio {
 	//Clase para organizar todos los sonidos del videojuego, no se usa como instancia(me genera ciertos problemas).
 	//Esta todo static, me da bronca eso.
 	
-	public static Sound sonidoMenu,pjCorriendo;
+	public static Sound sonidoMenu,sonidoSeleccion,seleccionElegida,pjCorriendo;
 	public static Music cancionMenu;
 	public static float volumen = 1f;
 	
@@ -17,9 +17,16 @@ public class Audio {
 		volumen += num;
 		cancionMenu.setVolume(volumen);
 		sonidoMenu.setVolume(sonidoMenu.play(),volumen);
+		//sonidoSeleccion.setVolume(sonidoSeleccion.play(), volumen);
 		//pjCorriendo.setVolume(pjCorriendo.play(), volumen);  		//Lo dejo asi porque no estoy muy seguro de como hacerlo.
 	}
 	
+	public static void setSeleccionElegida() {
+		seleccionElegida = Gdx.audio.newSound(Gdx.files.internal(Recursos.SELECCION_ELEGIDA));
+	}
+	public static void setSonidoSeleccion() {
+		sonidoSeleccion = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_SELECCION));
+	}
 	public static void setCancionMenu() {
 		cancionMenu = Gdx.audio.newMusic(Gdx.files.internal(Recursos.CANCION_MENU));
 	}

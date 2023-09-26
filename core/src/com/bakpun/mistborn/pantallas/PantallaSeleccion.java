@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -27,6 +26,7 @@ import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.enums.InfoPersonaje;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.utiles.Config;
+import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
 public final class PantallaSeleccion implements Screen{
@@ -36,13 +36,14 @@ public final class PantallaSeleccion implements Screen{
 	private Stage stage;
 	private Table tabla,botones,imagenPj,infoPj;
 	private Skin skin;
-	private Image imgPj[] = new Image[cantMaxPersonajes];
+	private Image[] imgPj = new Image[cantMaxPersonajes];
+	private Image fondo;
 	private ImageButton botonesPj[] = new ImageButton[cantMaxPersonajes];
 	private Window informacion;
 	private Label txtInfo,nombrePj,avisoSeleccion;
 	private InfoPersonaje pjSeleccionado;
 	
-	private boolean derecha,izquierda;
+	private boolean derecha,izquierda,opcionElegida = false;
 	private float tiempo = 0;
 	
 	//Terminar esta PantallaSeleccion (no estan ordenados por prioridad):
@@ -52,8 +53,8 @@ public final class PantallaSeleccion implements Screen{
 	//  - Crear un Label que diga TOQUE ENTER PARA ACEPTAR ELECCION, se mande la PantallaPvP. HECHO
 	// 	- Poner la cabeza Ham en el boton, y cambiar tamb la Imagen. HECHO
 	//  - Cambiar el tamano de las letras y el estilo.	HECHO
+	//  - Hacer los disenos de esta pantalla (fondo,fondoPj,Window de la informacionPj). HECHO.
 	
-	//  - Hacer los disenos de esta pantalla (fondo,fondoPj,Window de la informacionPj).
 	//  - Reflection para la creacion de la instancia Personaje.
 	
 
@@ -70,9 +71,14 @@ public final class PantallaSeleccion implements Screen{
 		nombrePj = new Label("",Fuente.PIXELTEXTO.getStyle(skin));
 		avisoSeleccion = new Label(Render.bundle.get("seleccion.avisoenter"),Fuente.PIXELTEXTO.getStyle(skin));
 		informacion = new Window(Render.bundle.get("seleccion.txtinfo"),skin);
+		fondo = new Image(new Texture(Recursos.FONDO_SELECCION));
+		fondo.setSize(Config.ANCHO, Config.ALTO);
 		for (int i = 0; i < imgPj.length; i++) {
 			imgPj[i] = new Image(new Texture(InfoPersonaje.values()[i].getRutaTextura()));
 		}
+		
+		Audio.setSonidoSeleccion();
+		Audio.setSeleccionElegida();
 	}
 
 	public void show() {
@@ -100,19 +106,24 @@ public final class PantallaSeleccion implements Screen{
 		tabla.add(botones).bottom().padBottom(30);
 		tabla.add(infoPj);
 		
-		configAvisoSeleccion();
-		
+		stage.addActor(fondo);
 		stage.addActor(tabla);	//Anadir la contenedora al stage.
+		configAvisoSeleccion();
 	}
 
 	public void render(float delta) {
-		Render.limpiarPantalla((float) 101/255,(float) 90/255,(float) 105/255);
+		Render.limpiarPantalla((float) 24.3f/255,(float) 24.3f/255,(float) 24.3f/255);
 		
 		calcularTeclas(delta);		//Metodo para el uso del teclado (entradas).
 		marcarOpcionSeleccionada();	//Aplicar efectos para la opcion seleccionada.
 		
-		if(entradas.isEnter()) {
-			cambiarPantallaFadeOut();
+		if(!opcionElegida) {
+			if(entradas.isEnter()) {
+				opcionElegida = true;
+				Audio.seleccionElegida.play();
+				avisoSeleccion.setVisible(false);
+				cambiarPantallaFadeOut();
+			}
 		}
 		stage.act(delta);
 		stage.draw();
@@ -120,12 +131,13 @@ public final class PantallaSeleccion implements Screen{
 	}
 	
 	private void cambiarPantallaFadeOut() {
-		stage.addAction(Actions.sequence(Actions.fadeOut(2),Actions.run(new Runnable() {   
+		stage.addAction(Actions.sequence(Actions.fadeOut(1.5f),
+			Actions.run(new Runnable() {   
 			  @Override
 	            public void run() {					//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
 					Audio.cancionMenu.stop();
 	                Render.app.setScreen(new PantallaPvP());
-	            }})));
+	            }})));	
 	}
 
 	private void configAvisoSeleccion() {
@@ -140,12 +152,12 @@ public final class PantallaSeleccion implements Screen{
 	private void crearTablaInformacion() {
 		txtInfo.setWrap(true);
 		txtInfo.setAlignment(Align.top);
+		informacion.getTitleLabel().setAlignment(Align.center);
 		infoPj.add(informacion).size(Config.ANCHO/4,Config.ALTO/2);
 	}
 	
 	private void crearTablaBotones() {
 		for (int i = 0; i < botonesPj.length; i++) {
-			
 			TextureRegionDrawable trd = new TextureRegionDrawable(new Texture(InfoPersonaje.values()[i].getRutaIcono()));
 			ImageButtonStyle ibs = new ImageButtonStyle(skin.get(ButtonStyle.class));
 			ibs.imageUp = trd;
@@ -159,6 +171,7 @@ public final class PantallaSeleccion implements Screen{
 		         public void clicked(InputEvent event, float x, float y) {
 		             seleccion = opc;
 		             mostrarInformacion(seleccion);
+		             Audio.sonidoSeleccion.play();
 				 } 
 			});
 			botones.add(botonesPj[i]).pad(10);
@@ -187,11 +200,13 @@ public final class PantallaSeleccion implements Screen{
 		
 		if(derecha) {
 			if(tiempo >= 0.2f) {	
+				Audio.sonidoSeleccion.play();
 				seleccion = (seleccion == cantMaxPersonajes-1)?0:seleccion+1;
 				tiempo = 0;
 			}
 		}else if(izquierda) {
 			if(tiempo >= 0.2f) {
+				Audio.sonidoSeleccion.play();
 				seleccion = (seleccion == 0)?cantMaxPersonajes-1:seleccion-1;
 				tiempo = 0;
 			}
@@ -235,7 +250,7 @@ public final class PantallaSeleccion implements Screen{
 	
 	public void dispose() {
 		stage.dispose();
-		
+		Audio.sonidoSeleccion.dispose();
 	}
 
 	
