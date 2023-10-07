@@ -1,8 +1,8 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +14,7 @@ import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
 import com.bakpun.mistborn.elementos.Audio;
+import com.bakpun.mistborn.elementos.Disparo;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.io.Entradas;
@@ -29,6 +30,7 @@ public abstract class Personaje {
 	private Vector2 movimiento;
 	private Fisica f;
 	private Colision c;
+	private Disparo disparo;
 	private TextureRegion saltos[] = new TextureRegion[3];
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
@@ -38,7 +40,7 @@ public abstract class Personaje {
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
 	
 	
-	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,boolean ladoDerecho) {
+	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho) {
 		this.animacionSaltos = animacionSaltos;
 		this.animacionEstados = animacionEstados;
 		this.ladoDerecho = ladoDerecho;
@@ -46,6 +48,7 @@ public abstract class Personaje {
 		this.entradas = entradas;
 		movimiento = new Vector2();
 		f = new Fisica();
+		disparo = new Disparo(mundo,this,cam);
 		Audio.setSonidoPjCorriendo();
  		spr = new Imagen(rutaPj);
  		spr.setEscalaBox2D(12);
@@ -63,7 +66,7 @@ public abstract class Personaje {
 		pj.setFixedRotation(true);		//Para que el body no rote por culpa de las fuerzas.
 	}
 
-	private void update() {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
+	private void updateAnimacion() {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
 		delta = Gdx.graphics.getDeltaTime();
 		
 		animacionQuieto.update(delta);
@@ -71,8 +74,18 @@ public abstract class Personaje {
 	}
 	
 	public void draw() {
+		/* Cosas que hay que hacer como principal para el disparo:
+
+		 * Hacer un ArrayList de las monedas del jugador, esto informarle al HUD mediante un evento.
+		 * Hacer lo que vendria a ser el disparo, creando un body nuevo por cada moneda que se lanza y ver como se dirige en base al apuntado del mouse. 
+		 * Crear clase Moneda que este compuesta por su body y su textura.
+		 * Crear clase Disparo que haga todo el manejo del disparo. (relacionado con el punto 2).
+		 * Hacer el sonido de la moneda cuando se dispara.
+		 * Saber como hacer el impacto de la moneda contra el otro jugador.
+		 * Reducir la vida del jugador afectado mediante un evento porque tambien se le informa al HUD  
+		 */
 		
-		update();
+		updateAnimacion();
 		
 		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.
 		
@@ -95,6 +108,7 @@ public abstract class Personaje {
 		
 		animar();
 		reproducirSFX();
+		
 	}
 	
 	//Metodo que administra los sonidos de los pj, salto,golpe,disparo,etc.
@@ -134,6 +148,10 @@ public abstract class Personaje {
 		}
 	}
 
+	public void drawLineaDisparo() {
+		this.disparo.drawLinea();
+	}
+	
 	public void dispose() {
 		spr.getTexture().dispose();
 	}
@@ -166,11 +184,18 @@ public abstract class Personaje {
 		if(estaQuieto) {	//Esto para que no se quede deslizando.
 			movimiento.x = 0;
 		}
+		
+	
+		
 	}
 	public float getX() {
-		return this.movimiento.x;
+		return this.pj.getPosition().x;
 	}
 	public float getY() {
-		return this.movimiento.y;
+		return this.pj.getPosition().y;
+	}
+	
+	public Entradas getInput() {
+		return this.entradas;
 	}
 }

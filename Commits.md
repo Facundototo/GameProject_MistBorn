@@ -9,6 +9,11 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "pensando mecanica del pvp" - Fecha 7/10
+
+- Adjuntamos un PNG que muestra el objetivo final a llegar con el tema del PvP.
+- Creamos una clase Disparo para ir probando como disparar las monedas, aunque no estamos muy seguros todavia de como introducirnos en este tema. 
+
 ### "agregando sonidos y fondo PantallaSeleccion" - Fecha 26/09
 
 - Creamos e implementamos un background en la PantallaSeleccion.

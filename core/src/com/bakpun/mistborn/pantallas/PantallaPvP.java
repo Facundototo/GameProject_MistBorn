@@ -1,6 +1,8 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
+
+
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -44,8 +46,7 @@ public final class PantallaPvP implements Screen{
 	private InputMultiplexer im;
 	private Hud hud;
 	private Colision colisionMundo;		//Colision global, la unica en todo el juego.
-
-	
+		
 	//Para que quede bien, me faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
 	
 	public void show() {
@@ -59,8 +60,8 @@ public final class PantallaPvP implements Screen{
 		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
-		pj1 = new Vin(mundo,entradasPj1,colisionMundo,false);
-		pj2 = new Ham(mundo,entradasPj2,colisionMundo,true);
+		pj1 = new Vin(mundo,entradasPj1,colisionMundo,cam,false);
+		pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
 		
 		crearPlataformas();
 		crearLimites();
@@ -79,7 +80,10 @@ public final class PantallaPvP implements Screen{
 		for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
 		}
+		
 		Render.batch.end();
+			
+		pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
 		
 		hud.draw(delta);	//Dibujo el hud.
 		
@@ -161,8 +165,6 @@ public final class PantallaPvP implements Screen{
 			f.setFixture(f.getChain(), 100, 1f, 0);
 			f.createBody(mundo);
 			f.getChain().dispose();
-		}
-		
+		}	
 	}
-	
 }
