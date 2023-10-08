@@ -109,6 +109,10 @@ public abstract class Personaje {
 		animar();
 		reproducirSFX();
 		
+		if(Gdx.input.justTouched()) {
+			disparo.disparar();
+		}
+		
 	}
 	
 	//Metodo que administra los sonidos de los pj, salto,golpe,disparo,etc.

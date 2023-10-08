@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "haciendo Disparo y creando clases" - Fecha 8/10
+
+- Codeamos un poco como funciona los disparos.
+- Creamos las clases de los 3 poderes del videojuego, aunque todavia no lo empezamos.
+- Adjuntamos la carpeta del Skin Composer.
+
 ### "pensando mecanica del pvp" - Fecha 7/10
 
 - Adjuntamos un PNG que muestra el objetivo final a llegar con el tema del PvP.
