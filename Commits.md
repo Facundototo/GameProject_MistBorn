@@ -9,6 +9,10 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "implementando barra de acero y hierro" - Fecha 9/10
+
+- Diseñamos las dos barras de metales, como era la de la vida.
+
 ### "haciendo Disparo y creando clases" - Fecha 8/10
 
 - Codeamos un poco como funciona los disparos.
