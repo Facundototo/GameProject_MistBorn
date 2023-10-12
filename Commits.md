@@ -9,6 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "poderes en Hud,evento" - Fecha 12/10
+
+- Creamos la clase Listeners para el manejo de eventos.
+- Creamos la interfaz EventoCrearBarra, utilizada en Listeners para decirle al Hud que cree cierta barra de poder en base al personaje elegido.
+- Implementamos las barras de los poderes en Recursos y en las clases de Poder.
+- Modificando Disparo para resolver problema (todavia no resuelto).
+
 ### "implementando barra de acero y hierro" - Fecha 9/10
 
 - Diseñamos las dos barras de metales, como era la de la vida.

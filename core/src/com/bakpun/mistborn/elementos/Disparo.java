@@ -41,7 +41,7 @@ public class Disparo {
 	
 	public void disparar() {
 		direccion.set(pj.getInput().getMouseX()/Box2dConfig.PPM - pj.getX(), pj.getInput().getMouseY()/Box2dConfig.PPM - pj.getY());
-		f.setBody(BodyType.DynamicBody,new Vector2((pj.getInput().getMouseX()/Box2dConfig.PPM > 0)?pj.getX()+0.5f:pj.getX()-6,pj.getY()));
+		f.setBody(BodyType.DynamicBody,new Vector2((pj.getInput().getMouseX()/Box2dConfig.PPM < 0)?pj.getX()+0.5f:pj.getX()-6,pj.getY()));
 		f.createPolygon(6/Box2dConfig.PPM, 4/Box2dConfig.PPM);	
 		f.setFixture(f.getPolygon(), 5, 0, 0);
 		moneda = mundo.createBody(f.getBody());		//No anda disparar para la izq.

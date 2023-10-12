@@ -19,6 +19,8 @@ public class Recursos {
 
 	public static final String SKIN = "skin/uiskin.json";
 	public static final String MARCO_VIDA = "hud/corazonMarco.png";
+	public static final String MARCO_ACERO = "hud/acero.png";
+	public static final String MARCO_HIERRO = "hud/hierro.png";
 	
 	public static final String PLATAFORMA_GRANDE = "animaciones/plataGrande.png";
 	public static final String PLATAFORMA_CHICA = "animaciones/plataChica.png";

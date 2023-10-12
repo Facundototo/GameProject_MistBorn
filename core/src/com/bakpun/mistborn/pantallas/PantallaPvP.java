@@ -1,8 +1,6 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
-
-
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,10 +14,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.box2d.Fisica;
-import com.bakpun.mistborn.elementos.Hud;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.elementos.Plataforma;
 import com.bakpun.mistborn.enums.UserData;
+import com.bakpun.mistborn.hud.Hud;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.personajes.Ham;
 import com.bakpun.mistborn.personajes.Personaje;
@@ -30,36 +28,39 @@ import com.bakpun.mistborn.utiles.Render;
 
 public final class PantallaPvP implements Screen{
 
+	private OrthographicCamera cam = new OrthographicCamera(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
+	private World mundo = new World(new Vector2(0,-30f),true);
+	private Entradas entradasPj1 = new Entradas(),entradasPj2 = new Entradas();
+	private Colision colisionMundo = new Colision();		//Colision global, la unica en todo el juego.
 	private Imagen fondo;
 	private Personaje pj1,pj2;
-	private OrthographicCamera cam;
 	private Viewport vw;
-	private World mundo;
 	private Box2DDebugRenderer db;
 	private Fisica f;
 	private Body piso;
-	private Entradas entradasPj1,entradasPj2;
 	private Plataforma plataformas[] = new Plataforma[7];
 	private Vector2[] posicionPlataformas = {new Vector2(400/Box2dConfig.PPM,325/Box2dConfig.PPM),new Vector2(1400/Box2dConfig.PPM,325/Box2dConfig.PPM)
 			,new Vector2(1400/Box2dConfig.PPM,650/Box2dConfig.PPM),new Vector2(500/Box2dConfig.PPM,750/Box2dConfig.PPM),new Vector2(750/Box2dConfig.PPM,500/Box2dConfig.PPM),
 			new Vector2(1750/Box2dConfig.PPM,500/Box2dConfig.PPM),new Vector2(1000/Box2dConfig.PPM,600/Box2dConfig.PPM)};
 	private InputMultiplexer im;
 	private Hud hud;
-	private Colision colisionMundo;		//Colision global, la unica en todo el juego.
-		
+
 	//Para que quede bien, me faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
+	//Terminar el reflection.
+	
+	public PantallaPvP(String clasePj) {
+		//pj1 = crearPersonaje(clasePj);
+	}
 	
 	public void show() {
-		mundo = new World(new Vector2(0,-30f),true);
 		creandoInputs();
-		hud = new Hud();
 		f = new Fisica();
 		fondo = new Imagen(Recursos.FONDO_PVP);
 		fondo.setTamano(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
-		cam = new OrthographicCamera(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
 		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
+		hud = new Hud();
 		pj1 = new Vin(mundo,entradasPj1,colisionMundo,cam,false);
 		pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
 		
@@ -124,13 +125,9 @@ public final class PantallaPvP implements Screen{
 	}
 	
 	private void creandoInputs() {
-		colisionMundo = new Colision();
-		entradasPj1 = new Entradas();		//Creo 2 entradas, porque sino se superponen.
-        entradasPj2 = new Entradas();
 		im = new InputMultiplexer();
-		
 		im.addProcessor(entradasPj1);		//Multiplexor porque hay mas de un input.
-		im.addProcessor(entradasPj2);
+		im.addProcessor(entradasPj2);		//Creo 2 entradas, porque sino se superponen.
 		
 		Gdx.input.setInputProcessor(im);		//Seteo entradas.
 		mundo.setContactListener(colisionMundo); 
@@ -167,4 +164,17 @@ public final class PantallaPvP implements Screen{
 			f.getChain().dispose();
 		}	
 	}
+
+	/*private Personaje crearPersonaje(String clasePj) {
+	    Personaje pj = null;
+	    Class clase = Class.forName("com.bakpun.mistborn.personajes." + clasePj);		//No andan las excepciones.
+	    Constructor constructor = clase.getConstructor(String.class);
+	    pj = (Personaje) constructor.newInstance(mundo,entradasPj1,colisionMundo,cam,false);
+	    return pj;
+		
+	}*/
+	
+	
+	
+	
 }

@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -45,19 +46,10 @@ public final class PantallaSeleccion implements Screen{
 	
 	private boolean derecha,izquierda,opcionElegida = false;
 	private float tiempo = 0;
-	
-	//Terminar esta PantallaSeleccion (no estan ordenados por prioridad):
-	//  - Hacer el enum para mostrar la informacion, aca tendria que ver lo de la traduccion. HECHO
-	// - Tambien tendriamos que informarnos mas sobre el Table, porque no lo estamos utilizando del todo. HECHO
-	//  - Hacer que los botones pasen a ser ImageButton. HECHO  
-	//  - Crear un Label que diga TOQUE ENTER PARA ACEPTAR ELECCION, se mande la PantallaPvP. HECHO
-	// 	- Poner la cabeza Ham en el boton, y cambiar tamb la Imagen. HECHO
-	//  - Cambiar el tamano de las letras y el estilo.	HECHO
-	//  - Hacer los disenos de esta pantalla (fondo,fondoPj,Window de la informacionPj). HECHO.
+
 	
 	//  - Reflection para la creacion de la instancia Personaje.
 	
-
 	public PantallaSeleccion() {
 		skin = SkinFreeTypeLoader.cargar();		//Cargo el codigo que hay que copiar para usar FreeTypeFont en Scene2DUI.
 		stage = new Stage(new FillViewport(Config.ANCHO,Config.ALTO));
@@ -136,7 +128,7 @@ public final class PantallaSeleccion implements Screen{
 			  @Override
 	            public void run() {					//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
 					Audio.cancionMenu.stop();
-	                Render.app.setScreen(new PantallaPvP());
+	                Render.app.setScreen(new PantallaPvP(InfoPersonaje.values()[seleccion].getNombre()));
 	            }})));	
 	}
 
