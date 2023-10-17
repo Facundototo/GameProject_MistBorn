@@ -36,7 +36,7 @@ public abstract class Personaje {
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
 	
-	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
+	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,estaDisparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
 	private boolean reproducirSonidoCorrer;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
 	
@@ -110,9 +110,12 @@ public abstract class Personaje {
 		animar();
 		reproducirSFX();
 		
-		if(Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
+		if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isButtonPressed(Buttons.RIGHT) && !estaDisparando) {
 			disparo.disparar();
-			disparo.calcularFuerzas();	//Me quede aca, nose como hacer el apuntado y disparo.
+			disparo.calcularFuerzas();
+			estaDisparando = true;		//Hay que ver como hacer el disparo, porque el pj tiene que tocar una vez y desp mantener para usar la gracia del poder.
+		}else {						
+			estaDisparando = false;
 		}
 		
 	}
@@ -157,7 +160,6 @@ public abstract class Personaje {
 	public void drawLineaDisparo() {
 		this.disparo.drawLinea();
 	}
-	
 	public void dispose() {
 		spr.getTexture().dispose();
 	}
@@ -190,9 +192,6 @@ public abstract class Personaje {
 		if(estaQuieto) {	//Esto para que no se quede deslizando.
 			movimiento.x = 0;
 		}
-		
-	
-		
 	}
 	public float getX() {
 		return this.pj.getPosition().x;

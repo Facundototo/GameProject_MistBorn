@@ -31,7 +31,11 @@ import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
 public final class PantallaSeleccion implements Screen{
+	
 	private int seleccion = 0,cantMaxPersonajes = 4;
+	private boolean derecha,izquierda,opcionElegida = false;
+	private float tiempo = 0;
+	
 	private InputMultiplexer im;
 	private Entradas entradas;
 	private Stage stage;
@@ -43,13 +47,7 @@ public final class PantallaSeleccion implements Screen{
 	private Window informacion;
 	private Label txtInfo,nombrePj,avisoSeleccion;
 	private InfoPersonaje pjSeleccionado;
-	
-	private boolean derecha,izquierda,opcionElegida = false;
-	private float tiempo = 0;
 
-	
-	//  - Reflection para la creacion de la instancia Personaje.
-	
 	public PantallaSeleccion() {
 		skin = SkinFreeTypeLoader.cargar();		//Cargo el codigo que hay que copiar para usar FreeTypeFont en Scene2DUI.
 		stage = new Stage(new FillViewport(Config.ANCHO,Config.ALTO));

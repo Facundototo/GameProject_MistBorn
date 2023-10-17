@@ -1,10 +1,14 @@
 package com.bakpun.mistborn.pantallas;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -22,7 +26,6 @@ import com.bakpun.mistborn.hud.Hud;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.personajes.Ham;
 import com.bakpun.mistborn.personajes.Personaje;
-import com.bakpun.mistborn.personajes.Vin;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
@@ -45,12 +48,12 @@ public final class PantallaPvP implements Screen{
 			new Vector2(1750/Box2dConfig.PPM,500/Box2dConfig.PPM),new Vector2(1000/Box2dConfig.PPM,600/Box2dConfig.PPM)};
 	private InputMultiplexer im;
 	private Hud hud;
+	private String nombrePj;
 
 	//Para que quede bien, me faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
-	//Terminar el reflection.
 	
 	public PantallaPvP(String clasePj) {
-		//pj1 = crearPersonaje(clasePj);
+		nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
 	}
 	
 	public void show() {
@@ -62,7 +65,7 @@ public final class PantallaPvP implements Screen{
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
 		hud = new Hud();
-		pj1 = new Vin(mundo,entradasPj1,colisionMundo,cam,false);
+		pj1 = crearPersonaje(this.nombrePj);
 		pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
 		
 		crearPlataformas();
@@ -82,13 +85,11 @@ public final class PantallaPvP implements Screen{
 		for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
 		}
-		
 		Render.batch.end();
 			
 		if(Gdx.input.isButtonPressed(Buttons.RIGHT)) {
 			pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
 		}
-		
 		
 		hud.draw(delta);	//Dibujo el hud.
 		
@@ -98,7 +99,7 @@ public final class PantallaPvP implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		vw.update(width, height);
+		vw.update(width, height,true);
 		hud.getStage().getViewport().update(width, height, true);
 	}
 
@@ -169,14 +170,19 @@ public final class PantallaPvP implements Screen{
 		}	
 	}
 
-	/*private Personaje crearPersonaje(String clasePj) {
-	    Personaje pj = null;
-	    Class clase = Class.forName("com.bakpun.mistborn.personajes." + clasePj);		//No andan las excepciones.
-	    Constructor constructor = clase.getConstructor(String.class);
-	    pj = (Personaje) constructor.newInstance(mundo,entradasPj1,colisionMundo,cam,false);
+	private Personaje crearPersonaje(String clasePj) {	//Metodo para la creacion del pj, utilizando Reflection.
+		Personaje pj = null;
+	    try {
+	    	//<?> no sabemos que significa pero si lo sacamos nos sale el mark amarillo.
+	        Class<?> clase = Class.forName("com.bakpun.mistborn.personajes." + clasePj);
+	        //boolean.class lo ponemos porque el booleano no tiene .getClass(), es lo mismo.
+	        Constructor<?> constructor = clase.getConstructor(mundo.getClass(), entradasPj1.getClass(), colisionMundo.getClass(), cam.getClass(), boolean.class);
+	        pj = (Personaje) constructor.newInstance(mundo, entradasPj1, colisionMundo, cam, false);
+	    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+	        e.printStackTrace();
+	    }
 	    return pj;
-		
-	}*/
+	}
 	
 	
 	

@@ -9,6 +9,11 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "terminamos reflection y siguiendo disparo" - Fecha 18/10
+
+- Ahora cuando seleccionamos el pj en la PantallaSeleccion se nos creara en la PantallaPvP a traves de Reflection
+- Estamos viendo como hacer la clase Disparo.
+
 ### "solucionando direccion del disparo" - Fecha 18/10
 
 - En la clase Disparo solucionamos la direccion del disparo respecto al cursor.
