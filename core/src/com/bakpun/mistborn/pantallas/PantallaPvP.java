@@ -3,6 +3,7 @@ package com.bakpun.mistborn.pantallas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -84,7 +85,10 @@ public final class PantallaPvP implements Screen{
 		
 		Render.batch.end();
 			
-		pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
+		if(Gdx.input.isButtonPressed(Buttons.RIGHT)) {
+			pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
+		}
+		
 		
 		hud.draw(delta);	//Dibujo el hud.
 		

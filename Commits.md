@@ -9,6 +9,15 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "solucionando direccion del disparo" - Fecha 18/10
+
+- En la clase Disparo solucionamos la direccion del disparo respecto al cursor.
+
+### "implementando barra de peltre"  - Fecha 17/10
+
+- Diseñamos el marco del poder peltre.
+- Cargado en Archivos XCF y assets/Hud
+
 ### "poderes en Hud,evento" - Fecha 12/10
 
 - Creamos la clase Listeners para el manejo de eventos.

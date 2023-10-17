@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -109,8 +110,9 @@ public abstract class Personaje {
 		animar();
 		reproducirSFX();
 		
-		if(Gdx.input.justTouched()) {
+		if(Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
 			disparo.disparar();
+			disparo.calcularFuerzas();	//Me quede aca, nose como hacer el apuntado y disparo.
 		}
 		
 	}

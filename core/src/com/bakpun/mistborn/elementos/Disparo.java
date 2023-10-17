@@ -12,7 +12,7 @@ import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.personajes.Personaje;
 
-public class Disparo {
+public final class Disparo {
 
 	private World mundo;
 	private OrthographicCamera cam;
@@ -20,7 +20,8 @@ public class Disparo {
 	private Personaje pj;
 	private Fisica f;
 	private Body moneda;
-	private Vector2 direccion;
+	private Vector2 direccion,posIniBala;
+	private final float _amplitud = 1.5f;
 	
 	public Disparo(World mundo,Personaje pj,OrthographicCamera cam) {
 		this.mundo = mundo;
@@ -29,6 +30,7 @@ public class Disparo {
 		linea = new ShapeRenderer();
 		f = new Fisica();
 		direccion = new Vector2();
+		posIniBala = new Vector2();
 	}
 	
 	public void drawLinea() {
@@ -40,14 +42,23 @@ public class Disparo {
 	}
 	
 	public void disparar() {
-		direccion.set(pj.getInput().getMouseX()/Box2dConfig.PPM - pj.getX(), pj.getInput().getMouseY()/Box2dConfig.PPM - pj.getY());
-		f.setBody(BodyType.DynamicBody,new Vector2((pj.getInput().getMouseX()/Box2dConfig.PPM < 0)?pj.getX()+0.5f:pj.getX()-6,pj.getY()));
+		direccion.set(pj.getInput().getMouseX()/Box2dConfig.PPM - pj.getX(), pj.getInput().getMouseY()/Box2dConfig.PPM - pj.getY()); //Calcula solo la direccion no la distancia. con el .nor()
+		direccion.nor(); // direccion se normaliza para asegurarse de que tenga una longitud de 1, lo que significa que indica solo la dirección sin importar la distancia.
+		
+	    posIniBala.set(pj.getX() + _amplitud * direccion.x, pj.getY() + _amplitud * direccion.y);	//Agarra la pos del pj y la suma con la direccion(normalizada es igual a 1) por la amplitud(radio).
+		
+		f.setBody(BodyType.DynamicBody,posIniBala);
 		f.createPolygon(6/Box2dConfig.PPM, 4/Box2dConfig.PPM);	
 		f.setFixture(f.getPolygon(), 5, 0, 0);
-		moneda = mundo.createBody(f.getBody());		//No anda disparar para la izq.
+		
+		moneda = mundo.createBody(f.getBody());	
 		moneda.createFixture(f.getFixture());
-		moneda.setBullet(true);
-		moneda.setLinearVelocity(direccion.scl(3.0f));
+		moneda.setBullet(true);		//Identifico al body como bullet(bala),esto porque Box2D hace chequeos mas rigurosos con los bodies que tienen mucha velocidad.
+		//moneda.setLinearVelocity(direccion.scl(50.0f));	//Escalo la direccion y lo utilizo como velocidad.
+	}
+	
+	public void calcularFuerzas() {
+		moneda.setLinearVelocity(direccion.scl(50.0f));
 	}
 	
 	
