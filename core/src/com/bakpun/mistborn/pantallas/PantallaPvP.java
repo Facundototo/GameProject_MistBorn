@@ -1,14 +1,13 @@
 package com.bakpun.mistborn.pantallas;
 
 import java.lang.reflect.Constructor;
+
 import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -32,10 +31,10 @@ import com.bakpun.mistborn.utiles.Render;
 
 public final class PantallaPvP implements Screen{
 
-	private OrthographicCamera cam = new OrthographicCamera(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
-	private World mundo = new World(new Vector2(0,-30f),true);
-	private Entradas entradasPj1 = new Entradas(),entradasPj2 = new Entradas();
-	private Colision colisionMundo = new Colision();		//Colision global, la unica en todo el juego.
+	private OrthographicCamera cam;
+	private World mundo;
+	private Entradas entradasPj1,entradasPj2;
+	private Colision colisionMundo;		
 	private Imagen fondo;
 	private Personaje pj1,pj2;
 	private Viewport vw;
@@ -57,6 +56,9 @@ public final class PantallaPvP implements Screen{
 	}
 	
 	public void show() {
+		colisionMundo = new Colision(); 	//Colision global, la unica en todo el juego.
+		cam = new OrthographicCamera(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
+		mundo = new World(new Vector2(0,-30f),true);
 		creandoInputs();
 		f = new Fisica();
 		fondo = new Imagen(Recursos.FONDO_PVP);
@@ -86,10 +88,8 @@ public final class PantallaPvP implements Screen{
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
 		}
 		Render.batch.end();
-			
-		if(Gdx.input.isButtonPressed(Buttons.RIGHT)) {
-			pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
-		}
+	
+		pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
 		
 		hud.draw(delta);	//Dibujo el hud.
 		
@@ -130,6 +130,8 @@ public final class PantallaPvP implements Screen{
 	}
 	
 	private void creandoInputs() {
+		entradasPj1 = new Entradas();
+		entradasPj2 = new Entradas();
 		im = new InputMultiplexer();
 		im.addProcessor(entradasPj1);		//Multiplexor porque hay mas de un input.
 		im.addProcessor(entradasPj2);		//Creo 2 entradas, porque sino se superponen.

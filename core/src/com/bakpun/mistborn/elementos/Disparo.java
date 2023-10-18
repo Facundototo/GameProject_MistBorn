@@ -49,7 +49,7 @@ public final class Disparo {
 		
 		f.setBody(BodyType.DynamicBody,posIniBala);
 		f.createPolygon(6/Box2dConfig.PPM, 4/Box2dConfig.PPM);	
-		f.setFixture(f.getPolygon(), 5, 0, 0);
+		f.setFixture(f.getPolygon(), 5, 1, 0);
 		
 		moneda = mundo.createBody(f.getBody());	
 		moneda.createFixture(f.getFixture());
@@ -57,8 +57,16 @@ public final class Disparo {
 		//moneda.setLinearVelocity(direccion.scl(50.0f));	//Escalo la direccion y lo utilizo como velocidad.
 	}
 	
-	public void calcularFuerzas() {
-		moneda.setLinearVelocity(direccion.scl(50.0f));
+	public boolean calcularFuerzas() {
+		
+		moneda.setLinearVelocity(direccion.scl(10f));
+		//System.out.println("X = "+ moneda.getLinearVelocity().x + "Y = " + moneda.getLinearVelocity().y);
+		//La velocidad se duplica por cada fotograma del render(), no queremos que pase eso, tengo que solucionarlo.
+		if(!moneda.isAwake()) {
+			return false;
+		}else {
+			return true;
+		}
 	}
 	
 	

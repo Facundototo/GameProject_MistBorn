@@ -39,7 +39,7 @@ public final class PantallaCarga implements Screen {
 		Render.batch.begin();
 		logo.draw();
 		Render.batch.end();
-		if(termina || entradas.isEspacio() || entradas.isMouseClick()) {
+		if(termina || entradas.isEspacio() || entradas.isBotonIzq()) {
 			Render.app.setScreen(new PantallaMenu());
 		}
 	}

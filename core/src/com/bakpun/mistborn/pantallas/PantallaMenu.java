@@ -102,14 +102,14 @@ public final class PantallaMenu implements Screen {
 
 	
 	private void accionesMenu() {	//Funciones del menu.
-		if(entradas.isEnter() || entradas.isMouseClick()) { 
-			if((seleccion==1 && entradas.isEnter()) || (seleccion == 1 && (entradas.isMouseClick() && estaSobreOpcion))) {
+		if(entradas.isEnter() || entradas.isBotonIzq()) { 
+			if((seleccion==1 && entradas.isEnter()) || (seleccion == 1 && (entradas.isBotonIzq() && estaSobreOpcion))) {
 				Audio.sonidoMenu.play(Audio.volumen);	//Pauso la cancion del menu.		
 				Render.app.setScreen(new PantallaSeleccion());
-			}else if((seleccion == 2 && entradas.isEnter()) || (seleccion == 2 && (entradas.isMouseClick() && estaSobreOpcion))){
+			}else if((seleccion == 2 && entradas.isEnter()) || (seleccion == 2 && (entradas.isBotonIzq() && estaSobreOpcion))){
 				mostrarMenuOpcion = true;
 				Audio.sonidoMenu.play(Audio.volumen);
-			}else if((seleccion == 3 && entradas.isEnter()) || (seleccion == 3 && (entradas.isMouseClick() && estaSobreOpcion))) {
+			}else if((seleccion == 3 && entradas.isEnter()) || (seleccion == 3 && (entradas.isBotonIzq() && estaSobreOpcion))) {
 				Gdx.app.exit();
 			}
 		}

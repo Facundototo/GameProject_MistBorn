@@ -48,6 +48,8 @@ public final class PantallaSeleccion implements Screen{
 	private Label txtInfo,nombrePj,avisoSeleccion;
 	private InfoPersonaje pjSeleccionado;
 
+	//Falta boton ESCAPE para ir hacia atras.
+	
 	public PantallaSeleccion() {
 		skin = SkinFreeTypeLoader.cargar();		//Cargo el codigo que hay que copiar para usar FreeTypeFont en Scene2DUI.
 		stage = new Stage(new FillViewport(Config.ANCHO,Config.ALTO));

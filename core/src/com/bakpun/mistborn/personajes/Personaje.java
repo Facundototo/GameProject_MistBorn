@@ -1,7 +1,7 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,8 +36,8 @@ public abstract class Personaje {
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
 	
-	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,estaDisparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
-	private boolean reproducirSonidoCorrer;
+	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
+	private boolean reproducirSonidoCorrer,balaDisparada;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
 	
 	
@@ -88,18 +88,7 @@ public abstract class Personaje {
 		
 		updateAnimacion();
 		
-		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.
-		
-		correrDerecha = ((!ladoDerecho)?entradas.isIrDerD():entradas.isIrDerRight());
-		correrIzquierda = ((!ladoDerecho)?entradas.isIrIzqA():entradas.isIrIzqLeft());
-		saltar = (((!ladoDerecho)?Gdx.input.isKeyJustPressed(Keys.SPACE):Gdx.input.isKeyJustPressed(Keys.UP)) && this.c.isPuedeSaltar(pj));
-		puedeMoverse = (correrDerecha != correrIzquierda);	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
-		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse && this.c.isPuedeSaltar(pj));
-		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse && this.c.isPuedeSaltar(pj));
-		primerSalto = (movimiento.y > IMPULSO_Y - 8 && movimiento.y <= IMPULSO_Y);
-		segundoSalto = (movimiento.y > 0 && movimiento.y <= IMPULSO_Y - 8);
-		caidaSalto = (movimiento.y < 0);
-		
+		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
 		calcularSalto();	//Calcula el salto con la gravedad.
 		calcularMovimiento();	//Calcula el movimiento.
 		
@@ -110,16 +99,32 @@ public abstract class Personaje {
 		animar();
 		reproducirSFX();
 		
-		if(Gdx.input.isButtonPressed(Buttons.LEFT) && Gdx.input.isButtonPressed(Buttons.RIGHT) && !estaDisparando) {
+		if(disparando && !balaDisparada) {
+			balaDisparada = true;
 			disparo.disparar();
-			disparo.calcularFuerzas();
-			estaDisparando = true;		//Hay que ver como hacer el disparo, porque el pj tiene que tocar una vez y desp mantener para usar la gracia del poder.
-		}else {						
-			estaDisparando = false;
 		}
 		
+		if(disparando && balaDisparada) {
+			balaDisparada = disparo.calcularFuerzas();
+		}
+		
+		
 	}
-	
+	private void calcularAcciones() {
+		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.	
+		correrDerecha = ((!ladoDerecho)?entradas.isIrDerD():entradas.isIrDerRight());
+		correrIzquierda = ((!ladoDerecho)?entradas.isIrIzqA():entradas.isIrIzqLeft());
+		saltar = (((!ladoDerecho)?Gdx.input.isKeyJustPressed(Keys.SPACE):Gdx.input.isKeyJustPressed(Keys.UP)) && this.c.isPuedeSaltar(pj));
+		puedeMoverse = (correrDerecha != correrIzquierda);	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
+		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse && this.c.isPuedeSaltar(pj));
+		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse && this.c.isPuedeSaltar(pj));
+		primerSalto = (movimiento.y > IMPULSO_Y - 8 && movimiento.y <= IMPULSO_Y);
+		segundoSalto = (movimiento.y > 0 && movimiento.y <= IMPULSO_Y - 8);
+		caidaSalto = (movimiento.y < 0);
+		apuntando =	(entradas.isBotonDer()); 	//este booleano se utiliza en el metodo drawLineaDisparo().
+		disparando = (entradas.isBotonIzq() && apuntando);	
+	}
+
 	//Metodo que administra los sonidos de los pj, salto,golpe,disparo,etc.
 	private void reproducirSFX() {
 		if(estaCorriendo) {
@@ -158,7 +163,9 @@ public abstract class Personaje {
 	}
 
 	public void drawLineaDisparo() {
-		this.disparo.drawLinea();
+		if(apuntando) {
+			this.disparo.drawLinea();
+		}	
 	}
 	public void dispose() {
 		spr.getTexture().dispose();

@@ -101,23 +101,23 @@ public final class VentanaOpciones {
 	}
 	
 	private void accionesMenuOpciones() {	//Funciones de la ventana opciones.
-		if(entradas.isEnter() || entradas.isMouseClick()) { 
-			if((selecOpciones==1 && entradas.isEnter()) || (selecOpciones == 1 && (entradas.isMouseClick() && estaSobreOpcion))) {
+		if(entradas.isEnter() || entradas.isBotonIzq()) { 
+			if((selecOpciones==1 && entradas.isEnter()) || (selecOpciones == 1 && (entradas.isBotonIzq() && estaSobreOpcion))) {
 				if(!Config.isFullScreen()) {
 					Audio.sonidoMenu.play(Audio.volumen);
 					Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 				}
-			}else if((selecOpciones == 2 && entradas.isEnter()) || (selecOpciones == 2 && (entradas.isMouseClick() && estaSobreOpcion))){
+			}else if((selecOpciones == 2 && entradas.isEnter()) || (selecOpciones == 2 && (entradas.isBotonIzq() && estaSobreOpcion))){
 				if(!Config.isWindowed()) {
 					Audio.sonidoMenu.play(Audio.volumen);
 					Gdx.graphics.setWindowedMode(Config.ANCHO, Config.ALTO);	
 				}
-			}else if((selecOpciones == 3 && entradas.isEnter()) || (selecOpciones == 3 && (entradas.isMouseClick() && estaSobreOpcion))) {
+			}else if((selecOpciones == 3 && entradas.isEnter()) || (selecOpciones == 3 && (entradas.isBotonIzq() && estaSobreOpcion))) {
 				if(Audio.volumen < 1) {
 					Audio.setVolumen(0.01f);
 					numeroVolumen.setTexto(String.valueOf((int)(Audio.volumen/0.01f)));
 				}
-			}else if((selecOpciones == 4 && entradas.isEnter()) || (selecOpciones == 4 && (entradas.isMouseClick() && estaSobreOpcion))) {
+			}else if((selecOpciones == 4 && entradas.isEnter()) || (selecOpciones == 4 && (entradas.isBotonIzq() && estaSobreOpcion))) {
 				if(Audio.volumen > 0.01f) {
 					Audio.setVolumen(-0.01f);
 					numeroVolumen.setTexto(String.valueOf((int)(Audio.volumen/0.01f)));

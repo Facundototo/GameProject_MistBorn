@@ -9,16 +9,21 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
-### "terminamos reflection y siguiendo disparo" - Fecha 18/10
+### "cambiando Entradas y lidiando todavia con Disparo" - Fecha 18/10
+
+- Cambiamos las Entradas para los 2 botones principales del mouse, tuvimos que cambiar los booleanos de Entradas de las Pantallas.
+- Siguiendo con Disparo hasta ahora, creamos 3 booleanos (apuntando,disparando,balaDisparada), en base a eso se hacen los calculos con Box2D, en proceso.
+
+### "terminamos reflection y siguiendo disparo" - Fecha 17/10
 
 - Ahora cuando seleccionamos el pj en la PantallaSeleccion se nos creara en la PantallaPvP a traves de Reflection
 - Estamos viendo como hacer la clase Disparo.
 
-### "solucionando direccion del disparo" - Fecha 18/10
+### "solucionando direccion del disparo" - Fecha 17/10
 
 - En la clase Disparo solucionamos la direccion del disparo respecto al cursor.
 
-### "implementando barra de peltre"  - Fecha 17/10
+### "implementando barra de peltre"  - Fecha 16/10
 
 - Diseñamos el marco del poder peltre.
 - Cargado en Archivos XCF y assets/Hud

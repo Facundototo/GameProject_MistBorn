@@ -1,12 +1,13 @@
 package com.bakpun.mistborn.io;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.bakpun.mistborn.utiles.Config;
 
 public class Entradas implements InputProcessor{
 
-	private boolean abajo,arriba,irDerD,irIzqA,saltar,mouseClick,enter,escape,irDerRight,irIzqLeft;
+	private boolean abajo,arriba,irDerD,irIzqA,saltar,mouseClickDer,mouseClickIzq,enter,escape,irDerRight,irIzqLeft;
 	private int mouseX=0,mouseY=0;
 	
 	public boolean keyDown(int keycode) {
@@ -80,11 +81,21 @@ public class Entradas implements InputProcessor{
 	}
 
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		mouseClick = true;
+		if(button == Buttons.RIGHT) {
+			mouseClickDer = true;
+		}
+		if(button == Buttons.LEFT) {
+			mouseClickIzq = true;
+		}
 		return false;
 	}
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		mouseClick = false;
+		if(button == Buttons.RIGHT) {
+			mouseClickDer = false;
+		}
+		if(button == Buttons.LEFT) {
+			mouseClickIzq = false;
+		}
 		return false;
 	}
 
@@ -140,10 +151,12 @@ public class Entradas implements InputProcessor{
 	public boolean isEscape() {
 		return this.escape;
 	}
-	public boolean isMouseClick() {
-		return this.mouseClick;
+	public boolean isBotonDer() {
+		return this.mouseClickDer;
 	}
-	
+	public boolean isBotonIzq() {
+		return this.mouseClickIzq;
+	}
 	public int getMouseX() {
 		return this.mouseX;
 	}
