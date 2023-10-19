@@ -114,7 +114,7 @@ public final class PantallaSeleccion implements Screen{
 				opcionElegida = true;
 				Audio.seleccionElegida.play();
 				avisoSeleccion.setVisible(false);
-				cambiarPantallaFadeOut();
+				cambiarPantallaFadeOut(seleccion);
 			}
 		}
 		stage.act(delta);
@@ -122,13 +122,15 @@ public final class PantallaSeleccion implements Screen{
 		
 	}
 	
-	private void cambiarPantallaFadeOut() {
+	private void cambiarPantallaFadeOut(int seleccion) {  	
+		//La seleccion se pasa por parametro porque luego de elegir el pj, las teclas se siguen moviendo y modifican la seleccion.
+		final int _seleccionElegida = seleccion;		
 		stage.addAction(Actions.sequence(Actions.fadeOut(1.5f),
 			Actions.run(new Runnable() {   
 			  @Override
 	            public void run() {					//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
 					Audio.cancionMenu.stop();
-	                Render.app.setScreen(new PantallaPvP(InfoPersonaje.values()[seleccion].getNombre()));
+	                Render.app.setScreen(new PantallaPvP(InfoPersonaje.values()[_seleccionElegida].getNombre()));
 	            }})));	
 	}
 

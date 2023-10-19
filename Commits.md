@@ -9,6 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "Disparo,Colision y arreglo minimo PantallaSeleccion" - Fecha 19/10
+
+- Logramos hacer que el disparo de la moneda fuera como quisimos. Hablando de la logica.
+- Tocamos la clase Colision para detectar las colisiones de las monedas con el piso y las plataformas. Si las monedas estan inactivas, se eliminan del mundo.
+- Creamos la clase Moneda para que nos sirva tanto para crear el body (con su textura) cuando se dispara la misma y tambien para futuro guardar instancias de esa clase en el inventario del jugador en vez de Body.
+- Error en la PantallaSeleccion. Cuando tocabas ENTER para seleccionar el pj y despues seleccionabas otro (fade activado),en el juego se te ponia el ultimo que seleccionaste en vez de que sea el que tocaste ENTER.
+
 ### "cambiando Entradas y lidiando todavia con Disparo" - Fecha 18/10
 
 - Cambiamos las Entradas para los 2 botones principales del mouse, tuvimos que cambiar los booleanos de Entradas de las Pantallas.

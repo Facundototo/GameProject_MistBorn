@@ -49,7 +49,7 @@ public abstract class Personaje {
 		this.entradas = entradas;
 		movimiento = new Vector2();
 		f = new Fisica();
-		disparo = new Disparo(mundo,this,cam);
+		disparo = new Disparo(mundo,this,cam,c);
 		Audio.setSonidoPjCorriendo();
  		spr = new Imagen(rutaPj);
  		spr.setEscalaBox2D(12);
@@ -92,6 +92,7 @@ public abstract class Personaje {
 		calcularSalto();	//Calcula el salto con la gravedad.
 		calcularMovimiento();	//Calcula el movimiento.
 		
+		
 		pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
 		
 		spr.setPosicion(pj.getPosition().x, pj.getPosition().y);	//Le digo al Sprite que se ponga en la posicion del body.
@@ -99,13 +100,15 @@ public abstract class Personaje {
 		animar();
 		reproducirSFX();
 		
+		//Todo este bloque habria que pensarlo con los poderes, por ahora esta aca.
 		if(disparando && !balaDisparada) {
 			balaDisparada = true;
 			disparo.disparar();
 		}
+		disparo.borrarMonedas();
 		
-		if(disparando && balaDisparada) {
-			balaDisparada = disparo.calcularFuerzas();
+		if(balaDisparada) {
+			balaDisparada = disparo.calcularFuerzas(disparando);
 		}
 		
 		

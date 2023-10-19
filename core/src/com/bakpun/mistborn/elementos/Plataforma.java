@@ -25,7 +25,7 @@ public class Plataforma {
 		f = new Fisica();									
 		f.setBody(BodyType.KinematicBody, posXY);
 		f.createPolygon((esChica)?50/Box2dConfig.PPM:80/Box2dConfig.PPM,(esChica)?15/Box2dConfig.PPM:24/Box2dConfig.PPM);
-		f.setFixture(f.getPolygon(), 2, 0, 0);
+		f.setFixture(f.getPolygon(), 2, 0.5f, 0);
 		plataforma = mundo.createBody(f.getBody());
 		plataforma.createFixture(f.getFixture());
 		plataforma.setUserData(UserData.SALTO_P);
