@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "terminamos Disparo,y viendo eventos Hud" - Fecha 21/10
+
+- Terminamos la clase de Disparo, todo funciona como lo esperado.
+- Respecto al item anterior,modificamos la clase Colision para las paredes, clase Moneda y enum UserData.
+- Viendo como hacer los eventos de reducirVida() y reducirPoderes() en la clase HUD y Personaje.
+
 ### "Disparo,Colision y arreglo minimo PantallaSeleccion" - Fecha 19/10
 
 - Logramos hacer que el disparo de la moneda fuera como quisimos. Hablando de la logica.

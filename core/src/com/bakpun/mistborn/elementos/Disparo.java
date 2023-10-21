@@ -13,7 +13,7 @@ import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.personajes.Personaje;
 
-public final class Disparo {
+public final class Disparo{
 	
 	private Colision c;
 	private World mundo;
@@ -22,8 +22,10 @@ public final class Disparo {
 	private Personaje pj;
 	private Moneda moneda;
 	private ArrayList<Body> monedasInutiles = new ArrayList<Body>();
-	private Vector2 direccionBala,posIniBala,movimientoBala;
-	private final float _amplitud = 1.5f,_velocidad = 1.3f;
+	private Vector2 direccionBala,posIniBala,movimientoBala,fuerzaContraria;
+	private final float _amplitud = 1.5f,_velocidad = 30f;
+	
+	//Falta hacer colision entre bala y pj oponente. junto con el evento hecho de reducirVida().
 	
 	public Disparo(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
 		this.mundo = mundo;
@@ -34,6 +36,7 @@ public final class Disparo {
 		direccionBala = new Vector2();
 		posIniBala = new Vector2();
 		movimientoBala = new Vector2();
+		fuerzaContraria = new Vector2();
 		moneda = new Moneda();
 	}
 	
@@ -46,12 +49,7 @@ public final class Disparo {
 	}
 	
 	public void disparar() {
-		//Calcula solo la direccion no la distancia. con el .nor()
-		direccionBala.set(pj.getInput().getMouseX()/Box2dConfig.PPM - pj.getX(), pj.getInput().getMouseY()/Box2dConfig.PPM - pj.getY()); 
-		//movimientoBala guarda el valor de direccionBala, porque luego se normaliza y se pierde.
-		movimientoBala.set(direccionBala.x*_velocidad,direccionBala.y*_velocidad);
-		// direccionBala se normaliza para asegurarse de que tenga una longitud de 1, lo que significa que indica solo la dirección sin importar la distancia.
-		direccionBala.nor(); 
+		actualizarDireccionBala();
 		//Agarra la pos del pj y la suma con la direccion(normalizada es igual a 1) por la amplitud(radio).
 	    posIniBala.set(pj.getX() + _amplitud * direccionBala.x, pj.getY() + _amplitud * direccionBala.y);	
 		
@@ -61,33 +59,44 @@ public final class Disparo {
 	public boolean calcularFuerzas(boolean disparando) {
 		boolean balaEnAccion;
 		
-		//Aclaracion: Notamos que el pj que esta mas cerca del destino de la bala, esta va mas lenta, porque esta esperando a que llegue la bala del otro pj.
-		//Esto con Redes no va a pasar obviamente.
+		//Aclaracion: El juego se crashea me parece si saltamos y vamos disparando, no sabemos a que se debe.
 		
 		if(disparando) { 
 			moneda.getBody().setLinearVelocity(movimientoBala);
 			balaEnAccion = true;
+			if(c.isMonedaColisiona(moneda.getBody())) {
+				actualizarDireccionBala();		//Actualizo la direccion opuesta que va a tomar el pj, porque puede ser diferente a la direccion inicial.
+				//Cuando la moneda toca algo inamovible mientras dispara el pj, este se impulsa para la direccion contraria a la moneda.
+				pj.aplicarFuerza(fuerzaContraria);		 
+			}
 		}else {	
 			monedasInutiles.add(moneda.getBody());
-			moneda.getBody().applyForceToCenter(new Vector2(0,0), true);
+			moneda.getBody().applyForceToCenter(new Vector2(0,0), true);	//Para que la moneda caiga realisticamente.
 			balaEnAccion = false;
 		}
+		
 		return balaEnAccion;
 	}
 	
 	public void borrarMonedas() {		//Metodo que borra las monedas del mundo que estan inutilizadas.
 		if(monedasInutiles.size()>0) {
-			for (Body monedaInutil: monedasInutiles) {
-				if(c.isMonedaInactiva(monedaInutil) && !monedaInutil.isAwake()) {
-					mundo.destroyBody(monedaInutil);
+			for (int i = 0; i < monedasInutiles.size(); i++) {
+				if(c.isMonedaColisiona(monedasInutiles.get(i)) && !monedasInutiles.get(i).isAwake()) {
+					mundo.destroyBody(monedasInutiles.get(i));
+					monedasInutiles.remove(i);
 				}
 			}
 		}
 	}
 	
-	
-	
-	
-	
-	
+	private void actualizarDireccionBala() {		//Metodo que reutilizable que actualiza y que va a ayudar para la direccion de la moneda y del pj.
+		//Calcula solo la direccion no la distancia. con el .nor()
+		direccionBala.set(pj.getInput().getMouseX()/Box2dConfig.PPM - pj.getX(), pj.getInput().getMouseY()/Box2dConfig.PPM - pj.getY()); 
+		// direccionBala se normaliza para asegurarse de que tenga una longitud de 1, lo que significa que indica solo la dirección sin importar la distancia.
+		direccionBala.nor(); 
+		//movimientoBala guarda el valor de direccionBala.
+		movimientoBala.set(direccionBala.x*_velocidad,direccionBala.y*_velocidad);
+		//fuerzaContraria es el movimiento contrario al que va la bala.
+		fuerzaContraria.set(-movimientoBala.x, -movimientoBala.y);
+	}
 }

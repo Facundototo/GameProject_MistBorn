@@ -2,6 +2,7 @@ package com.bakpun.mistborn.pantallas;
 
 import java.lang.reflect.Constructor;
 
+
 import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
@@ -40,7 +41,7 @@ public final class PantallaPvP implements Screen{
 	private Viewport vw;
 	private Box2DDebugRenderer db;
 	private Fisica f;
-	private Body piso;
+	private Body piso,pared;
 	private Plataforma plataformas[] = new Plataforma[7];
 	private Vector2[] posicionPlataformas = {new Vector2(400/Box2dConfig.PPM,325/Box2dConfig.PPM),new Vector2(1400/Box2dConfig.PPM,325/Box2dConfig.PPM)
 			,new Vector2(1400/Box2dConfig.PPM,650/Box2dConfig.PPM),new Vector2(500/Box2dConfig.PPM,750/Box2dConfig.PPM),new Vector2(750/Box2dConfig.PPM,500/Box2dConfig.PPM),
@@ -68,9 +69,9 @@ public final class PantallaPvP implements Screen{
 		db = new Box2DDebugRenderer();
 		hud = new Hud();
 		pj1 = crearPersonaje(this.nombrePj);
-		pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
+		//pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
 		
-		crearPlataformas();
+		//crearPlataformas();
 		crearLimites();
 	}
 
@@ -83,10 +84,10 @@ public final class PantallaPvP implements Screen{
 		Render.batch.begin();
 		fondo.draw();	//Dibujo el fondo.
 		pj1.draw(); 	//Updateo al jugador.
-		pj2.draw();		//Updateo al jugador2.
-		for (int i = 0; i < plataformas.length; i++) {
+		//pj2.draw();		//Updateo al jugador2.
+		/*for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
-		}
+		}*/
 		Render.batch.end();
 	
 		pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
@@ -152,13 +153,9 @@ public final class PantallaPvP implements Screen{
 			f.setBody(BodyType.StaticBody, new Vector2(cam.viewportWidth/2,(i==0)?155/Box2dConfig.PPM:(Config.ALTO-20)/Box2dConfig.PPM));
 			f.createChain(new Vector2(-((Config.ANCHO/2)/Box2dConfig.PPM),0), new Vector2((Config.ANCHO/2)/Box2dConfig.PPM,0));
 			f.setFixture(f.getChain(), 100, 1f, 0);
-			if(i==0) {
-				piso = mundo.createBody(f.getBody());
-				piso.createFixture(f.getFixture());
-				piso.setUserData(UserData.SALTO_P); //ID para la colision.
-			}else {
-				f.createBody(mundo);
-			}
+			piso = mundo.createBody(f.getBody());
+			piso.createFixture(f.getFixture());
+			piso.setUserData(UserData.SALTO_P); //ID para la colision.
 			f.getChain().dispose();
 			
 		}
@@ -167,7 +164,9 @@ public final class PantallaPvP implements Screen{
 			f.setBody(BodyType.StaticBody, new Vector2((i==0)?30/Box2dConfig.PPM:(Config.ANCHO-20)/Box2dConfig.PPM,cam.viewportHeight/2));
 			f.createChain(new Vector2(0,-(((Config.ALTO/2)-155)/Box2dConfig.PPM)),new Vector2(0,(Config.ALTO/2)/Box2dConfig.PPM));
 			f.setFixture(f.getChain(), 100, 1f, 0);
-			f.createBody(mundo);
+			pared = mundo.createBody(f.getBody());
+			pared.createFixture(f.getFixture());
+			pared.setUserData(UserData.PARED);
 			f.getChain().dispose();
 		}	
 	}

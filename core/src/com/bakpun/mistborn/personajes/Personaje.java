@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,11 +17,15 @@ import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Disparo;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.UserData;
+import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.poderes.EventoReducirVida;
 
-public abstract class Personaje {
+public abstract class Personaje implements EventoReducirVida{
 	
 	private final float VELOCIDAD_X = 15f, IMPULSO_Y = 20f;
+	
+	private float vida = 100f;
 	
 	private Animacion animacionQuieto,animacionCorrer;
 	private Imagen spr;
@@ -55,6 +58,7 @@ public abstract class Personaje {
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
 		crearBody(mundo);
+		Listeners.agregarListener(this);
 	}
 	
 	private void crearBody(World mundo) {
@@ -65,6 +69,7 @@ public abstract class Personaje {
 		pj.createFixture(f.getFixture());
 		pj.setUserData(UserData.PJ);	//ID para la colision.
 		pj.setFixedRotation(true);		//Para que el body no rote por culpa de las fuerzas.
+		f.getPolygon().dispose();
 	}
 
 	private void updateAnimacion() {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
@@ -109,9 +114,7 @@ public abstract class Personaje {
 		
 		if(balaDisparada) {
 			balaDisparada = disparo.calcularFuerzas(disparando);
-		}
-		
-		
+		}	
 	}
 	private void calcularAcciones() {
 		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.	
@@ -212,5 +215,13 @@ public abstract class Personaje {
 	
 	public Entradas getInput() {
 		return this.entradas;
+	}
+	public void aplicarFuerza(Vector2 movimiento) {
+		pj.setLinearVelocity(movimiento);
+	}
+	
+	@Override
+	public void reducirVida(float dano) {
+		this.vida -= dano;
 	}
 }

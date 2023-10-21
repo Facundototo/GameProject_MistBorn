@@ -1,5 +1,6 @@
 package com.bakpun.mistborn.elementos;
 
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -20,10 +21,10 @@ public class Moneda {
 	}
 	
 	public void crear(Vector2 posInicial,World mundo) {
+
 		f.setBody(BodyType.DynamicBody,posInicial);
 		f.createPolygon(_ancho/Box2dConfig.PPM, _alto/Box2dConfig.PPM);	
 		f.setFixture(f.getPolygon(), 5, 1, 0);
-		
 		body = mundo.createBody(f.getBody());	
 		body.createFixture(f.getFixture());
 		body.setBullet(true);		//Identifico al body como bullet(bala),esto porque Box2D hace chequeos mas rigurosos con los bodies que tienen mucha velocidad.

@@ -14,10 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.poderes.EventoCrearBarra;
+import com.bakpun.mistborn.poderes.EventoReducirVida;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 
-public class Hud implements EventoCrearBarra{
+public class Hud implements EventoCrearBarra,EventoReducirVida{
 
 	private Stage stage;
 	private Table tabla;
@@ -94,6 +95,11 @@ public class Hud implements EventoCrearBarra{
 		
 		marcosPoder[_index] = new Image(new Texture(ruta));
 		tabla.add(marcosPoder[_index]).size(marcosPoder[_index].getWidth()*escalado, marcosPoder[_index].getHeight()*escalado).padTop(10).left().row();
+	}
+
+	@Override
+	public void reducirVida(float dano) {
+		vida = (dano/100)*vida;
 	}
 	
 	

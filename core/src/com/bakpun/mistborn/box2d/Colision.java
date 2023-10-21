@@ -14,7 +14,7 @@ import com.bakpun.mistborn.enums.UserData;
 public class Colision implements ContactListener{
 
 	private ArrayList<Body> pjs = new ArrayList<Body>();
-	private ArrayList<Body> monedasInactivas = new ArrayList<Body>();	
+	private ArrayList<Body> monedas = new ArrayList<Body>();	
 	
 	public void beginContact(Contact contact) {
         Body bodyA = contact.getFixtureA().getBody();     //Me da los bodies que chocaron(contact).
@@ -26,10 +26,10 @@ public class Colision implements ContactListener{
         	pjs.add(bodyB);  
         }
         
-        if(bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.SALTO_P) {
-        	monedasInactivas.add(bodyA);
-        }else if(bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.SALTO_P) {
-        	monedasInactivas.add(bodyB);
+        if((bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.SALTO_P) || bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.PARED) {
+        	monedas.add(bodyA);
+        }else if(bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.SALTO_P || bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.PARED) {
+        	monedas.add(bodyB);
         }
         
     }
@@ -44,10 +44,10 @@ public class Colision implements ContactListener{
             pjs.remove(bodyB);
         }
         
-        if(bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.SALTO_P) {
-        	monedasInactivas.remove(bodyA);
-        }else if(bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.SALTO_P) {
-        	monedasInactivas.remove(bodyB);
+        if((bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.SALTO_P) || bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.PARED) {
+        	monedas.remove(bodyA);
+        }else if(bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.SALTO_P || bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.PARED) {
+        	monedas.remove(bodyB);
         }
     }
 	//Si el personaje esta tocando el suelo o una plataforma, entonces isPuedeSaltar retorna true, sino, false.
@@ -55,8 +55,8 @@ public class Colision implements ContactListener{
 		return this.pjs.contains(pj);
 	}
 	
-	public boolean isMonedaInactiva(Body moneda) {	//Retorna si en este momento,la lista tiene a una moneda inactiva.Osea que esta inmovil.
-		return this.monedasInactivas.contains(moneda);
+	public boolean isMonedaColisiona(Body moneda) {	//Retorna si en este momento,la lista tiene a una moneda inactiva.Osea que esta inmovil.
+		return this.monedas.contains(moneda);
 	}
  
 	@Override
