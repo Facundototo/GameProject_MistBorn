@@ -1,4 +1,4 @@
-package com.bakpun.mistborn.poderes;
+package com.bakpun.mistborn.eventos;
 
 import java.util.EventListener;
 

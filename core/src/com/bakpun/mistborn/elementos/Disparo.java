@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
+import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.personajes.Personaje;
 
 public final class Disparo{
@@ -25,7 +26,7 @@ public final class Disparo{
 	private Vector2 direccionBala,posIniBala,movimientoBala,fuerzaContraria;
 	private final float _amplitud = 1.5f,_velocidad = 30f;
 	
-	//Falta hacer colision entre bala y pj oponente. junto con el evento hecho de reducirVida().
+	//Faltaria destruir la moneda cuando lo toca.
 	
 	public Disparo(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
 		this.mundo = mundo;
@@ -68,6 +69,9 @@ public final class Disparo{
 				actualizarDireccionBala();		//Actualizo la direccion opuesta que va a tomar el pj, porque puede ser diferente a la direccion inicial.
 				//Cuando la moneda toca algo inamovible mientras dispara el pj, este se impulsa para la direccion contraria a la moneda.
 				pj.aplicarFuerza(fuerzaContraria);		 
+			}
+			if(c.isPjMoneda(pj.getBody())) {
+				Listeners.reducirVidaPj(1);		
 			}
 		}else {	
 			monedasInutiles.add(moneda.getBody());

@@ -17,9 +17,9 @@ import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Disparo;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.UserData;
+import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
-import com.bakpun.mistborn.poderes.EventoReducirVida;
 
 public abstract class Personaje implements EventoReducirVida{
 	
@@ -83,12 +83,7 @@ public abstract class Personaje implements EventoReducirVida{
 		/* Cosas que hay que hacer como principal para el disparo:
 
 		 * Hacer un ArrayList de las monedas del jugador, esto informarle al HUD mediante un evento.
-		 * Hacer lo que vendria a ser el disparo, creando un body nuevo por cada moneda que se lanza y ver como se dirige en base al apuntado del mouse. 
-		 * Crear clase Moneda que este compuesta por su body y su textura.
-		 * Crear clase Disparo que haga todo el manejo del disparo. (relacionado con el punto 2).
 		 * Hacer el sonido de la moneda cuando se dispara.
-		 * Saber como hacer el impacto de la moneda contra el otro jugador.
-		 * Reducir la vida del jugador afectado mediante un evento porque tambien se le informa al HUD  
 		 */
 		
 		updateAnimacion();
@@ -211,6 +206,9 @@ public abstract class Personaje implements EventoReducirVida{
 	}
 	public float getY() {
 		return this.pj.getPosition().y;
+	}
+	public Body getBody() {
+		return this.pj;
 	}
 	
 	public Entradas getInput() {

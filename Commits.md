@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "solucionando error y reducirVida()" - Fecha 23/10
+
+- Solucionamos un error que no nos dejaba elegir al pj Vin porque habia un problema en la clase de Listeners.
+- Hicimos la colision de moneda-pj la cual reduce la vida del Hud cuando colisionan mientras el pj esta disparando.
+- Con respecto al item anterior, no esta bien hecho ya que hay un hud global el cual no se diferencian la vida de los 2 pjs.
+
 ### "terminamos Disparo,y viendo eventos Hud" - Fecha 21/10
 
 - Terminamos la clase de Disparo, todo funciona como lo esperado.

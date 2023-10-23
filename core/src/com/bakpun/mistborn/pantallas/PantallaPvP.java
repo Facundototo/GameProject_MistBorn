@@ -69,7 +69,7 @@ public final class PantallaPvP implements Screen{
 		db = new Box2DDebugRenderer();
 		hud = new Hud();
 		pj1 = crearPersonaje(this.nombrePj);
-		//pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
+		pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
 		
 		//crearPlataformas();
 		crearLimites();
@@ -84,12 +84,12 @@ public final class PantallaPvP implements Screen{
 		Render.batch.begin();
 		fondo.draw();	//Dibujo el fondo.
 		pj1.draw(); 	//Updateo al jugador.
-		//pj2.draw();		//Updateo al jugador2.
+		pj2.draw();		//Updateo al jugador2.
 		/*for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
 		}*/
 		Render.batch.end();
-	
+		
 		pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
 		
 		hud.draw(delta);	//Dibujo el hud.

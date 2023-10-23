@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.bakpun.mistborn.eventos.EventoCrearBarra;
+import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.Listeners;
-import com.bakpun.mistborn.poderes.EventoCrearBarra;
-import com.bakpun.mistborn.poderes.EventoReducirVida;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 
@@ -45,7 +45,7 @@ public class Hud implements EventoCrearBarra,EventoReducirVida{
 		
 		tabla.top().left().pad(30);		//Le pongo un padding de 30 px.
 		tabla.add(marcoVida).size(marcoVida.getWidth()*escalado, marcoVida.getHeight()*escalado).row();
-		this.vida = (marcoVida.getWidth()*escalado)-27;
+		this.vida = 245;
 		
 		stage.addActor(tabla);
 	}
@@ -72,7 +72,7 @@ public class Hud implements EventoCrearBarra,EventoReducirVida{
 	public void drawVida() {
 		shapeVida.setProjectionMatrix(stage.getCamera().combined);
 		shapeVida.begin(ShapeType.Filled);
-		shapeVida.rect(marcoVida.getX()+12*escalado, marcoVida.getY(), vida, marcoVida.getHeight());
+		shapeVida.rect(50*escalado, marcoVida.getY(), vida, marcoVida.getHeight());
 		shapeVida.end();
 	}
 	
@@ -99,7 +99,7 @@ public class Hud implements EventoCrearBarra,EventoReducirVida{
 
 	@Override
 	public void reducirVida(float dano) {
-		vida = (dano/100)*vida;
+		vida -= (dano/100)*245;
 	}
 	
 	

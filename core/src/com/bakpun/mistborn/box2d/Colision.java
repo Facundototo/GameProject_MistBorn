@@ -13,6 +13,7 @@ import com.bakpun.mistborn.enums.UserData;
 
 public class Colision implements ContactListener{
 
+	private ArrayList<Body> pjMonedas = new ArrayList<Body>();
 	private ArrayList<Body> pjs = new ArrayList<Body>();
 	private ArrayList<Body> monedas = new ArrayList<Body>();	
 	
@@ -32,6 +33,12 @@ public class Colision implements ContactListener{
         	monedas.add(bodyB);
         }
         
+        if(bodyA.getUserData() == UserData.PJ && bodyB.getUserData() == UserData.MONEDA) {       
+        	pjMonedas.add(bodyA);
+        }else if(bodyB.getUserData() == UserData.PJ && bodyA.getUserData() == UserData.MONEDA) {
+        	pjMonedas.add(bodyB);  
+        }
+        
     }
 	
 	public void endContact(Contact contact) {
@@ -49,6 +56,12 @@ public class Colision implements ContactListener{
         }else if(bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.SALTO_P || bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.PARED) {
         	monedas.remove(bodyB);
         }
+        
+        if(bodyA.getUserData() == UserData.PJ && bodyB.getUserData() == UserData.MONEDA) {       
+        	pjMonedas.remove(bodyA);
+        }else if(bodyB.getUserData() == UserData.PJ && bodyA.getUserData() == UserData.MONEDA) {
+        	pjMonedas.remove(bodyB);  
+        }
     }
 	//Si el personaje esta tocando el suelo o una plataforma, entonces isPuedeSaltar retorna true, sino, false.
 	public boolean isPuedeSaltar(Body pj) {		//Retorna si en este momento, la lista tiene al pj, es decir que esta en el piso(true).
@@ -58,7 +71,13 @@ public class Colision implements ContactListener{
 	public boolean isMonedaColisiona(Body moneda) {	//Retorna si en este momento,la lista tiene a una moneda inactiva.Osea que esta inmovil.
 		return this.monedas.contains(moneda);
 	}
+	
+	public boolean isPjMoneda(Body pj) {
+		return this.pjMonedas.contains(pj);
+	}
  
+	
+	
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		// TODO Auto-generated method stub
