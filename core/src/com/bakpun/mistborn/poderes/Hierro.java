@@ -8,7 +8,13 @@ public class Hierro extends Poder{
 	//Poder que tira de objetos metalicos.
 
 	public Hierro() {
-		super(Recursos.MARCO_HIERRO, Color.GRAY);		//Falta disenar las barras para ponerselo como parametro
+		super(Recursos.MARCO_HIERRO, Color.GRAY);	
+	}
+
+	@Override
+	public void quemar() {
+		System.out.println("quemando hierro");
+		
 	}
 	
 }

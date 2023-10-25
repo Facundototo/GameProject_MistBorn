@@ -9,4 +9,10 @@ public class Peltre extends Poder{
 	public Peltre() {		
 		super(Recursos.MARCO_PELTRE, Color.PURPLE);
 	}
+
+	@Override
+	public void quemar() {
+		System.out.println("quemando peltre");
+		
+	}
 }

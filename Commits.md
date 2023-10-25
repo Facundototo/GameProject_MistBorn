@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "haciendo poderes" - Fecha 24/10
+
+- Adaptamos la clase Poder, junto con sus hijas, a la clase Personaje, cuando toque 1,2 o R se activan los poderes. (falta el sistema de reduccion de pts en el hud).
+- Creamos el enum TipoPersonaje justamente para el item anterior, para saber si el pj es Nacido de la bruma o brumoso.
+- Adaptamos (y falta un poco) la clase Disparo a el Poder Acero.
+
 ### "solucionando error y reducirVida()" - Fecha 23/10
 
 - Solucionamos un error que no nos dejaba elegir al pj Vin porque habia un problema en la clase de Listeners.

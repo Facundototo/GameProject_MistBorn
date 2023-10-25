@@ -57,12 +57,12 @@ public final class Disparo{
 	    moneda.crear(posIniBala, mundo);
 	}
 	
-	public boolean calcularFuerzas(boolean disparando) {
+	public boolean calcularFuerzas() {
 		boolean balaEnAccion;
 		
 		//Aclaracion: El juego se crashea me parece si saltamos y vamos disparando, no sabemos a que se debe.
 		
-		if(disparando) { 
+		if(pj.isDisparando()) { 
 			moneda.getBody().setLinearVelocity(movimientoBala);
 			balaEnAccion = true;
 			if(c.isMonedaColisiona(moneda.getBody())) {
@@ -103,4 +103,10 @@ public final class Disparo{
 		//fuerzaContraria es el movimiento contrario al que va la bala.
 		fuerzaContraria.set(-movimientoBala.x, -movimientoBala.y);
 	}
+	
+	public boolean isDisparando() {
+		return this.pj.isDisparando();
+	}
+	
+	
 }

@@ -16,10 +16,12 @@ import com.bakpun.mistborn.elementos.Animacion;
 import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Disparo;
 import com.bakpun.mistborn.elementos.Imagen;
+import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.poderes.Poder;
 
 public abstract class Personaje implements EventoReducirVida{
 	
@@ -38,18 +40,22 @@ public abstract class Personaje implements EventoReducirVida{
 	private TextureRegion saltos[] = new TextureRegion[3];
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
+	protected Poder poderes[];
+	private TipoPersonaje tipo;
 	
 	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
 	private boolean reproducirSonidoCorrer,balaDisparada;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
+	private int seleccion = 0;
 	
-	
-	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho) {
+	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,TipoPersonaje tipo) {
 		this.animacionSaltos = animacionSaltos;
 		this.animacionEstados = animacionEstados;
 		this.ladoDerecho = ladoDerecho;
 		this.c = c;
 		this.entradas = entradas;
+		this.poderes = new Poder[(tipo == TipoPersonaje.NACIDO_BRUMA)?3:1];
+		this.tipo = tipo;
 		movimiento = new Vector2();
 		f = new Fisica();
 		disparo = new Disparo(mundo,this,cam,c);
@@ -58,8 +64,11 @@ public abstract class Personaje implements EventoReducirVida{
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
 		crearBody(mundo);
+		crearPoderes(mundo,cam,c);
 		Listeners.agregarListener(this);
 	}
+	
+	protected abstract void crearPoderes(World mundo,OrthographicCamera cam,Colision c);
 	
 	private void crearBody(World mundo) {
 		f.setBody(BodyType.DynamicBody,new Vector2((!ladoDerecho)?10:20,5));
@@ -100,17 +109,31 @@ public abstract class Personaje implements EventoReducirVida{
 		animar();
 		reproducirSFX();
 		
+		quemarPoder();	//Seleccion de poderes.
+		
 		//Todo este bloque habria que pensarlo con los poderes, por ahora esta aca.
-		if(disparando && !balaDisparada) {
+		/*if(disparando && !balaDisparada) {
 			balaDisparada = true;
 			disparo.disparar();
 		}
 		disparo.borrarMonedas();
-		
+			
 		if(balaDisparada) {
-			balaDisparada = disparo.calcularFuerzas(disparando);
-		}	
+			balaDisparada = disparo.calcularFuerzas();
+		}	*/
 	}
+	private void quemarPoder() {
+		if(tipo == TipoPersonaje.NACIDO_BRUMA){		//Si es nacido de la bruma, puede seleccionar los poderes.
+			if(Gdx.input.isKeyJustPressed(Keys.NUM_1)) {seleccion = 0;}
+			else if(Gdx.input.isKeyJustPressed(Keys.NUM_2)) {seleccion = 1;}
+			else if(Gdx.input.isKeyJustPressed(Keys.R)) {poderes[2].quemar();}
+		}else if(tipo == TipoPersonaje.VIOLENTO && Gdx.input.isKeyJustPressed(Keys.R)){poderes[seleccion].quemar();}		
+		
+		// Este if le sirve tanto al nacido de la bruma como a atraedor y lanzamonedas.
+		if(disparando && tipo != TipoPersonaje.VIOLENTO) {poderes[seleccion].quemar();}  
+		
+	}
+
 	private void calcularAcciones() {
 		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.	
 		correrDerecha = ((!ladoDerecho)?entradas.isIrDerD():entradas.isIrDerRight());
@@ -221,5 +244,9 @@ public abstract class Personaje implements EventoReducirVida{
 	@Override
 	public void reducirVida(float dano) {
 		this.vida -= dano;
+	}
+	
+	public boolean isDisparando() {
+		return this.disparando;
 	}
 }
