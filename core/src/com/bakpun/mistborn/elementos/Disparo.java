@@ -25,6 +25,7 @@ public final class Disparo{
 	private ArrayList<Body> monedasInutiles = new ArrayList<Body>();
 	private Vector2 direccionBala,posIniBala,movimientoBala,fuerzaContraria;
 	private final float _amplitud = 1.5f,_velocidad = 30f;
+	private boolean balaDisparada = false;
 	
 	//Faltaria destruir la moneda cuando lo toca.
 	
@@ -50,39 +51,44 @@ public final class Disparo{
 	}
 	
 	public void disparar() {
-		actualizarDireccionBala();
-		//Agarra la pos del pj y la suma con la direccion(normalizada es igual a 1) por la amplitud(radio).
-	    posIniBala.set(pj.getX() + _amplitud * direccionBala.x, pj.getY() + _amplitud * direccionBala.y);	
-		
-	    moneda.crear(posIniBala, mundo);
+		if(!balaDisparada) {
+			actualizarDireccionBala();
+			//Agarra la pos del pj y la suma con la direccion(normalizada es igual a 1) por la amplitud(radio).
+		    posIniBala.set(pj.getX() + _amplitud * direccionBala.x, pj.getY() + _amplitud * direccionBala.y);	
+			
+		    moneda.crear(posIniBala, mundo);
+		    balaDisparada = true;
+		}
 	}
 	
-	public boolean calcularFuerzas() {
-		boolean balaEnAccion;
+	public void calcularFuerzas(boolean disparando) {
 		
 		//Aclaracion: El juego se crashea me parece si saltamos y vamos disparando, no sabemos a que se debe.
 		
-		if(pj.isDisparando()) { 
-			moneda.getBody().setLinearVelocity(movimientoBala);
-			balaEnAccion = true;
-			if(c.isMonedaColisiona(moneda.getBody())) {
-				actualizarDireccionBala();		//Actualizo la direccion opuesta que va a tomar el pj, porque puede ser diferente a la direccion inicial.
-				//Cuando la moneda toca algo inamovible mientras dispara el pj, este se impulsa para la direccion contraria a la moneda.
-				pj.aplicarFuerza(fuerzaContraria);		 
-			}
-			if(c.isPjMoneda(pj.getBody())) {
-				Listeners.reducirVidaPj(1);		
-			}
-		}else {	
-			monedasInutiles.add(moneda.getBody());
-			moneda.getBody().applyForceToCenter(new Vector2(0,0), true);	//Para que la moneda caiga realisticamente.
-			balaEnAccion = false;
-		}
+		borrarMonedas();
 		
-		return balaEnAccion;
+		if(balaDisparada) {
+			if(disparando) { 
+				moneda.getBody().setLinearVelocity(movimientoBala);
+				balaDisparada = true;
+				if(c.isMonedaColisiona(moneda.getBody())) {
+					actualizarDireccionBala();		//Actualizo la direccion opuesta que va a tomar el pj, porque puede ser diferente a la direccion inicial.
+					//Cuando la moneda toca algo inamovible mientras dispara el pj, este se impulsa para la direccion contraria a la moneda.
+					pj.aplicarFuerza(fuerzaContraria);		 
+				}
+				if(c.isPjMoneda(pj.getBody())) {
+					Listeners.reducirVidaPj(1);		
+				}
+			}else {	
+				Listeners.restarMonedas();
+				monedasInutiles.add(moneda.getBody());
+				moneda.getBody().applyForceToCenter(new Vector2(0,0), true);	//Para que la moneda caiga realisticamente.
+				balaDisparada = false;
+			}
+		}
 	}
 	
-	public void borrarMonedas() {		//Metodo que borra las monedas del mundo que estan inutilizadas.
+	private void borrarMonedas() {		//Metodo que borra las monedas del mundo que estan inutilizadas.
 		if(monedasInutiles.size()>0) {
 			for (int i = 0; i < monedasInutiles.size(); i++) {
 				if(c.isMonedaColisiona(monedasInutiles.get(i)) && !monedasInutiles.get(i).isAwake()) {
@@ -104,9 +110,7 @@ public final class Disparo{
 		fuerzaContraria.set(-movimientoBala.x, -movimientoBala.y);
 	}
 	
-	public boolean isDisparando() {
-		return this.pj.isDisparando();
+	public int getCantMonedas() {
+		return this.pj.getCantMonedas();
 	}
-	
-	
 }

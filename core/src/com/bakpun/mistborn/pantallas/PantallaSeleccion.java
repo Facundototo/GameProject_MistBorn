@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -116,7 +115,11 @@ public final class PantallaSeleccion implements Screen{
 				avisoSeleccion.setVisible(false);
 				cambiarPantallaFadeOut(seleccion);
 			}
+			if(entradas.isEscape()) {
+				Render.app.setScreen(new PantallaMenu());
+			}
 		}
+		
 		stage.act(delta);
 		stage.draw();
 		

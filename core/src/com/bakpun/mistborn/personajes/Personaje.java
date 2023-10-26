@@ -19,11 +19,13 @@ import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
+import com.bakpun.mistborn.eventos.EventoRestarMonedas;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.poderes.Disparable;
 import com.bakpun.mistborn.poderes.Poder;
 
-public abstract class Personaje implements EventoReducirVida{
+public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas{
 	
 	private final float VELOCIDAD_X = 15f, IMPULSO_Y = 20f;
 	
@@ -41,10 +43,11 @@ public abstract class Personaje implements EventoReducirVida{
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
 	protected Poder poderes[];
+	private int monedas;
 	private TipoPersonaje tipo;
 	
 	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
-	private boolean reproducirSonidoCorrer,balaDisparada;
+	private boolean reproducirSonidoCorrer;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
 	private int seleccion = 0;
 	
@@ -56,6 +59,7 @@ public abstract class Personaje implements EventoReducirVida{
 		this.entradas = entradas;
 		this.poderes = new Poder[(tipo == TipoPersonaje.NACIDO_BRUMA)?3:1];
 		this.tipo = tipo;
+		this.monedas = 10;	//Monedas iniciales 10.
 		movimiento = new Vector2();
 		f = new Fisica();
 		disparo = new Disparo(mundo,this,cam,c);
@@ -110,28 +114,33 @@ public abstract class Personaje implements EventoReducirVida{
 		reproducirSFX();
 		
 		quemarPoder();	//Seleccion de poderes.
-		
-		//Todo este bloque habria que pensarlo con los poderes, por ahora esta aca.
-		/*if(disparando && !balaDisparada) {
-			balaDisparada = true;
-			disparo.disparar();
-		}
-		disparo.borrarMonedas();
-			
-		if(balaDisparada) {
-			balaDisparada = disparo.calcularFuerzas();
-		}	*/
+
 	}
 	private void quemarPoder() {
 		if(tipo == TipoPersonaje.NACIDO_BRUMA){		//Si es nacido de la bruma, puede seleccionar los poderes.
 			if(Gdx.input.isKeyJustPressed(Keys.NUM_1)) {seleccion = 0;}
 			else if(Gdx.input.isKeyJustPressed(Keys.NUM_2)) {seleccion = 1;}
 			else if(Gdx.input.isKeyJustPressed(Keys.R)) {poderes[2].quemar();}
-		}else if(tipo == TipoPersonaje.VIOLENTO && Gdx.input.isKeyJustPressed(Keys.R)){poderes[seleccion].quemar();}		
+		}
+		else if(tipo == TipoPersonaje.VIOLENTO && Gdx.input.isKeyJustPressed(Keys.R)){poderes[seleccion].quemar();}		
 		
 		// Este if le sirve tanto al nacido de la bruma como a atraedor y lanzamonedas.
-		if(disparando && tipo != TipoPersonaje.VIOLENTO) {poderes[seleccion].quemar();}  
+		if(disparando && tipo != TipoPersonaje.VIOLENTO) {
+			poderes[seleccion].quemar();
+		} 
 		
+		// Chequea todo el tiempo calcularFuerzas() porque lo que pasa es que todo lo de Disparo no se puede chequear en Acero.
+		if(tipo == TipoPersonaje.NACIDO_BRUMA || tipo == TipoPersonaje.LANZAMONEDAS) {
+			boolean encontrado = false;
+			int i = 0;
+			do {
+				if (poderes[i] instanceof Disparable) {		//Esta condicion chequea si el poder implementa Disparable.
+					((Disparable) poderes[i]).getDisparo().calcularFuerzas(disparando);	//La interfaz Disparable solo la tiene Acero.
+					encontrado = true;
+				}
+				i++;
+			}while(!encontrado);
+		}
 	}
 
 	private void calcularAcciones() {
@@ -245,8 +254,12 @@ public abstract class Personaje implements EventoReducirVida{
 	public void reducirVida(float dano) {
 		this.vida -= dano;
 	}
+	@Override
+	public void restarMonedas() {
+		this.monedas--;
+	}
 	
-	public boolean isDisparando() {
-		return this.disparando;
+	public int getCantMonedas() {
+		return this.monedas;
 	}
 }

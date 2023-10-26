@@ -10,7 +10,6 @@ import com.bakpun.mistborn.utiles.Render;
 public class MistBorn extends Game {
 
 	
-	
 	public void create() {
 		Audio.setCancionMenu();	//Reproduzco la cancion aca porque quiero que se escuche en la 2 pantallas diferentes.
 		Audio.cancionMenu.play();

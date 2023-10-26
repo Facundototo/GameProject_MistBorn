@@ -9,6 +9,14 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "adaptando Disparo a Acero, ESC para PantallaSeleccion y evento restarMoneda()" - Fecha 25/10
+
+- Adaptamos la clase Disparo al poder de Acero, ya ahora cuando selecciona el poder acero puede disparar joya.
+- Para el item anterior creamos la interfaz Disparable, esta interfaz la tiene solo la clase Acero. 
+- Hicimos el evento de restarMoneda() que se utiliza en la clase HUD y Personaje.
+- Creamos el label en Hud que muestra el contador de monedas, esto ya esta adaptado junto al disparo, osea que cuando gasta una moneda, esta se resta a traves del evento.
+- Creamos el enum TipoPoder para la creacion del label del item anterior.
+ 
 ### "haciendo poderes" - Fecha 24/10
 
 - Adaptamos la clase Poder, junto con sus hijas, a la clase Personaje, cuando toque 1,2 o R se activan los poderes. (falta el sistema de reduccion de pts en el hud).
