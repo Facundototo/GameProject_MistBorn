@@ -2,7 +2,6 @@ package com.bakpun.mistborn.pantallas;
 
 import java.lang.reflect.Constructor;
 
-
 import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
@@ -20,11 +19,11 @@ import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Imagen;
+import com.bakpun.mistborn.elementos.ObjetoMetalico;
 import com.bakpun.mistborn.elementos.Plataforma;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.hud.Hud;
 import com.bakpun.mistborn.io.Entradas;
-import com.bakpun.mistborn.personajes.Ham;
 import com.bakpun.mistborn.personajes.Personaje;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
@@ -35,7 +34,7 @@ public final class PantallaPvP implements Screen{
 	private OrthographicCamera cam;
 	private World mundo;
 	private Entradas entradasPj1,entradasPj2;
-	private Colision colisionMundo;		
+	private Colision colisionMundo;
 	private Imagen fondo;
 	private Personaje pj1,pj2;
 	private Viewport vw;
@@ -49,11 +48,12 @@ public final class PantallaPvP implements Screen{
 	private InputMultiplexer im;
 	private Hud hud;
 	private String nombrePj;
+	private ObjetoMetalico metal;
 
-	//Para que quede bien, me faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
+	//Para que quede bien, faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
 	
 	public PantallaPvP(String clasePj) {
-		nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
+		this.nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
 	}
 	
 	public void show() {
@@ -71,8 +71,9 @@ public final class PantallaPvP implements Screen{
 		pj1 = crearPersonaje(this.nombrePj);
 		//pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
 		
-		crearPlataformas();
+		//crearPlataformas();
 		crearLimites();
+		metal = new ObjetoMetalico(mundo,new Vector2(((Config.ANCHO/2)/Box2dConfig.PPM),(Config.ALTO/2)/Box2dConfig.PPM),45);
 	}
 
 	public void render(float delta) {
@@ -86,15 +87,14 @@ public final class PantallaPvP implements Screen{
 		fondo.draw();	//Dibujo el fondo.
 		pj1.draw(); 	//Updateo al jugador.
 		//pj2.draw();		//Updateo al jugador2.
-		for (int i = 0; i < plataformas.length; i++) {
+		/*for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
-		}
-		
+		}*/
 		Render.batch.end();
 		
-		pj1.drawLineaDisparo(); // Se dibuja aca porque en el metodo draw() esta dentro del batch.
-		
 		hud.draw(delta);	//Dibujo el hud.
+		
+	
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
 		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.

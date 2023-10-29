@@ -43,6 +43,7 @@ public final class Disparo{
 	}
 	
 	public void drawLinea() {
+		
 		linea.setProjectionMatrix(cam.combined);		//Linea para debuggear el disparo.
 		linea.begin(ShapeType.Line);
 		linea.setColor(Color.CYAN);
@@ -52,7 +53,7 @@ public final class Disparo{
 	
 	public void disparar() {
 		if(!balaDisparada) {
-			actualizarDireccionBala();
+			actualizarDireccion(pj.getInput().getMouseX()/Box2dConfig.PPM,pj.getInput().getMouseY()/Box2dConfig.PPM);
 			//Agarra la pos del pj y la suma con la direccion(normalizada es igual a 1) por la amplitud(radio).
 		    posIniBala.set(pj.getX() + _amplitud * direccionBala.x, pj.getY() + _amplitud * direccionBala.y);	
 			
@@ -72,7 +73,7 @@ public final class Disparo{
 				moneda.getBody().setLinearVelocity(movimientoBala);
 				balaDisparada = true;
 				if(c.isMonedaColisiona(moneda.getBody())) {
-					actualizarDireccionBala();		//Actualizo la direccion opuesta que va a tomar el pj, porque puede ser diferente a la direccion inicial.
+					actualizarDireccion(pj.getInput().getMouseX()/Box2dConfig.PPM,pj.getInput().getMouseY()/Box2dConfig.PPM);		//Actualizo la direccion opuesta que va a tomar el pj, porque puede ser diferente a la direccion inicial.
 					//Cuando la moneda toca algo inamovible mientras dispara el pj, este se impulsa para la direccion contraria a la moneda.
 					pj.aplicarFuerza(fuerzaContraria);		 
 				}
@@ -99,9 +100,9 @@ public final class Disparo{
 		}
 	}
 	
-	private void actualizarDireccionBala() {		//Metodo que reutilizable que actualiza y que va a ayudar para la direccion de la moneda y del pj.
+	public void actualizarDireccion(float destinoX,float destinoY) {		//Metodo reutilizable que actualiza y que va a ayudar para la direccion de la moneda y del pj.
 		//Calcula solo la direccion no la distancia. con el .nor()
-		direccionBala.set(pj.getInput().getMouseX()/Box2dConfig.PPM - pj.getX(), pj.getInput().getMouseY()/Box2dConfig.PPM - pj.getY()); 
+		direccionBala.set(destinoX - pj.getX(), destinoY - pj.getY()); 
 		// direccionBala se normaliza para asegurarse de que tenga una longitud de 1, lo que significa que indica solo la dirección sin importar la distancia.
 		direccionBala.nor(); 
 		//movimientoBala guarda el valor de direccionBala.
@@ -112,5 +113,8 @@ public final class Disparo{
 	
 	public int getCantMonedas() {
 		return this.pj.getCantMonedas();
+	}
+	public Vector2 getMovimientoBala() {
+		return this.movimientoBala;
 	}
 }

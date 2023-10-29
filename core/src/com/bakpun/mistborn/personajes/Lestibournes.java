@@ -16,7 +16,7 @@ public final class Lestibournes extends Personaje{
 
 	@Override
 	protected void crearPoderes(World mundo,OrthographicCamera cam,Colision c) {
-		poderes[0] = new Hierro();
+		poderes[0] = new Hierro(mundo,this,cam,c);
 	}
 
 }

@@ -107,7 +107,8 @@ public class Entradas implements InputProcessor{
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
+		mouseX = screenX;
+		mouseY = Config.ALTO - screenY;
 		return false;
 	}
 

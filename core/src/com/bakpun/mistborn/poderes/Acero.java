@@ -12,24 +12,21 @@ import com.bakpun.mistborn.utiles.Recursos;
 public class Acero extends Poder implements Disparable{
 
 	//Poder que empuja objetos metalicos o disparo de monedas.
-	private Disparo disparo;
 	
 	public Acero(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
-		super(Recursos.MARCO_ACERO, Color.CYAN,TipoPoder.ACERO); 
-		disparo = new Disparo(mundo,pj,cam,c);
+		super(Recursos.MARCO_ACERO, Color.CYAN,TipoPoder.ACERO,pj); 
+		crearDisparo(mundo,pj,cam,c);
 	}
 
 	@Override
 	public void quemar() {
-		if(disparo.getCantMonedas() > 0) {		//Si tiene monedas dispara sino no puede.
-			disparo.disparar();
+		if(super.disparo.getCantMonedas() > 0) {		//Si tiene monedas dispara sino no puede.
+			super.disparo.disparar();
 		}
 	}
-	
+
 	@Override
-	public Disparo getDisparo(){
-		return this.disparo;
+	public void crearDisparo(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
+		super.disparo = new Disparo(mundo,pj,cam,c);
 	}
-	
-	
 }

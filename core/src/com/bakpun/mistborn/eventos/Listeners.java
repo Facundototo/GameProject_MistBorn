@@ -16,13 +16,17 @@ public class Listeners {
 	
 	public static void crearBarraHUD(String ruta,Color color,TipoPoder tipo) {		//Este evento va a llamar al metodo de Hud para crear los marcos del poder que se cree.
 		for (EventListener listener : listeners) {
+			if(listener instanceof EventoCrearBarra) {
 				((EventoCrearBarra)listener).crearBarra(ruta,color,tipo);
 			}
+		}
 	}
 	
 	public static void reducirVidaPj(float dano) {		//Evento que se utiliza en Hud y Personaje.
 		for (EventListener listener : listeners) {
-			((EventoReducirVida)listener).reducirVida(dano);
+			if(listener instanceof EventoReducirVida) {
+				((EventoReducirVida)listener).reducirVida(dano);
+			}
 		}
 	}
 	

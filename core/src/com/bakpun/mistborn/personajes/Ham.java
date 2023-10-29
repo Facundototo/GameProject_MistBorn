@@ -16,7 +16,7 @@ public final class Ham extends Personaje{
 
 	@Override
 	protected void crearPoderes(World mundo,OrthographicCamera cam,Colision c) {
-		super.poderes[0] = new Peltre();
+		super.poderes[0] = new Peltre(this);
 	}
 
 }

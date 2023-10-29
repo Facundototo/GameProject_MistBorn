@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,12 +12,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
+import com.bakpun.mistborn.box2d.ColisionMouse;
 import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
 import com.bakpun.mistborn.elementos.Audio;
-import com.bakpun.mistborn.elementos.Disparo;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.TipoPersonaje;
+import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.EventoRestarMonedas;
@@ -38,7 +40,7 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 	private Vector2 movimiento;
 	private Fisica f;
 	private Colision c;
-	private Disparo disparo;
+	private ColisionMouse cm;
 	private TextureRegion saltos[] = new TextureRegion[3];
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
@@ -62,7 +64,7 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 		this.monedas = 10;	//Monedas iniciales 10.
 		movimiento = new Vector2();
 		f = new Fisica();
-		disparo = new Disparo(mundo,this,cam,c);
+		cm = new ColisionMouse(mundo,cam);
 		Audio.setSonidoPjCorriendo();
  		spr = new Imagen(rutaPj);
  		spr.setEscalaBox2D(12);
@@ -95,7 +97,6 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 	public void draw() {
 		/* Cosas que hay que hacer como principal para el disparo:
 
-		 * Hacer un ArrayList de las monedas del jugador, esto informarle al HUD mediante un evento.
 		 * Hacer el sonido de la moneda cuando se dispara.
 		 */
 		
@@ -130,17 +131,14 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 		} 
 		
 		// Chequea todo el tiempo calcularFuerzas() porque lo que pasa es que todo lo de Disparo no se puede chequear en Acero.
-		if(tipo == TipoPersonaje.NACIDO_BRUMA || tipo == TipoPersonaje.LANZAMONEDAS) {
-			boolean encontrado = false;
-			int i = 0;
-			do {
-				if (poderes[i] instanceof Disparable) {		//Esta condicion chequea si el poder implementa Disparable.
-					((Disparable) poderes[i]).getDisparo().calcularFuerzas(disparando);	//La interfaz Disparable solo la tiene Acero.
-					encontrado = true;
-				}
-				i++;
-			}while(!encontrado);
+		if(poderes[seleccion].getTipoPoder() == TipoPoder.ACERO) {
+			poderes[seleccion].getDisparo().calcularFuerzas(disparando);	
 		}
+		
+		if((poderes[seleccion].getTipoPoder() == TipoPoder.HIERRO)) {
+			cm.dibujar(new Vector2(pj.getPosition().x,pj.getPosition().y), new Vector2(entradas.getMouseX()/Box2dConfig.PPM,entradas.getMouseY()/Box2dConfig.PPM));
+		}
+		
 	}
 
 	private void calcularAcciones() {
@@ -194,12 +192,7 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 			spr.flip((correrDerecha)?false:true);
 		}
 	}
-
-	public void drawLineaDisparo() {
-		if(apuntando) {
-			this.disparo.drawLinea();
-		}	
-	}
+	
 	public void dispose() {
 		spr.getTexture().dispose();
 	}
@@ -262,4 +255,8 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 	public int getCantMonedas() {
 		return this.monedas;
 	}
+	public ColisionMouse getColisionMouse() {
+		return this.cm;
+	}
+	
 }

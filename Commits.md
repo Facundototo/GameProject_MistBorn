@@ -9,6 +9,14 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "poder Hierro hecho,ColisionMouse,muchas cosas" - Fecha 29/10
+
+- Terminamos de hacer el poder Hierro, anda como lo esperado.
+- Para hacer el Hierro creamos la clase ColisionMouse para detectar a traves de un rayo los bodies metalicos del mundo.
+- En base a eso creamos la clase ObjetoMetalico, para crear estos objetos de metal.
+- Tuvimos que modificar bastantes cosas como la interfaz Disparable, la clase Disparo un poco, porque nos convenia para hacer el poder de Hierro, creemos que lo supimos adaptar.
+- Tambien hemos hecho modificaciones en la clase Poder, Personaje,PantallaPvP, entre otras.
+
 ### "adaptando Disparo a Acero, ESC para PantallaSeleccion y evento restarMoneda()" - Fecha 25/10
 
 - Adaptamos la clase Disparo al poder de Acero, ya ahora cuando selecciona el poder acero puede disparar joya.

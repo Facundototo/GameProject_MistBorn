@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.box2d;
 
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -25,6 +26,12 @@ public class Fisica {
 	
 	public void setBody(BodyType type,Vector2 position) {		//Asigna el tipo de body y la posicion.
 		bd.type = type;	
+		bd.position.set(position);
+	}
+	
+	public void setBody(BodyType type,Vector2 position,int angulo) {		//Sobrecarga para ponerle un angulo.
+		bd.type = type;	
+		bd.angle = angulo * MathUtils.degreesToRadians;		//Transforma los grados a radianes.
 		bd.position.set(position);
 	}
 	

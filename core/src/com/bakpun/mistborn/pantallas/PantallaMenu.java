@@ -2,7 +2,6 @@ package com.bakpun.mistborn.pantallas;
 
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
@@ -47,6 +46,8 @@ public final class PantallaMenu implements Screen {
 		Audio.setSonidoMenu();
 		Gdx.input.setInputProcessor(entradas);
 		cargarTextos();
+		
+		
 	}
 
 	public void render(float delta) {

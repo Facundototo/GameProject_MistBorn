@@ -20,8 +20,8 @@ public final class Vin extends Personaje{
 	@Override
 	protected void crearPoderes(World mundo,OrthographicCamera cam,Colision c) {
 		super.poderes[0] = new Acero(mundo,this,cam,c);		
-		super.poderes[1] = new Hierro();	
-		super.poderes[2] = new Peltre();
+		super.poderes[1] = new Hierro(mundo,this,cam,c);	
+		super.poderes[2] = new Peltre(this);
 	}
 
 }
