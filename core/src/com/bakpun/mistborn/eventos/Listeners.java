@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 
 import com.badlogic.gdx.graphics.Color;
+import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 
 public class Listeners {
@@ -30,10 +31,24 @@ public class Listeners {
 		}
 	}
 	
+	public static void reducirPoderPj(TipoPersonaje tipoPj,TipoPoder tipoPoder,float energia) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoReducirPoder)
+			((EventoReducirPoder)listener).reducirPoder(tipoPj, tipoPoder, energia);
+		}
+	}
+	
 	public static void restarMonedas() {
 		for (EventListener listener : listeners) {
 			if(listener instanceof EventoRestarMonedas)
 			((EventoRestarMonedas)listener).restarMonedas();
+		}
+	}
+	
+	public static void setDuracion(int segundo) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoSetDuracionPeltre)
+			((EventoSetDuracionPeltre)listener).setDuracion(segundo);
 		}
 	}
 }

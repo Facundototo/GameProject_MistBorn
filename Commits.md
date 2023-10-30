@@ -9,6 +9,14 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "terminamos los poderes, barras de HUD adaptadas y mas cosas" - Fecha 29/10
+
+- Terminamos lo que vendrian a ser todos los poderes del juego, hicimos el peltre y hicimos cambio de opcion con la X en el poder de Acero (el concepto esta en el PNG que lo explica).
+- Creamos la clase Basura para borrar mas facilmente las monedas inutiles, porque antes teniamos problemas al estar todo en una clase (Disparo).
+- Creamos 2 interfaces mas para realizar eventos, una para reducirPoder() en el Hud, cuando se esta quemando uno y la otra interfaz para decirle al hud la duracion del poder del Peltre.
+- Creamos un enumerador OpcionAcero para switchear entre DISPARO Y EMPUJE cuando toca la tecla X. Tambien nos sirve en la clase Personaje para dibujar la ColisionMouse si es EMPUJE.
+- Hemos hecho cambios en los poderes tambien para todo el tema del gasto de energia. 
+
 ### "poder Hierro hecho,ColisionMouse,muchas cosas" - Fecha 29/10
 
 - Terminamos de hacer el poder Hierro, anda como lo esperado.

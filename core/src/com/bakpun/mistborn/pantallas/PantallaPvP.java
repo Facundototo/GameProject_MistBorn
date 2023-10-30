@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.box2d.Fisica;
+import com.bakpun.mistborn.elementos.Basura;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.elementos.ObjetoMetalico;
 import com.bakpun.mistborn.elementos.Plataforma;
@@ -51,6 +52,7 @@ public final class PantallaPvP implements Screen{
 	private ObjetoMetalico metal;
 
 	//Para que quede bien, faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
+	//Hacer las texturas de los objetos de metal y las monedas.
 	
 	public PantallaPvP(String clasePj) {
 		this.nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
@@ -70,6 +72,9 @@ public final class PantallaPvP implements Screen{
 		hud = new Hud();
 		pj1 = crearPersonaje(this.nombrePj);
 		//pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
+		
+		Basura.mundo = mundo;
+		Basura.c = colisionMundo;
 		
 		//crearPlataformas();
 		crearLimites();
@@ -94,7 +99,7 @@ public final class PantallaPvP implements Screen{
 		
 		hud.draw(delta);	//Dibujo el hud.
 		
-	
+		Basura.borrarBasura();		//Se llama siempre a este metodo static para que borre las monedas.
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
 		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.

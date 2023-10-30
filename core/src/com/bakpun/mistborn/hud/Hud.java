@@ -2,13 +2,12 @@ package com.bakpun.mistborn.hud;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,24 +15,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.elementos.SkinFreeTypeLoader;
 import com.bakpun.mistborn.enums.Fuente;
+import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.EventoCrearBarra;
+import com.bakpun.mistborn.eventos.EventoReducirPoder;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.EventoRestarMonedas;
+import com.bakpun.mistborn.eventos.EventoSetDuracionPeltre;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 
-public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoRestarMonedas{
+public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoRestarMonedas,EventoSetDuracionPeltre,EventoReducirPoder{
 
 	private Skin skin;
 	private Stage stage;
 	private Table tabla;
 	private Image marcoVida;
 	private Image[] marcosPoder = new Image[3];		//Lo creamos con el max de poderes que puede tener un pj pero lo limita el for de shapesPoder.
-	private Label cantMonedas;
+	private Label cantMonedas,tiempoPeltre;
 	private ShapeRenderer shapeVida;
 	private ArrayList<ShapeRenderer> shapesPoder;	//Este arraylist porque no se sabe cuantos poderes se van a crear.
+	private float[] energiaPoderes;
 	private float vida,escalado = 1.5f;
 	private int monedas = 10;
 	
@@ -60,14 +63,6 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 	}
 	
 	public void draw(float delta) {
-		
-		// Este if es para probar si anda la vida.
-		if(Gdx.input.isKeyPressed(Keys.S) && vida > 19*escalado) {
-			vida -= 1f;
-		}else if(Gdx.input.isKeyPressed(Keys.W) && vida < 182*escalado) {
-			vida += 1f;	
-		}
-		
 		drawVida();
 		drawPoderes();
 		
@@ -90,9 +85,11 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 		for (int i = 0; i < shapesPoder.size(); i++) {
 			shapesPoder.get(i).setProjectionMatrix(stage.getCamera().combined);
 			shapesPoder.get(i).begin(ShapeType.Filled);
-			shapesPoder.get(i).rect(marcosPoder[i].getX()+12*escalado, marcosPoder[i].getY(), vida, marcosPoder[i].getHeight());
+			shapesPoder.get(i).rect(marcosPoder[i].getX()+10*escalado, marcosPoder[i].getY(), energiaPoderes[i], marcosPoder[i].getHeight());
 			shapesPoder.get(i).end();
 		}
+		
+		tiempoPeltre.setVisible((tiempoPeltre.getText().contains("0")?false:true));	//Si es cero desaparece el contador.
 	}
 	
 	
@@ -109,9 +106,19 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 		if(tipo == TipoPoder.ACERO) {		//Para que se agregue al lado de la barra de acero el contador de monedas que tiene el pj.
 			cantMonedas = new Label(String.valueOf(monedas),Fuente.PIXELTEXTO.getStyle(skin));
 			tabla.add(cantMonedas).right();
+		}else if(tipo == TipoPoder.PELTRE) {
+			tiempoPeltre = new Label(String.valueOf(0),Fuente.PIXELTEXTO.getStyle(skin));
+			//Aca se hace la secuencia del fade, aplicandole un delay para que funcione.
+			tiempoPeltre.addAction(Actions.forever(Actions.sequence(Actions.fadeIn(0.3f),Actions.fadeOut(0.3f),Actions.delay(0.2f))));
+			tabla.add(tiempoPeltre).right();
+		
 		}
 		tabla.row();
 		
+		energiaPoderes = new float[shapesPoder.size()];	
+		for (int i = 0; i < energiaPoderes.length; i++) {
+			energiaPoderes[i] = 240f;
+		}
 	}
 	@Override
 	public void reducirVida(float dano) {
@@ -121,6 +128,20 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 	@Override
 	public void restarMonedas() {
 		cantMonedas.setText(String.valueOf(--monedas));
+	}
+
+	@Override
+	public void setDuracion(int segundo) {
+		this.tiempoPeltre.setText(String.valueOf(segundo));
+	}
+
+	@Override
+	public void reducirPoder(TipoPersonaje tipoPj, TipoPoder tipoPoder,float energia) {
+		if(tipoPj == TipoPersonaje.NACIDO_BRUMA) {
+			energiaPoderes[tipoPoder.getNroSeleccion()] -= (energia/100)*210;
+		}else {
+			energiaPoderes[0] -= (energia/100)*210;
+		}
 	}
 	
 	

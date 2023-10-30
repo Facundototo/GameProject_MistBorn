@@ -7,7 +7,7 @@ import com.bakpun.mistborn.utiles.Config;
 
 public class Entradas implements InputProcessor{
 
-	private boolean abajo,arriba,irDerD,irIzqA,saltar,mouseClickDer,mouseClickIzq,enter,escape,irDerRight,irIzqLeft;
+	private boolean abajo,arriba,irDerD,irIzqA,saltar,mouseClickDer,mouseClickIzq,enter,escape,irDerRight,irIzqLeft,primerPoder,segundoPoder;
 	private int mouseX=0,mouseY=0;
 	
 	public boolean keyDown(int keycode) {
@@ -39,6 +39,12 @@ public class Entradas implements InputProcessor{
 		if(keycode == Keys.ESCAPE) {
 			escape = true;
 		}
+		if(keycode == Keys.NUM_1) {
+			primerPoder = true;
+		}
+		if(keycode == Keys.NUM_2) {
+			segundoPoder = true;
+		}
 		return false;
 	}
 
@@ -69,6 +75,12 @@ public class Entradas implements InputProcessor{
 		}
 		if(keycode == Keys.ESCAPE) {
 			escape = false;
+		}
+		if(keycode == Keys.NUM_1) {
+			primerPoder = false;
+		}
+		if(keycode == Keys.NUM_2) {
+			segundoPoder = false;
 		}
 		return false;
 	}
@@ -157,6 +169,12 @@ public class Entradas implements InputProcessor{
 	}
 	public boolean isBotonIzq() {
 		return this.mouseClickIzq;
+	}
+	public boolean isPrimerPoder() {
+		return this.primerPoder;
+	}
+	public boolean isSegundoPoder() {
+		return this.segundoPoder;
 	}
 	public int getMouseX() {
 		return this.mouseX;

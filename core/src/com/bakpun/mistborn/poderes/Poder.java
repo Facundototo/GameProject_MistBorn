@@ -8,9 +8,10 @@ import com.bakpun.mistborn.personajes.Personaje;
 
 public abstract class Poder{
 	
+	protected TipoPoder tipo;
 	protected Personaje pj;
-	private TipoPoder tipo;
 	protected Disparo disparo;
+	protected float energia = 100f;
 	
 	public Poder(String ruta,Color color,TipoPoder tipo,Personaje pj) {
 		Listeners.crearBarraHUD(ruta, color,tipo);	//Llama al evento para crear la barra especifica del Hud.
