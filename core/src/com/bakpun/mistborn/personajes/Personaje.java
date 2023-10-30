@@ -84,7 +84,7 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 		pj = mundo.createBody(f.getBody());
 		pj.createFixture(f.getFixture());
 		pj.setUserData(UserData.PJ);	//ID para la colision.
-		pj.setFixedRotation(true);		//Para que el body no rote por culpa de las fuerzas.
+		pj.setFixedRotation(true);		//Para que el body no rote.
 		f.getPolygon().dispose();
 	}
 
@@ -111,7 +111,7 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 		animar();
 		reproducirSFX();
 		
-		quemarPoder();	//Seleccion de poderes.
+		quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
 
 	}
 	private void quemarPoder() {

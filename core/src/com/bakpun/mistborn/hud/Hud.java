@@ -88,8 +88,10 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 			shapesPoder.get(i).rect(marcosPoder[i].getX()+10*escalado, marcosPoder[i].getY(), energiaPoderes[i], marcosPoder[i].getHeight());
 			shapesPoder.get(i).end();
 		}
+		if(tiempoPeltre != null) {
+			tiempoPeltre.setVisible((tiempoPeltre.getText().contains("0")?false:true));	//Si es cero desaparece el contador.
+		}
 		
-		tiempoPeltre.setVisible((tiempoPeltre.getText().contains("0")?false:true));	//Si es cero desaparece el contador.
 	}
 	
 	
@@ -111,7 +113,6 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 			//Aca se hace la secuencia del fade, aplicandole un delay para que funcione.
 			tiempoPeltre.addAction(Actions.forever(Actions.sequence(Actions.fadeIn(0.3f),Actions.fadeOut(0.3f),Actions.delay(0.2f))));
 			tabla.add(tiempoPeltre).right();
-		
 		}
 		tabla.row();
 		

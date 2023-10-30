@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "poniendo cursor personalizado" - Fecha 30/10
+
+- Creamos los cursores para el mouse y para la colision del Mouse con los bodies de box2D.
+- Los implementamos en ColisionMouse y PantallaPvP.
+- Archivos XCF y assets estan subidos.
+
 ### "terminamos los poderes, barras de HUD adaptadas y mas cosas" - Fecha 29/10
 
 - Terminamos lo que vendrian a ser todos los poderes del juego, hicimos el peltre y hicimos cambio de opcion con la X en el poder de Acero (el concepto esta en el PNG que lo explica).

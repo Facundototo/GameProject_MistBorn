@@ -14,7 +14,7 @@ import com.bakpun.mistborn.utiles.Recursos;
 public class ColisionMouse{
 
 	private World mundo;
-	private Vector2 colision,normal;
+	private Vector2 colision;
 	private RayCastCallback callback;
 	private Imagen cursor;
 	private boolean colisionando = false;
@@ -22,10 +22,9 @@ public class ColisionMouse{
 	
 	public ColisionMouse(World mundo,OrthographicCamera cam) {
 		this.mundo = mundo;
-		normal = new Vector2();
 		colision = new Vector2();
-		cursor = new Imagen(Recursos.CABEZA_HAM);
-		cursor.setEscalaBox2D(32);
+		cursor = new Imagen(Recursos.CURSOR_COLISIONMOUSE);
+		cursor.setEscalaBox2D(24);
 	}
 	
 	public void dibujar(Vector2 posPj,Vector2 posMouse) {
@@ -38,7 +37,6 @@ public class ColisionMouse{
 			public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
 				if(fixture.getBody().getUserData() == UserData.METAL) {
 					colision.set(point);
-					ColisionMouse.this.normal.set(normal).add(point);
 					colisionando = true;
 					cursor.setPosicion(colision.x, colision.y);
 					cursor.draw();

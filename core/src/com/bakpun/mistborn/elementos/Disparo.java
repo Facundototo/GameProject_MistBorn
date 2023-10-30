@@ -41,15 +41,6 @@ public final class Disparo{
 		moneda = new Moneda();
 	}
 	
-	public void drawLinea() {
-		
-		linea.setProjectionMatrix(cam.combined);		//Linea para debuggear el disparo.
-		linea.begin(ShapeType.Line);
-		linea.setColor(Color.CYAN);
-		linea.line(pj.getX(), pj.getY(),pj.getInput().getMouseX()/Box2dConfig.PPM, pj.getInput().getMouseY()/Box2dConfig.PPM);
-		linea.end();
-	}
-	
 	public void disparar(float energia) {
 		//Le paso la energia por aca para que se chequee en el metodo calcularFuerzas(). Porque sino se puede quedar manteniendo el disparo de por vida.
 		this.energia = energia;		
@@ -69,7 +60,6 @@ public final class Disparo{
 		
 		if(balaDisparada) {
 			if(disparando && this.energia > 0) { 
-				System.out.println(energia);
 				moneda.getBody().setLinearVelocity(movimientoBala);
 				balaDisparada = true;
 				Listeners.reducirPoderPj(pj.getTipo(), TipoPoder.ACERO, 0.5f);

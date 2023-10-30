@@ -1,13 +1,13 @@
 package com.bakpun.mistborn.pantallas;
 
 import java.lang.reflect.Constructor;
-
 import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -50,6 +50,7 @@ public final class PantallaPvP implements Screen{
 	private Hud hud;
 	private String nombrePj;
 	private ObjetoMetalico metal;
+	private Pixmap cursor;
 
 	//Para que quede bien, faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
 	//Hacer las texturas de los objetos de metal y las monedas.
@@ -79,6 +80,9 @@ public final class PantallaPvP implements Screen{
 		//crearPlataformas();
 		crearLimites();
 		metal = new ObjetoMetalico(mundo,new Vector2(((Config.ANCHO/2)/Box2dConfig.PPM),(Config.ALTO/2)/Box2dConfig.PPM),45);
+		
+		cursor = new Pixmap(Gdx.files.internal(Recursos.CURSOR_MOUSE));	//Cargamos un cursor.
+		Gdx.graphics.setCursor(Gdx.graphics.newCursor(cursor, 0, 0));
 	}
 
 	public void render(float delta) {
@@ -133,6 +137,7 @@ public final class PantallaPvP implements Screen{
 		pj1.dispose();	//Texture.
 		pj2.dispose();	//Texture.
 		f.dispose();	
+		cursor.dispose();	
 		Render.batch.dispose();		//SpriteBatch.
 		this.dispose();
 	}

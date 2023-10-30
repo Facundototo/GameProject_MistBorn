@@ -22,6 +22,8 @@ public class Recursos {
 	public static final String MARCO_ACERO = "hud/acero.png";
 	public static final String MARCO_HIERRO = "hud/hierro.png";
 	public static final String MARCO_PELTRE = "hud/peltre.png";
+	public static final String CURSOR_MOUSE = "cursores/cursorMouse.png";
+	public static final String CURSOR_COLISIONMOUSE = "cursores/cursorColisionMouse.png";
 	
 	public static final String PLATAFORMA_GRANDE = "animaciones/plataGrande.png";
 	public static final String PLATAFORMA_CHICA = "animaciones/plataChica.png";
