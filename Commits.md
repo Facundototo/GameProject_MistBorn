@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "textura de la moneda y GestorMonedas" - Fecha 31/10
+
+- Añadimos la textura de las monedas.
+- Para dibujar las mismas tuvimos que modificar la clase Basura y ahora se llama GestorMonedas porque nos dimos cuenta de que se puede utilizar para dibujar las monedas en PantallaPvP.
+- El metodo añadirBasura() de la clase GestorMoneda tambien se utiliza en Colision porque ahi detecta mejor las monedas que se borran.
+
 ### "renovando PantallaCarga y PantallaMenu con Scene2D" - Fecha 31/10
 
 - Cambiamos las pantallas mencionadas para optimizar codigo con Scene2D.

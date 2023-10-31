@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.box2d.Fisica;
-import com.bakpun.mistborn.elementos.Basura;
+import com.bakpun.mistborn.elementos.GestorMonedas;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.elementos.ObjetoMetalico;
 import com.bakpun.mistborn.elementos.Plataforma;
@@ -42,18 +42,14 @@ public final class PantallaPvP implements Screen{
 	private Box2DDebugRenderer db;
 	private Fisica f;
 	private Body piso,pared;
-	private Plataforma plataformas[] = new Plataforma[7];
-	private Vector2[] posicionPlataformas = {new Vector2(400/Box2dConfig.PPM,325/Box2dConfig.PPM),new Vector2(1400/Box2dConfig.PPM,325/Box2dConfig.PPM)
-			,new Vector2(1400/Box2dConfig.PPM,650/Box2dConfig.PPM),new Vector2(500/Box2dConfig.PPM,750/Box2dConfig.PPM),new Vector2(750/Box2dConfig.PPM,500/Box2dConfig.PPM),
-			new Vector2(1750/Box2dConfig.PPM,500/Box2dConfig.PPM),new Vector2(1000/Box2dConfig.PPM,600/Box2dConfig.PPM)};
+	private Plataforma plataformas[] = new Plataforma[5];	
 	private InputMultiplexer im;
 	private Hud hud;
 	private String nombrePj;
 	private ObjetoMetalico metal;
 	private Pixmap cursor;
 
-	//Para que quede bien, faltaria adaptar las plataformas y los pj a las diferentes resoluciones.
-	//Hacer las texturas de los objetos de metal y las monedas.
+	//Hacer las texturas de los objetos de metal y aumentar los poderes y las monedas.
 	
 	public PantallaPvP(String clasePj) {
 		this.nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
@@ -74,10 +70,10 @@ public final class PantallaPvP implements Screen{
 		pj1 = crearPersonaje(this.nombrePj);
 		//pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
 		
-		Basura.mundo = mundo;
-		Basura.c = colisionMundo;
+		GestorMonedas.mundo = mundo;
+		GestorMonedas.c = colisionMundo;
 		
-		//crearPlataformas();
+		crearPlataformas();
 		crearLimites();
 		metal = new ObjetoMetalico(mundo,new Vector2(((Config.ANCHO/2)/Box2dConfig.PPM),(Config.ALTO/2)/Box2dConfig.PPM),45);
 		
@@ -90,20 +86,18 @@ public final class PantallaPvP implements Screen{
 		cam.update();	
 		
 		Render.batch.setProjectionMatrix(cam.combined);
-		
 		Render.batch.begin();
-		
 		fondo.draw();	//Dibujo el fondo.
 		pj1.draw(); 	//Updateo al jugador.
 		//pj2.draw();		//Updateo al jugador2.
-		/*for (int i = 0; i < plataformas.length; i++) {
+		for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
-		}*/
+		}		
+		GestorMonedas.drawMonedas();	//Se dibujan las monedas.
 		Render.batch.end();
 		
 		hud.draw(delta);	//Dibujo el hud.
-		
-		Basura.borrarBasura();		//Se llama siempre a este metodo static para que borre las monedas.
+		GestorMonedas.borrarBasura();		//Se llama siempre a este metodo static para que borre las monedas.
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
 		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
@@ -154,8 +148,11 @@ public final class PantallaPvP implements Screen{
 	}
 
 	private void crearPlataformas() {
+		Vector2[] posicionPlataformas = {new Vector2((Config.ANCHO/4)/Box2dConfig.PPM,(Config.ALTO/1.3f)/Box2dConfig.PPM),new Vector2((Config.ANCHO/1.3f)/Box2dConfig.PPM,(Config.ALTO/1.3f)/Box2dConfig.PPM)
+		,new Vector2(Config.ANCHO/2/Box2dConfig.PPM,Config.ALTO/1.7f/Box2dConfig.PPM),new Vector2((Config.ANCHO/1.3f)/Box2dConfig.PPM,(Config.ALTO/2.5f)/Box2dConfig.PPM),new Vector2((Config.ANCHO/4)/Box2dConfig.PPM,(Config.ALTO/3f)/Box2dConfig.PPM)};
+		
 		for (int i = 0; i < plataformas.length; i++) {
-			plataformas[i] = new Plataforma((i>=4)?true:false,posicionPlataformas[i],mundo);
+			plataformas[i] = new Plataforma(true,posicionPlataformas[i],mundo);
 		}
 	}
 	

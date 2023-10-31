@@ -1,10 +1,8 @@
 package com.bakpun.mistborn.elementos;
 
 
-import com.badlogic.gdx.graphics.Color;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
@@ -17,8 +15,6 @@ public final class Disparo{
 	
 	private Colision c;
 	private World mundo;
-	private OrthographicCamera cam;
-	private ShapeRenderer linea;
 	private Personaje pj;
 	private Moneda moneda;
 	private Vector2 direccionBala,posIniBala,movimientoBala,fuerzaContraria;
@@ -31,14 +27,12 @@ public final class Disparo{
 	public Disparo(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
 		this.mundo = mundo;
 		this.pj = pj;
-		this.cam = cam;
 		this.c = c;
-		linea = new ShapeRenderer();
 		direccionBala = new Vector2();
 		posIniBala = new Vector2();
 		movimientoBala = new Vector2();
 		fuerzaContraria = new Vector2();
-		moneda = new Moneda();
+		
 	}
 	
 	public void disparar(float energia) {
@@ -48,8 +42,12 @@ public final class Disparo{
 			actualizarDireccion(pj.getInput().getMouseX()/Box2dConfig.PPM,pj.getInput().getMouseY()/Box2dConfig.PPM);
 			//Agarra la pos del pj y la suma con la direccion(normalizada es igual a 1) por la amplitud(radio).
 		    posIniBala.set(pj.getX() + _amplitud * direccionBala.x, pj.getY() + _amplitud * direccionBala.y);	
-			
+		    
+		    Moneda moneda = new Moneda();
+		    this.moneda = moneda;		//Ponemos la variable moneda para que se use en los otros metodos.
 		    moneda.crear(posIniBala, mundo);
+		    GestorMonedas.agregarMoneda(moneda);	//La agregamos a este GestorMonedas para que despues de dibuje en PantallaPvP.
+		    
 		    balaDisparada = true;
 		}
 	}
@@ -59,6 +57,7 @@ public final class Disparo{
 		//Aclaracion: El juego se crashea me parece si saltamos y vamos disparando, no sabemos a que se debe.
 		
 		if(balaDisparada) {
+			
 			if(disparando && this.energia > 0) { 
 				moneda.getBody().setLinearVelocity(movimientoBala);
 				balaDisparada = true;
@@ -73,7 +72,7 @@ public final class Disparo{
 				}
 			}else {	
 				Listeners.restarMonedas();
-				Basura.agregarBasura(moneda);
+				GestorMonedas.agregarBasura(moneda.getBody());		//La agregamos a la basura para despues borrarla.
 				moneda.getBody().applyForceToCenter(new Vector2(0,0), true);	//Para que la moneda caiga realisticamente.
 				balaDisparada = false;
 			}

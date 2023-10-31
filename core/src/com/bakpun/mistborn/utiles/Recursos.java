@@ -10,6 +10,7 @@ public class Recursos {
 	public static final String FONDO_SELECCION = "fondos/backgroundSeleccion.png";
 	public static final String LOGO_MISTBORN = "fondos/logoMistBorn.png";
 
+	public static final String MONEDA = "objetos/moneda.png";
 
 	public static final String FUENTE_MENU = "fuentes/Enchanted Land.otf";
 	public static final String SONIDO_OPCION_MENU = "sonidos/cambiarOpcion.mp3";

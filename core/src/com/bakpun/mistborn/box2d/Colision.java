@@ -2,11 +2,13 @@ package com.bakpun.mistborn.box2d;
 
 import java.util.ArrayList;
 
+
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.bakpun.mistborn.elementos.GestorMonedas;
 import com.bakpun.mistborn.enums.UserData;
 
 //Clase para detectar las colisiones y que hacer en base a eso.
@@ -29,8 +31,10 @@ public class Colision implements ContactListener{
         
         if((bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.SALTO_P) || bodyA.getUserData() == UserData.MONEDA && bodyB.getUserData() == UserData.PARED) {
         	monedas.add(bodyA);
+        	GestorMonedas.agregarBasura(bodyA);	//Agrego aca la basura porque sino las monedas cuando se tira muchas a la vez no se borran.
         }else if(bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.SALTO_P || bodyB.getUserData() == UserData.MONEDA && bodyA.getUserData() == UserData.PARED) {
         	monedas.add(bodyB);
+        	GestorMonedas.agregarBasura(bodyA);
         }
         
         if(bodyA.getUserData() == UserData.PJ && bodyB.getUserData() == UserData.MONEDA) {       
