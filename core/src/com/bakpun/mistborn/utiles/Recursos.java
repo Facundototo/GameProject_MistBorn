@@ -4,6 +4,7 @@ public class Recursos {
 
 	//Las rutas de los assets.
 	
+	public static final String BARRA_NEGRA = "fondos/colornegro.png";
 	public static final String FONDO_MENU = "fondos/backgroundMenu.jpg";		
 	public static final String FONDO_PVP = "fondos/background.png";
 	public static final String FONDO_SELECCION = "fondos/backgroundSeleccion.png";

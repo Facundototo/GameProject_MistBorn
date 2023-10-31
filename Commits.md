@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "renovando PantallaCarga y PantallaMenu con Scene2D" - Fecha 31/10
+
+- Cambiamos las pantallas mencionadas para optimizar codigo con Scene2D.
+- Borramos las anteriores pantallas.
+- Modificamos el diseño de los botones del menu. Lo demas quedo bastante parecido. 
+
 ### "poniendo cursor personalizado" - Fecha 30/10
 
 - Creamos los cursores para el mouse y para la colision del Mouse con los bodies de box2D.
