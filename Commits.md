@@ -9,6 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "ultimos cambios de PantallaMenu" - Fecha 3/11
+
+- Cambiamos el LabelStyle de las opciones de PantallaMenu, las añadimos usando SkinComposer.
+- Borramos metodos que de la clase Config que ya no utilizamos.
+- Añadimos la fuente nueva al enum Fuente.
+- Borramos de los assets y la ruta en Recursos, la fuente que usabamos antes.
+
 ### "opciones del menu, Audio y locale" - Fecha 2/11
 
 - Añadimos la ventana de opciones con scene2d en PantallaMenu(), borramos la clase VentanaOpciones que anteriormente usabamos.

@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -32,7 +32,7 @@ public class PantallaMenu implements Screen{
 	private Stage stage;
 	private Skin skin;
 	private Table tablaCont, tablaBotones,tablaOpciones;
-	private TextButton botones[] = new TextButton[3];
+	private Label botones[] = new Label[3];
 	private Image fondo,barraNegra,fondoNegro;
 	private SelectBox<String> modoPantalla;
 	private Label textoMusica,textoSonido,numeroVolMusica,numeroVolSonido;
@@ -55,9 +55,9 @@ public class PantallaMenu implements Screen{
 		tablaBotones = new Table();
 		tablaOpciones = new Table();
 		tablaCont = new Table();
-		botones[0] = new TextButton(Render.bundle.get("menu.jugar"), skin);
-		botones[1] = new TextButton(Render.bundle.get("menu.opciones"), skin);
-		botones[2] = new TextButton(Render.bundle.get("menu.salir"), skin);
+		botones[0] = new Label(Render.bundle.get("menu.jugar"), Fuente.PIXELMENU.getStyle(skin));
+		botones[1] = new Label(Render.bundle.get("menu.opciones"), Fuente.PIXELMENU.getStyle(skin));
+		botones[2] = new Label(Render.bundle.get("menu.salir"), Fuente.PIXELMENU.getStyle(skin));
 		//Ventana Opciones
 		fondoNegro = new Image(new Texture(Recursos.BARRA_NEGRA));
 		modoPantalla = new SelectBox<String>(skin);
@@ -82,13 +82,14 @@ public class PantallaMenu implements Screen{
 		
 		for (int i = 0; i < botones.length; i++) {
 			final int opc = i;
-			tablaBotones.add(botones[i]).size(150,40).pad(15).row();
+			tablaBotones.add(botones[i]).left().pad(10).row();
 			botones[i].addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					if(!flagOpciones) {		//If para que no puedas seleccionar si esta en la ventanaOpciones
 						Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 						seleccion = opc;
+						colorearSeleccion();
 						tocarOpcion(true);
 					}
 				}
@@ -102,7 +103,7 @@ public class PantallaMenu implements Screen{
 		modoPantalla.setWidth(100);
 		
 		fondo.addAction(Actions.forever(Actions.parallel(Actions.sequence(		//Esta accion es la que maneja todo el movimiento del fondo.
-				Actions.moveTo(-1600, -1500, 10),
+				Actions.moveTo(-1600, -1500, 40),
 				Actions.fadeOut(1),
 				Actions.moveTo(0, 0),
 				Actions.fadeIn(1)
@@ -166,16 +167,16 @@ public class PantallaMenu implements Screen{
 			}
 		});
 		
-		volumenMusica.setValue(Render.audio.getVolumen(TipoAudio.MUSICA)*100);	//Ponemos el valor que tenia antes por si el usuario crea de nuevo la pantallaMenu.
+		volumenMusica.setValue(Render.audio.getVolumen(TipoAudio.MUSICA)*100);	//Ponemos el valor que tenia antes por si el usuario crea de nuevo la pantallaMenu().
 		volumenSonido.setValue(Render.audio.getVolumen(TipoAudio.SONIDO)*100);
-		
+	
 		modoPantalla.addListener(new ChangeListener() {		
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {			//Si hubo algun cambio en el SelectBox este evento lo detecta.
 				if(modoPantalla.getSelected().equals(Render.bundle.get("menuopciones.fullscreen"))) {		//Si el string seleccionado es fullscreen.
 					Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 				}else {
-					Gdx.graphics.setWindowedMode(1920, 1080);
+					Gdx.graphics.setWindowedMode(Config.ANCHO, Config.ALTO);
 				}
 			}
 		});
@@ -202,10 +203,10 @@ public class PantallaMenu implements Screen{
 	}
 
 	private void colorearSeleccion() {
-		botones[seleccion].setColor(Color.PURPLE);
+		botones[seleccion].setColor(Color.RED);
 		for (int i = 0; i < botones.length; i++) {
 			if(i != seleccion) {
-				botones[i].setColor(Color.BLACK);
+				botones[i].setColor(Color.WHITE);
 			}
 		}		
 	}

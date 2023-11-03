@@ -8,7 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public enum Fuente {
 
 	//Fuentes de texto que se usaran en el juego.
-	PIXELINFO("fontpixel-info-white"),PIXELTEXTO("pixelfont-white");
+	PIXELINFO("fontpixel-info-white"),
+	PIXELTEXTO("pixelfont-white"),
+	PIXELMENU("pixelfontMenu");	
 	
 	private String nombreFuente;
 	
