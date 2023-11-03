@@ -11,12 +11,14 @@ public class MistBorn extends Game {
 
 	
 	public void create() {
-		Audio.setCancionMenu();	//Reproduzco la cancion aca porque quiero que se escuche en la 2 pantallas diferentes.
-		Audio.cancionMenu.play();
+		Render.audio = new Audio();
 		Render.app = this;			//Asigno a app esta clase para hacer el metodo setScreen() en otras pantallas.
 		Render.batch = new SpriteBatch();	//SpriteBatch unico.
+		Render.audio.cancionMenu.play();
+		Render.audio.cancionMenu.setLooping(true);
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		this.setScreen(new PantallaCarga());
+		
 	}
 
 	public void render () {
@@ -25,6 +27,7 @@ public class MistBorn extends Game {
 	
 	public void dispose () {
 		Render.batch.dispose();		//SpriteBatch.
+		Render.audio.dispose();
 		super.dispose();		
 	}
 }

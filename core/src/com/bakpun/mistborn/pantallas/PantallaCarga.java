@@ -17,6 +17,7 @@ public class PantallaCarga implements Screen{
 	private Image logo;
 	private Entradas entradas;
 	
+	
 	public PantallaCarga() {
 		stage = new Stage();
 		logo = new Image(new Texture(Recursos.LOGO_MISTBORN));
@@ -29,19 +30,19 @@ public class PantallaCarga implements Screen{
 		stage.addActor(logo);
 		
 		((OrthographicCamera)stage.getViewport().getCamera()).zoom = 3f;
-		logo.getColor().a = 0;
+		logo.getColor().a = 0;		//Canal alpha del logo empieza en 0.
 	}
 
 	@Override
 	public void render(float delta) {
 		Render.limpiarPantalla(0, 0, 0);
-		((OrthographicCamera)stage.getViewport().getCamera()).zoom -= 0.003f;
+		((OrthographicCamera)stage.getViewport().getCamera()).zoom -= 0.003f;	//Se aumenta el zoom.
 		
-		if(((OrthographicCamera)stage.getViewport().getCamera()).zoom < 3f) {
-			logo.addAction(Actions.alpha(1, 3));
+		if(((OrthographicCamera)stage.getViewport().getCamera()).zoom < 3f) {	//Hace una especie de fadeIn.
+			logo.addAction(Actions.alpha(1, 1));
 		}
-		
-		if(((OrthographicCamera)stage.getViewport().getCamera()).zoom <= 1.5f) {
+		//Si llega a determinado zoom o toca click o espacion salta a la otra pantalla.
+		if(((OrthographicCamera)stage.getViewport().getCamera()).zoom <= 1.5f || entradas.isEspacio() || entradas.isBotonIzq()) {
 			logo.addAction(Actions.sequence(
 					Actions.fadeOut(0.7f),
 					Actions.run(new Runnable() {	
@@ -51,16 +52,10 @@ public class PantallaCarga implements Screen{
 						}
 					})));
 		}
-		
-		if(entradas.isEspacio() || entradas.isBotonIzq()) {
-			Render.app.setScreen(new PantallaMenu());
-		}
-		
-		
 		stage.draw();
 		stage.act();
 	}
-
+	
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);

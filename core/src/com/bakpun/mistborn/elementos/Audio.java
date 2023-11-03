@@ -3,42 +3,42 @@ package com.bakpun.mistborn.elementos;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.bakpun.mistborn.enums.TipoAudio;
 import com.bakpun.mistborn.utiles.Recursos;
 
 public class Audio {
-	//Clase para organizar todos los sonidos del videojuego, no se usa como instancia(me genera ciertos problemas).
-	//Esta todo static, me da bronca eso.
+	//Clase para organizar todos los sonidos del videojuego.
 	
-	public static Sound sonidoMenu,sonidoSeleccion,seleccionElegida,pjCorriendo;
-	public static Music cancionMenu;
-	public static float volumen = 1f;
+	public Sound sonidoMenu,sonidoSeleccion,seleccionElegida,pjCorriendo;
+	public Music cancionMenu;
+	private float volumenMusica = 0.5f,volumenSonido = 0.5f;	//Volumenes iniciales
 	
-	public static void setVolumen(float num) {
-		volumen += num;
-		cancionMenu.setVolume(volumen);
-		sonidoMenu.setVolume(sonidoMenu.play(),volumen);
-		//sonidoSeleccion.setVolume(sonidoSeleccion.play(), volumen);
-		//pjCorriendo.setVolume(pjCorriendo.play(), volumen);  		//Lo dejo asi porque no estoy muy seguro de como hacerlo.
-	}
-	
-	public static void setSeleccionElegida() {
+	public Audio() {
 		seleccionElegida = Gdx.audio.newSound(Gdx.files.internal(Recursos.SELECCION_ELEGIDA));
-	}
-	public static void setSonidoSeleccion() {
 		sonidoSeleccion = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_SELECCION));
-	}
-	public static void setCancionMenu() {
 		cancionMenu = Gdx.audio.newMusic(Gdx.files.internal(Recursos.CANCION_MENU));
-	}
-	public static void setSonidoMenu() {
 		sonidoMenu = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_OPCION_MENU));
-	}
-	public static void setSonidoPjCorriendo() {
 		pjCorriendo = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_PJ_CORRIENDO));
 	}
-	public static float getVolumen() {
-		return volumen;
+	
+	public void setVolumen(float volumen,TipoAudio tipo) {
+		if(tipo == TipoAudio.MUSICA) {
+			this.volumenMusica = (volumen/100);		//Lo divido por cien porque el volumen va del 0 al 1.
+		}else {
+			this.volumenSonido = (volumen/100);
+		}
+		cancionMenu.setVolume(this.volumenMusica);
 	}
 	
+	public void dispose() {
+		sonidoMenu.dispose();
+		sonidoSeleccion.dispose();
+		seleccionElegida.dispose();
+		pjCorriendo.dispose();
+		cancionMenu.dispose();
+	}
 	
+	public float getVolumen(TipoAudio tipo) {
+		return (tipo == TipoAudio.SONIDO)?this.volumenSonido:this.volumenMusica;	
+	}
 }

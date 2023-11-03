@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,9 +15,9 @@ import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.box2d.ColisionMouse;
 import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
-import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.OpcionAcero;
+import com.bakpun.mistborn.enums.TipoAudio;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.enums.UserData;
@@ -27,6 +28,7 @@ import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.poderes.Acero;
 import com.bakpun.mistborn.poderes.Peltre;
 import com.bakpun.mistborn.poderes.Poder;
+import com.bakpun.mistborn.utiles.Render;
 
 public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas{
 	
@@ -66,7 +68,6 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 		movimiento = new Vector2();
 		f = new Fisica();
 		cm = new ColisionMouse(mundo,cam);
-		Audio.setSonidoPjCorriendo();
  		spr = new Imagen(rutaPj);
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
@@ -158,12 +159,12 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 	private void reproducirSFX() {
 		if(estaCorriendo) {
 			if(!reproducirSonidoCorrer) {
-				Audio.pjCorriendo.play(0.2f);
+				Render.audio.pjCorriendo.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				reproducirSonidoCorrer = true;
 			}
 		}else {
 			if(reproducirSonidoCorrer) {
-				Audio.pjCorriendo.stop();
+				Render.audio.pjCorriendo.stop();
 				reproducirSonidoCorrer = false;
 			}
 		}

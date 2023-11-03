@@ -1,16 +1,16 @@
 package com.bakpun.mistborn.utiles;
 
 import com.badlogic.gdx.Gdx;
-
-
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.bakpun.mistborn.MistBorn;
+import com.bakpun.mistborn.elementos.Audio;
 
 public class Render {
 	public static SpriteBatch batch;	//Unico SpriteBatch para el programa.
 	public static MistBorn app;		//Para utilizar por ahora el setScreen() para cambiar las pantallas.
+	public static Audio audio;		//Para manipular los sonidos y canciones del juego.
 	public static I18NBundle bundle = I18NBundle.createBundle(Gdx.files.internal("locale/locale"));	//Un bundle para todas los textos del juego.
 
 	public static void limpiarPantalla(float r, float g, float b) {	

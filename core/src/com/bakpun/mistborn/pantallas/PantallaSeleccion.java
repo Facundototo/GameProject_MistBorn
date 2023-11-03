@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -20,10 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.elementos.SkinFreeTypeLoader;
 import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.enums.InfoPersonaje;
+import com.bakpun.mistborn.enums.TipoAudio;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
@@ -67,9 +68,6 @@ public final class PantallaSeleccion implements Screen{
 		for (int i = 0; i < imgPj.length; i++) {
 			imgPj[i] = new Image(new Texture(InfoPersonaje.values()[i].getRutaTextura()));
 		}
-		
-		Audio.setSonidoSeleccion();
-		Audio.setSeleccionElegida();
 	}
 
 	public void show() {
@@ -111,7 +109,7 @@ public final class PantallaSeleccion implements Screen{
 		if(!opcionElegida) {
 			if(entradas.isEnter()) {
 				opcionElegida = true;
-				Audio.seleccionElegida.play();
+				Render.audio.seleccionElegida.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				avisoSeleccion.setVisible(false);
 				cambiarPantallaFadeOut(seleccion);
 			}
@@ -132,7 +130,7 @@ public final class PantallaSeleccion implements Screen{
 			Actions.run(new Runnable() {   
 			  @Override
 	            public void run() {					//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
-					Audio.cancionMenu.stop();
+					Render.audio.cancionMenu.stop();
 	                Render.app.setScreen(new PantallaPvP(InfoPersonaje.values()[_seleccionElegida].getNombre()));
 	            }})));	
 	}
@@ -168,7 +166,7 @@ public final class PantallaSeleccion implements Screen{
 		         public void clicked(InputEvent event, float x, float y) {
 		             seleccion = opc;
 		             mostrarInformacion(seleccion);
-		             Audio.sonidoSeleccion.play();
+		             Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				 } 
 			});
 			botones.add(botonesPj[i]).pad(10);
@@ -197,13 +195,13 @@ public final class PantallaSeleccion implements Screen{
 		
 		if(derecha) {
 			if(tiempo >= 0.2f) {	
-				Audio.sonidoSeleccion.play();
+				Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				seleccion = (seleccion == cantMaxPersonajes-1)?0:seleccion+1;
 				tiempo = 0;
 			}
 		}else if(izquierda) {
 			if(tiempo >= 0.2f) {
-				Audio.sonidoSeleccion.play();
+				Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				seleccion = (seleccion == 0)?cantMaxPersonajes-1:seleccion-1;
 				tiempo = 0;
 			}
@@ -247,7 +245,7 @@ public final class PantallaSeleccion implements Screen{
 	
 	public void dispose() {
 		stage.dispose();
-		Audio.sonidoSeleccion.dispose();
+		Render.audio.sonidoSeleccion.dispose();
 	}
 
 	

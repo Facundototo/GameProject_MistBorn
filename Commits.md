@@ -9,6 +9,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "opciones del menu, Audio y locale" - Fecha 2/11
+
+- Añadimos la ventana de opciones con scene2d en PantallaMenu(), borramos la clase VentanaOpciones que anteriormente usabamos.
+- Modificamos la clase Audio, ya no es estatica, y se setea en el Render como instancia unica en todo el juego.
+- Añadimos keys en locale por la implementacion de la ventana de opciones, borramos la clase Texto que antes tambien utilizabamos.
+- Creamos el enum TipoAudio debido al cambio de la clase Audio y de la logica que pensamos, ya que en la ventana de opciones se pueden bajar por separado el de la musica y el de los sonidos.
+
 ### "textura de la moneda y GestorMonedas" - Fecha 31/10
 
 - Añadimos la textura de las monedas.
