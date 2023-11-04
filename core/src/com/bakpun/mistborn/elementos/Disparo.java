@@ -8,10 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
+import com.bakpun.mistborn.enums.TipoAudio;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.objetos.GestorMonedas;
 import com.bakpun.mistborn.objetos.Moneda;
 import com.bakpun.mistborn.personajes.Personaje;
+import com.bakpun.mistborn.utiles.Render;
 
 public final class Disparo{
 	
@@ -40,6 +42,7 @@ public final class Disparo{
 		//Le paso la energia por aca para que se chequee en el metodo calcularFuerzas(). Porque sino se puede quedar manteniendo el disparo de por vida.
 		this.energia = energia;		
 		if(!balaDisparada) {
+			Render.audio.pjDisparo.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 			actualizarDireccion(pj.getInput().getMouseX()/Box2dConfig.PPM,pj.getInput().getMouseY()/Box2dConfig.PPM);
 			//Agarra la pos del pj y la suma con la direccion(normalizada es igual a 1) por la amplitud(radio).
 		    posIniBala.set(pj.getX() + _amplitud * direccionBala.x, pj.getY() + _amplitud * direccionBala.y);	

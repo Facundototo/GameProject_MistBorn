@@ -43,6 +43,8 @@ public final class PantallaPvP implements Screen{
 	private CuerposMundo entidades;
 	
 	public PantallaPvP(String clasePj) {
+		Render.audio.cancionBatalla.play();
+		Render.audio.cancionBatalla.setLooping(true);
 		this.nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
 	}
 	

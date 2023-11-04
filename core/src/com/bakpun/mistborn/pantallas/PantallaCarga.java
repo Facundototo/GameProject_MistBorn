@@ -7,7 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
@@ -16,18 +19,23 @@ public class PantallaCarga implements Screen{
 	private Stage stage;
 	private Image logo;
 	private Entradas entradas;
+	private Table tabla;
 	
 	
 	public PantallaCarga() {
-		stage = new Stage();
+		stage = new Stage(new FillViewport(Config.ANCHO, Config.ANCHO));
 		logo = new Image(new Texture(Recursos.LOGO_MISTBORN));
 		entradas = new Entradas();
+		tabla = new Table();
 	}
 	
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(entradas);
-		stage.addActor(logo);
+		
+		tabla.setFillParent(true);
+		tabla.add(logo).center();
+		stage.addActor(tabla);
 		
 		((OrthographicCamera)stage.getViewport().getCamera()).zoom = 3f;
 		logo.getColor().a = 0;		//Canal alpha del logo empieza en 0.

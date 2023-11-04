@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "añadiendo sonidos e informacion de los pj" - Fecha 4/11
+
+- Implementamos sonidos: una cancion durante la pelea, el sonido de salto y el sonido del disparo de la moneda.
+- Agregamos a los locale, la informacion faltante de los personajes en la PantallaSeleccion.
+- Minimos arreglos en la PantallaCarga.
+
 ### "textura de objeto metal hecho y disposeando" - Fecha 4/11
 
 - Cargamos en assets un fondo blanco que seria la textura del metal, esta la adaptamos al body.

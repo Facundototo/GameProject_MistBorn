@@ -172,7 +172,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		disparando = (entradas.isBotonIzq() && apuntando);	
 	}
 
-	//Metodo que administra los sonidos de los pj, salto,golpe,disparo,etc.
+	//Metodo que administra los sonidos de los pj.
 	private void reproducirSFX() {
 		if(estaCorriendo) {
 			if(!reproducirSonidoCorrer) {
@@ -184,6 +184,9 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 				Render.audio.pjCorriendo.stop();
 				reproducirSonidoCorrer = false;
 			}
+		}
+		if(saltar) {
+			Render.audio.pjSalto.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 		}
 	}
 
