@@ -3,11 +3,11 @@ package com.bakpun.mistborn.elementos;
 
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
-import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.personajes.Personaje;
 
@@ -22,7 +22,6 @@ public final class Disparo{
 	private boolean balaDisparada = false;
 	private float energia;
 	
-	//Faltaria destruir la moneda cuando lo toca.
 	
 	public Disparo(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
 		this.mundo = mundo;
@@ -54,15 +53,14 @@ public final class Disparo{
 	
 	public void calcularFuerzas(boolean disparando) {
 		
-		//Aclaracion: El juego se crashea me parece si saltamos y vamos disparando, no sabemos a que se debe.
+		//Aclaracion: El juego se crashea nos parece, si saltamos y vamos disparando, no sabemos a que se debe.
 		
 		if(balaDisparada) {
 			
 			if(disparando && this.energia > 0) { 
 				moneda.getBody().setLinearVelocity(movimientoBala);
 				balaDisparada = true;
-				Listeners.reducirPoderPj(pj.getTipo(), TipoPoder.ACERO, 0.5f);
-				if(c.isMonedaColisiona(moneda.getBody())) {
+				if(c.isMonedaColisiona(moneda.getBody())) {//Actualizar la direccion aca tambien me genera que mientras estes disparando el personaje se pueda mover con el mouse.
 					actualizarDireccion(pj.getInput().getMouseX()/Box2dConfig.PPM,pj.getInput().getMouseY()/Box2dConfig.PPM);		//Actualizo la direccion opuesta que va a tomar el pj, porque puede ser diferente a la direccion inicial.
 					//Cuando la moneda toca algo inamovible mientras dispara el pj, este se impulsa para la direccion contraria a la moneda.
 					pj.aplicarFuerza(fuerzaContraria);	

@@ -11,7 +11,7 @@ import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.utiles.Recursos;
 
 
-public class ColisionMouse{
+public class ColisionMouse {
 
 	private World mundo;
 	private Vector2 colision;
@@ -40,10 +40,11 @@ public class ColisionMouse{
 					colisionando = true;
 					cursor.setPosicion(colision.x, colision.y);
 					cursor.draw();
+					return 0;	//Detener la busqueda de colisiones.
 				}else {
 					colisionando = false;
-				}
-				return -1;
+					return 1; //Seguir buscando colisiones.
+				}	
 			}
 		};
 		

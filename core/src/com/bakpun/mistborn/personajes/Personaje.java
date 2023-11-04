@@ -22,7 +22,7 @@ import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
-import com.bakpun.mistborn.eventos.EventoRestarMonedas;
+import com.bakpun.mistborn.eventos.EventoGestionMonedas;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.poderes.Acero;
@@ -30,7 +30,7 @@ import com.bakpun.mistborn.poderes.Peltre;
 import com.bakpun.mistborn.poderes.Poder;
 import com.bakpun.mistborn.utiles.Render;
 
-public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas{
+public abstract class Personaje implements EventoReducirVida,EventoGestionMonedas{
 	
 	private float velocidadX = 15f, impulsoY = 20f;
 	
@@ -53,7 +53,7 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 	
 	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
 	private boolean reproducirSonidoCorrer;
-	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,delta = 0f;
+	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f;
 	private int seleccion = 0;
 	
 	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,TipoPersonaje tipo) {
@@ -89,32 +89,49 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 		f.getPolygon().dispose();
 	}
 
-	private void updateAnimacion() {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
-		delta = Gdx.graphics.getDeltaTime();
-		
+	private void updateAnimacion(float delta) {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
+
 		animacionQuieto.update(delta);
 		animacionCorrer.update(delta);
 	}
 	
-	public void draw() {
+	public void draw(float delta) {		
 		
-		updateAnimacion();
+		updateAnimacion(delta);
 		
 		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
 		calcularSalto();	//Calcula el salto con la gravedad.
 		calcularMovimiento();	//Calcula el movimiento.
 		
-		
 		pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
-		
 		spr.setPosicion(pj.getPosition().x, pj.getPosition().y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
-		animar();
-		reproducirSFX();
+		animar();	//Animacion del pj.
+		reproducirSFX();	//Efectos de sonido.
+		
+		aumentarEnergia(delta);	//Aumento de los poderes.
 		
 		quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
 
 	}
+	private void aumentarEnergia(float delta) {
+		this.tiempoMonedas += delta;	
+		/*Inconvenientes de hacer esto: Cuando se termina la energia pero vos seguis manteniendo el disparo 
+		con Acero, las monedas se disparan pero se caen al no haber energia, pasa esto porque se va aumentando y 
+		permite que haya un minimo de energia para el disparo cuando la condicion del disparo es que energia > 0*/
+		for (int i = 0; i < poderes.length; i++) {	
+			if(poderes[i].getEnergia() < 100) {
+				Listeners.aumentarPoderPj(this.tipo, poderes[i].getTipoPoder(), 0.05f);
+			}
+			if(this.tiempoMonedas > 2) { //Es el cooldown que tiene la regeneracion de las monedas.
+				if(this.monedas < 10) {		//Si las monedas son 10 no se aumentan pero si se resetea el contador.
+					Listeners.aumentarMonedas();
+				}
+				this.tiempoMonedas = 0;
+			}
+		}
+	}
+
 	private void quemarPoder() {
 		if(tipo == TipoPersonaje.NACIDO_BRUMA){		//Si es nacido de la bruma, puede seleccionar los poderes.
 			if(entradas.isPrimerPoder()) {seleccion = 0;}
@@ -258,6 +275,10 @@ public abstract class Personaje implements EventoReducirVida,EventoRestarMonedas
 	@Override
 	public void restarMonedas() {
 		this.monedas--;
+	}
+	@Override
+	public void aumentarMonedas() {
+		this.monedas++;
 	}
 	
 	public int getCantMonedas() {

@@ -1,5 +1,7 @@
 package com.bakpun.mistborn.eventos;
 
-public interface EventoSetDuracionPeltre {
+import java.util.EventListener;
+
+public interface EventoSetDuracionPeltre extends EventListener{
 	void setDuracion(int segundo);
 }

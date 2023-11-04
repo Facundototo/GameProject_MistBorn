@@ -33,15 +33,29 @@ public class Listeners {
 	
 	public static void reducirPoderPj(TipoPersonaje tipoPj,TipoPoder tipoPoder,float energia) {
 		for (EventListener listener : listeners) {
-			if(listener instanceof EventoReducirPoder)
-			((EventoReducirPoder)listener).reducirPoder(tipoPj, tipoPoder, energia);
+			if(listener instanceof EventoGestionPoderes)
+				((EventoGestionPoderes)listener).reducirPoder(tipoPj, tipoPoder, energia);
+		}
+	}
+	
+	public static void aumentarPoderPj(TipoPersonaje tipoPj,TipoPoder tipoPoder,float energia) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoGestionPoderes)
+				((EventoGestionPoderes)listener).aumentarPoder(tipoPj, tipoPoder, energia);
 		}
 	}
 	
 	public static void restarMonedas() {
 		for (EventListener listener : listeners) {
-			if(listener instanceof EventoRestarMonedas)
-			((EventoRestarMonedas)listener).restarMonedas();
+			if(listener instanceof EventoGestionMonedas)
+			((EventoGestionMonedas)listener).restarMonedas();
+		}
+	}
+
+	public static void aumentarMonedas() {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoGestionMonedas)
+			((EventoGestionMonedas)listener).aumentarMonedas();
 		}
 	}
 	

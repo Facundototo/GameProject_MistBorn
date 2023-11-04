@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "aumento de poderes hecho" - Fecha 4/11
+
+- Implementamos la logica de que tanto la energia de los poderes como la cantidad de monedas se regeneren automaticamente.
+- Creamos nuevos eventos, aumentarMonedas() y aumentarPoder(). Estos metodos estan en interfaces unidas con el metodo opuesto, ya que se utilizan en las mismas clases.
+- El Hud tambien se adapta a todos estos cambios, adaptandose a los limites de las barras, al limite de las monedas maximas,etc.
+
 ### "ultimos cambios de PantallaMenu" - Fecha 3/11
 
 - Cambiamos el LabelStyle de las opciones de PantallaMenu, las añadimos usando SkinComposer.

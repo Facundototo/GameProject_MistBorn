@@ -18,15 +18,15 @@ import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.EventoCrearBarra;
-import com.bakpun.mistborn.eventos.EventoReducirPoder;
+import com.bakpun.mistborn.eventos.EventoGestionPoderes;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
-import com.bakpun.mistborn.eventos.EventoRestarMonedas;
+import com.bakpun.mistborn.eventos.EventoGestionMonedas;
 import com.bakpun.mistborn.eventos.EventoSetDuracionPeltre;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 
-public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoRestarMonedas,EventoSetDuracionPeltre,EventoReducirPoder{
+public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoGestionMonedas,EventoSetDuracionPeltre,EventoGestionPoderes{
 
 	private Skin skin;
 	private Stage stage;
@@ -130,6 +130,10 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 	public void restarMonedas() {
 		cantMonedas.setText(String.valueOf(--monedas));
 	}
+	@Override
+	public void aumentarMonedas() {
+		cantMonedas.setText(String.valueOf(++monedas));
+	}
 
 	@Override
 	public void setDuracion(int segundo) {
@@ -138,11 +142,13 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoResta
 
 	@Override
 	public void reducirPoder(TipoPersonaje tipoPj, TipoPoder tipoPoder,float energia) {
-		if(tipoPj == TipoPersonaje.NACIDO_BRUMA) {
-			energiaPoderes[tipoPoder.getNroSeleccion()] -= (energia/100)*210;
-		}else {
-			energiaPoderes[0] -= (energia/100)*210;
-		}
+		//Este if ternario porque si es nacido de la bruma el array energiaPoderes tiene mas indices y varian.
+		energiaPoderes[(tipoPj == TipoPersonaje.NACIDO_BRUMA)?tipoPoder.getNroSeleccion():0] -= (energia/100)*210;
+	}
+	
+	@Override
+	public void aumentarPoder(TipoPersonaje tipoPj,TipoPoder tipoPoder, float energia) {
+		energiaPoderes[(tipoPj == TipoPersonaje.NACIDO_BRUMA)?tipoPoder.getNroSeleccion():0] += (energia/100)*210;
 	}
 	
 	

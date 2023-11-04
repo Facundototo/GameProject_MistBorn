@@ -25,6 +25,7 @@ import com.bakpun.mistborn.elementos.Plataforma;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.hud.Hud;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.personajes.Ham;
 import com.bakpun.mistborn.personajes.Personaje;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
@@ -88,8 +89,8 @@ public final class PantallaPvP implements Screen{
 		Render.batch.setProjectionMatrix(cam.combined);
 		Render.batch.begin();
 		fondo.draw();	//Dibujo el fondo.
-		pj1.draw(); 	//Updateo al jugador.
-		//pj2.draw();		//Updateo al jugador2.
+		pj1.draw(delta); 	//Updateo al jugador.
+		//pj2.draw(delta);		//Updateo al jugador2.
 		for (int i = 0; i < plataformas.length; i++) {
 			plataformas[i].draw(delta);		//Dibujo las plataformas.
 		}		

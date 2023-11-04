@@ -27,7 +27,6 @@ public class Peltre extends Poder{
 				this.duracion = r.nextInt(3)+5;
 				this.poderActivo = true;
 				super.pj.aumentarVelocidad();
-				super.energia -= 20f;
 				Listeners.reducirPoderPj(super.pj.getTipo(), super.tipo, 20f);
 			}
 		}else {
