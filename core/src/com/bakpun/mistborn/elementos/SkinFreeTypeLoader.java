@@ -28,7 +28,7 @@ public class SkinFreeTypeLoader {
                 json.setSerializer(FreeTypeFontGenerator.class, new Json.ReadOnlySerializer<FreeTypeFontGenerator>() {
                     @Override
                     public FreeTypeFontGenerator read(Json json,
-                            JsonValue jsonData, Class type) {
+                            JsonValue jsonData, @SuppressWarnings("rawtypes") Class type) {
                         String path = json.readValue("font", String.class, jsonData);
                         jsonData.remove("font");
 

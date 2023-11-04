@@ -63,4 +63,8 @@ public class ColisionMouse {
 	public Vector2 getPuntoColision() {
 		return this.colision;
 	}
+	
+	public void dispose() {
+		cursor.getTexture().dispose();
+	}
 }

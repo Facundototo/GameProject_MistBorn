@@ -1,4 +1,4 @@
-package com.bakpun.mistborn.elementos;
+package com.bakpun.mistborn.objetos;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Fisica;
+import com.bakpun.mistborn.elementos.Animacion;
+import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.utiles.Recursos;
 
@@ -43,6 +45,10 @@ public class Plataforma {
 		spr.draw(anima.getCurrentFrame());
 	}
 	
+	public void dispose() {
+		spr.getTexture().dispose();
+		f.dispose();
+	}
 	
 	
 }

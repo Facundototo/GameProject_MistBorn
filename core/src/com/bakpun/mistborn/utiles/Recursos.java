@@ -11,6 +11,7 @@ public class Recursos {
 	public static final String LOGO_MISTBORN = "fondos/logoMistBorn.png";
 
 	public static final String MONEDA = "objetos/moneda.png";
+	public static final String METAL = "objetos/blanco.jpg";
 
 	public static final String SONIDO_OPCION_MENU = "sonidos/cambiarOpcion.mp3";
 	public static final String SONIDO_SELECCION = "sonidos/cambiarSeleccion.wav";

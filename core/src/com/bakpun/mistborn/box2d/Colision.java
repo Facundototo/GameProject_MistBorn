@@ -8,8 +8,8 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.bakpun.mistborn.elementos.GestorMonedas;
 import com.bakpun.mistborn.enums.UserData;
+import com.bakpun.mistborn.objetos.GestorMonedas;
 
 //Clase para detectar las colisiones y que hacer en base a eso.
 

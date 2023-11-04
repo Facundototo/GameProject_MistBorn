@@ -9,6 +9,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "textura de objeto metal hecho y disposeando" - Fecha 4/11
+
+- Cargamos en assets un fondo blanco que seria la textura del metal, esta la adaptamos al body.
+- Estuvimos ordenando un poco el codigo en la PantallaPvP, creamos una clase CuerpoMundo que crea las plataformas,los metales y los limites del mundo, para que no este todo ese codigo en PantallaPvP.
+- Estuvimos disposeando varias clases.
+
 ### "aumento de poderes hecho" - Fecha 4/11
 
 - Implementamos la logica de que tanto la energia de los poderes como la cantidad de monedas se regeneren automaticamente.

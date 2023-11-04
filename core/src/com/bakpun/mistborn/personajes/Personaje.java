@@ -211,6 +211,8 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	
 	public void dispose() {
 		spr.getTexture().dispose();
+		f.dispose();
+		cm.dispose();
 	}
 	
 	private void crearAnimaciones() {

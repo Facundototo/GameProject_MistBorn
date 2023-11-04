@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.pantallas;
 
 import java.lang.reflect.Constructor;
+
 import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
@@ -9,23 +10,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
-import com.bakpun.mistborn.box2d.Fisica;
-import com.bakpun.mistborn.elementos.GestorMonedas;
 import com.bakpun.mistborn.elementos.Imagen;
-import com.bakpun.mistborn.elementos.ObjetoMetalico;
-import com.bakpun.mistborn.elementos.Plataforma;
-import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.hud.Hud;
 import com.bakpun.mistborn.io.Entradas;
-import com.bakpun.mistborn.personajes.Ham;
+import com.bakpun.mistborn.objetos.CuerposMundo;
+import com.bakpun.mistborn.objetos.GestorMonedas;
 import com.bakpun.mistborn.personajes.Personaje;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
@@ -41,16 +36,11 @@ public final class PantallaPvP implements Screen{
 	private Personaje pj1,pj2;
 	private Viewport vw;
 	private Box2DDebugRenderer db;
-	private Fisica f;
-	private Body piso,pared;
-	private Plataforma plataformas[] = new Plataforma[5];	
 	private InputMultiplexer im;
 	private Hud hud;
 	private String nombrePj;
-	private ObjetoMetalico metal;
 	private Pixmap cursor;
-
-	//Hacer las texturas de los objetos de metal y aumentar los poderes y las monedas.
+	private CuerposMundo entidades;
 	
 	public PantallaPvP(String clasePj) {
 		this.nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
@@ -61,7 +51,6 @@ public final class PantallaPvP implements Screen{
 		cam = new OrthographicCamera(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
 		mundo = new World(new Vector2(0,-30f),true);
 		creandoInputs();
-		f = new Fisica();
 		fondo = new Imagen(Recursos.FONDO_PVP);
 		fondo.setTamano(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM);
 		cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);	
@@ -74,9 +63,9 @@ public final class PantallaPvP implements Screen{
 		GestorMonedas.mundo = mundo;
 		GestorMonedas.c = colisionMundo;
 		
-		crearPlataformas();
-		crearLimites();
-		metal = new ObjetoMetalico(mundo,new Vector2(((Config.ANCHO/2)/Box2dConfig.PPM),(Config.ALTO/2)/Box2dConfig.PPM),45);
+		entidades = new CuerposMundo(mundo,cam);
+		entidades.crearPlataformas();	
+		entidades.crearMetales();
 		
 		cursor = new Pixmap(Gdx.files.internal(Recursos.CURSOR_MOUSE));	//Cargamos un cursor.
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(cursor, 0, 0));
@@ -88,13 +77,13 @@ public final class PantallaPvP implements Screen{
 		
 		Render.batch.setProjectionMatrix(cam.combined);
 		Render.batch.begin();
+		
 		fondo.draw();	//Dibujo el fondo.
 		pj1.draw(delta); 	//Updateo al jugador.
 		//pj2.draw(delta);		//Updateo al jugador2.
-		for (int i = 0; i < plataformas.length; i++) {
-			plataformas[i].draw(delta);		//Dibujo las plataformas.
-		}		
+		entidades.draw();		//Se dibujan las entidades del mundo.
 		GestorMonedas.drawMonedas();	//Se dibujan las monedas.
+		
 		Render.batch.end();
 		
 		hud.draw(delta);	//Dibujo el hud.
@@ -131,8 +120,8 @@ public final class PantallaPvP implements Screen{
 		fondo.getTexture().dispose();	//Texture
 		pj1.dispose();	//Texture.
 		pj2.dispose();	//Texture.
-		f.dispose();	
 		cursor.dispose();	
+		entidades.dispose();
 		Render.batch.dispose();		//SpriteBatch.
 		this.dispose();
 	}
@@ -148,39 +137,6 @@ public final class PantallaPvP implements Screen{
 		mundo.setContactListener(colisionMundo); 
 	}
 
-	private void crearPlataformas() {
-		Vector2[] posicionPlataformas = {new Vector2((Config.ANCHO/4)/Box2dConfig.PPM,(Config.ALTO/1.3f)/Box2dConfig.PPM),new Vector2((Config.ANCHO/1.3f)/Box2dConfig.PPM,(Config.ALTO/1.3f)/Box2dConfig.PPM)
-		,new Vector2(Config.ANCHO/2/Box2dConfig.PPM,Config.ALTO/1.7f/Box2dConfig.PPM),new Vector2((Config.ANCHO/1.3f)/Box2dConfig.PPM,(Config.ALTO/2.5f)/Box2dConfig.PPM),new Vector2((Config.ANCHO/4)/Box2dConfig.PPM,(Config.ALTO/3f)/Box2dConfig.PPM)};
-		
-		for (int i = 0; i < plataformas.length; i++) {
-			plataformas[i] = new Plataforma(true,posicionPlataformas[i],mundo);
-		}
-	}
-	
-	private void crearLimites() {	
-		//Limites Horizontales
-		for (int i = 0; i < 2; i++) {
-			f.setBody(BodyType.StaticBody, new Vector2(cam.viewportWidth/2,(i==0)?155/Box2dConfig.PPM:(Config.ALTO-20)/Box2dConfig.PPM));
-			f.createChain(new Vector2(-((Config.ANCHO/2)/Box2dConfig.PPM),0), new Vector2((Config.ANCHO/2)/Box2dConfig.PPM,0));
-			f.setFixture(f.getChain(), 100, 1f, 0);
-			piso = mundo.createBody(f.getBody());
-			piso.createFixture(f.getFixture());
-			piso.setUserData(UserData.SALTO_P); //ID para la colision.
-			f.getChain().dispose();
-			
-		}
-		//Limites Verticales
-		for (int i = 0; i < 2; i++) {
-			f.setBody(BodyType.StaticBody, new Vector2((i==0)?30/Box2dConfig.PPM:(Config.ANCHO-20)/Box2dConfig.PPM,cam.viewportHeight/2));
-			f.createChain(new Vector2(0,-(((Config.ALTO/2)-155)/Box2dConfig.PPM)),new Vector2(0,(Config.ALTO/2)/Box2dConfig.PPM));
-			f.setFixture(f.getChain(), 100, 1f, 0);
-			pared = mundo.createBody(f.getBody());
-			pared.createFixture(f.getFixture());
-			pared.setUserData(UserData.PARED);
-			f.getChain().dispose();
-		}	
-	}
-
 	private Personaje crearPersonaje(String clasePj) {	//Metodo para la creacion del pj, utilizando Reflection.
 		Personaje pj = null;
 	    try {
@@ -194,8 +150,4 @@ public final class PantallaPvP implements Screen{
 	    }
 	    return pj;
 	}
-	
-	
-	
-	
 }

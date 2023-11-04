@@ -1,4 +1,4 @@
-package com.bakpun.mistborn.elementos;
+package com.bakpun.mistborn.objetos;
 
 import java.util.ArrayList;
 

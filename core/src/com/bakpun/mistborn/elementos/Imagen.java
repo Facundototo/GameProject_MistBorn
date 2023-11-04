@@ -1,5 +1,6 @@
 package com.bakpun.mistborn.elementos;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
 
@@ -46,14 +47,18 @@ public class Imagen {
 		s.setSize(ancho, alto);		//Escala el Sprite en base a los ppm (pixels per meter).
 	}
 	
-	public void setTransparencia(float alpha) {	//Opacidad.
-		s.setAlpha(alpha);
-	}
-	
 	public void setPosicion(float x,float y) {	//Posicion x,y.
 		s.setCenter(x,y);		//En vez de setPosition que te ponia las coor en el vertice inferior izquierdo, este te lo pone en el centro de la textura. 
 		s.setOriginCenter();	//Lo tuve que adaptar por el flip.
 	}
+	
+	public void setAngulo(float grados) {
+		s.setRotation(grados);
+	}
+	public void setColor(Color color) {
+		s.setColor(color);
+	}
+	
 	public Texture getTexture() {
 		return this.t;
 	}

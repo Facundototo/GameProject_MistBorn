@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.eventos.Listeners;
+import com.bakpun.mistborn.objetos.GestorMonedas;
+import com.bakpun.mistborn.objetos.Moneda;
 import com.bakpun.mistborn.personajes.Personaje;
 
 public final class Disparo{
