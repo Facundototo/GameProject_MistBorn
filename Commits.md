@@ -7,7 +7,16 @@ Proyecto final de la materia "programacion sobre redes".
 - Ejecutar el archivo MistBorn.bat en la carpeta raiz.
 - Por consola, en la carpeta raiz del juego(cd "carpeta"), hay que ejecutar este comando: gradlew desktop:run. * 
 
+*Server del juego : https://github.com/Facundototo/MistBorn_Server*
+
 ## Commits (del mas actual al mas antiguo)
+
+### "comienzo Redes,conexion y desconexion" - Fecha 9/11
+
+- Empezamos con redes haciendo la copia del juego para el server https://github.com/Facundototo/MistBorn_Server.
+- Creamos HiloServidor y HiloCliente para manejar la red.
+- Hicimos por ahora la logica de la conexion de los 2 clientes y que pasa cuando se desconectan, ya sea en PantallaEspera o PantallaSeleccion.
+- Creamos una clase Red para informar a los clientes sobre el server.
 
 ### "añadiendo sonidos e informacion de los pj" - Fecha 4/11
 

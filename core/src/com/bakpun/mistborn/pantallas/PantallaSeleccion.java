@@ -26,8 +26,10 @@ import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.enums.InfoPersonaje;
 import com.bakpun.mistborn.enums.TipoAudio;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.redes.EstadoRed;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
+import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
 
 public final class PantallaSeleccion implements Screen{
@@ -113,8 +115,14 @@ public final class PantallaSeleccion implements Screen{
 				avisoSeleccion.setVisible(false);
 				cambiarPantallaFadeOut(seleccion);
 			}
-			if(entradas.isEscape()) {
+			//La segunda condicion es para forzar al cliente que no se desconecto mediante el ESC o ALT F4, a que se vaya.
+			if(entradas.isEscape() || Red.getEstado() == EstadoRed.DESCONECTADO) {	
 				Render.app.setScreen(new PantallaMenu());
+			}
+			/*Este es para el cliente que toca ESC,este llama a desconectar() lo que hace que se limpie el server 
+			y ponga en el if de arriba que el estado es DESCONECTADO para el segundo cliente, es una especie de polimorfismo*/
+			if(entradas.isEscape()) {	
+				Red.desconectar();
 			}
 		}
 		

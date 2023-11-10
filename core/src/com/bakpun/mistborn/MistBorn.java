@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.pantallas.PantallaCarga;
+import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
 
 public class MistBorn extends Game {
@@ -18,7 +19,7 @@ public class MistBorn extends Game {
 		Render.audio.cancionMenu.setLooping(true);
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		this.setScreen(new PantallaCarga());
-		
+		Red.iniciar();	//start() el HiloCliente.
 	}
 
 	public void render () {
@@ -26,6 +27,7 @@ public class MistBorn extends Game {
 	}
 	
 	public void dispose () {
+		Red.desconectar();	//Este desconectar() para el cliente que toque ALT F4. Hace el mismo procedimiento de ESC.
 		Render.batch.dispose();		//SpriteBatch.
 		Render.audio.dispose();
 		super.dispose();		

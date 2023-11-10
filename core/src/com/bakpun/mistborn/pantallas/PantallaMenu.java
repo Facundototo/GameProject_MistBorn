@@ -196,7 +196,7 @@ public class PantallaMenu implements Screen{
 	
 	private void tocarOpcion(boolean click) {		//Booleano que es true en el evento clicked().
 		if(entradas.isEnter() || click) {
-			if(seleccion == 0) {Render.app.setScreen(new PantallaSeleccion());}
+			if(seleccion == 0) {Render.app.setScreen(new PantallaEspera());}
 			else if(seleccion == 1) {flagOpciones = true;}
 			else {Gdx.app.exit();}
 		}
