@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.pantallas.PantallaCarga;
+import com.bakpun.mistborn.redes.EstadoRed;
 import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
 
@@ -26,8 +27,10 @@ public class MistBorn extends Game {
 		super.render();
 	}
 	
-	public void dispose () {
-		Red.desconectar();	//Este desconectar() para el cliente que toque ALT F4. Hace el mismo procedimiento de ESC.
+	public void dispose () { // No va a mandar desconectar si nunca se conecto al server (pantalla menu).
+		if(Red.getEstado() == EstadoRed.CONECTADO) {	//Si esta en la pantalla espera o seleccion entonces esta conectado.
+			Red.desconectar();	//Este desconectar() para el cliente que toque ALT F4. Hace el mismo procedimiento de ESC.
+		}
 		Render.batch.dispose();		//SpriteBatch.
 		Render.audio.dispose();
 		super.dispose();		

@@ -11,8 +11,8 @@ public class HiloCliente extends Thread{
 	private DatagramSocket socket;
 	private boolean fin = false;
 	private InetAddress ipServer;
-	private int puerto = 7654;
-	private boolean oponenteListo = false;
+	private int puerto = 7654, id = -1,seleccionOponente = 0;
+	private boolean oponenteEncontrado = false, empiezaPartida = false;
 	public EstadoRed estado = EstadoRed.DESCONECTADO;
 	
 	public HiloCliente() {
@@ -51,28 +51,46 @@ public class HiloCliente extends Thread{
 
 
 	private void procesarMensaje(DatagramPacket dp) {
-		String msg = new String(dp.getData()).trim();
-		System.out.println(msg);
-		switch(msg) {
+		String msg[] = new String(dp.getData()).trim().split("#");
+		System.out.println(msg[0]);
+		
+		switch(msg[0]) {
 		case "OK":	//OK es cuando el server responde a conexion, con este ok nos guardamos la ip del server para no estar haciendo broadcast siempre.
-			estado = EstadoRed.CONECTADO;
+			this.estado = EstadoRed.CONECTADO;
 			this.ipServer = dp.getAddress();
+			this.id = Integer.valueOf(msg[1]);
 			break;
-		case "OponenteListo":	//Si el oponente esta listo, por ende vos tambien, se pasa a la PantallaSeleccion.
-			this.oponenteListo = true;
+		case "OponenteEncontrado":	//Si el oponente esta listo, por ende vos tambien, se pasa a la PantallaSeleccion.
+			this.oponenteEncontrado = true;
+			break;
+		case "EmpiezaPartida": 
+			this.empiezaPartida = true;
 			break;
 		case "desconexion":		//Responde a la llamada de desconectar, para que le avise al otro cliente de que me desconecte.
 			estado = EstadoRed.DESCONECTADO;	//Con el desconectado se fuerza al otro cliente que se vaya a la PantallaMenu.
-			this.oponenteListo = false;			//Reseteamos este booleano porque sino salta de la PantallaMenu a la PantallaSeleccion.
+			this.oponenteEncontrado = false;			//Reseteamos este booleano porque sino salta de la PantallaMenu a la PantallaSeleccion.
+			break;
+		case "seleccionOponente":	//Es la seleccion del oponente mientras se elige al pj.
+			this.seleccionOponente = Integer.valueOf(msg[1]);
 			break;
 		}
 	}
 	
-	public boolean isOponenteListo() {
-		return this.oponenteListo;
+	public boolean isOponenteEncontrado() {
+		return this.oponenteEncontrado;
 	}
+	public boolean isEmpiezaPartida() {
+		return this.empiezaPartida;
+	}
+	public int getSeleccionOponente() {
+		return this.seleccionOponente;
+	}
+	
 	public EstadoRed getEstado() {
 		return this.estado;
+	}
+	public String getMiId() {
+		return String.valueOf(this.id);
 	}
 	
 }

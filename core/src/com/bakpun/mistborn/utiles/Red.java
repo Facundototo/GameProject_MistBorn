@@ -19,8 +19,24 @@ public class Red {
 		hc.enviarMensaje("desconectar");
 	}
 	
-	public static boolean isOponenteListo() {
-		return hc.isOponenteListo();
+	public static void listoSeleccion(boolean listo) {
+		hc.enviarMensaje(((listo)?"listo#":"nolisto#") + hc.getMiId());
+	}
+	
+	public static void enviarSeleccion(int seleccion) {
+		hc.enviarMensaje("seleccion#" + hc.getMiId() + "#" + String.valueOf(seleccion));
+	}
+	
+	public static int getSeleccionOponente() {
+		return hc.getSeleccionOponente();
+	}
+	
+	public static boolean isOponenteEncontrado() {
+		return hc.isOponenteEncontrado();
+	}
+	
+	public static boolean isEmpiezaPartida() {
+		return hc.isEmpiezaPartida();
 	}
 	
 	public static EstadoRed getEstado() {

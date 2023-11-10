@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -63,7 +62,7 @@ public final class PantallaSeleccion implements Screen{
 		im = new InputMultiplexer();
 		txtInfo = new Label("",Fuente.PIXELINFO.getStyle(skin));
 		nombrePj = new Label("",Fuente.PIXELTEXTO.getStyle(skin));
-		avisoSeleccion = new Label(Render.bundle.get("seleccion.avisoenter"),Fuente.PIXELTEXTO.getStyle(skin));
+		avisoSeleccion = new Label(Render.bundle.get("seleccion.aviso"),Fuente.PIXELTEXTO.getStyle(skin));
 		informacion = new Window(Render.bundle.get("seleccion.txtinfo"),skin);
 		fondo = new Image(new Texture(Recursos.FONDO_SELECCION));
 		fondo.setSize(Config.ANCHO, Config.ALTO);
@@ -105,25 +104,38 @@ public final class PantallaSeleccion implements Screen{
 	public void render(float delta) {
 		Render.limpiarPantalla((float) 24.3f/255,(float) 24.3f/255,(float) 24.3f/255);
 		
-		calcularTeclas(delta);		//Metodo para el uso del teclado (entradas).
 		marcarOpcionSeleccionada();	//Aplicar efectos para la opcion seleccionada.
 		
-		if(!opcionElegida) {
+		if(!opcionElegida) {	//Se bloquean las teclas.
+			avisoSeleccion.setText(Render.bundle.get("seleccion.aviso"));
+			calcularTeclas(delta);		//Metodo para el uso del teclado (entradas).
 			if(entradas.isEnter()) {
 				opcionElegida = true;
 				Render.audio.seleccionElegida.play(Render.audio.getVolumen(TipoAudio.SONIDO));
+				avisoSeleccion.setText(Render.bundle.get("seleccion.avisoenter"));
+				Red.listoSeleccion(true);
+			}
+		}else {
+			if(Red.isEmpiezaPartida()) {
 				avisoSeleccion.setVisible(false);
-				cambiarPantallaFadeOut(seleccion);
+				cambiarPantallaFadeOut();
 			}
-			//La segunda condicion es para forzar al cliente que no se desconecto mediante el ESC o ALT F4, a que se vaya.
-			if(entradas.isEscape() || Red.getEstado() == EstadoRed.DESCONECTADO) {	
-				Render.app.setScreen(new PantallaMenu());
+			if(entradas.isBotonDer()) {
+				opcionElegida = false;
+				Red.listoSeleccion(false);
 			}
-			/*Este es para el cliente que toca ESC,este llama a desconectar() lo que hace que se limpie el server 
-			y ponga en el if de arriba que el estado es DESCONECTADO para el segundo cliente, es una especie de polimorfismo*/
-			if(entradas.isEscape()) {	
-				Red.desconectar();
-			}
+		}
+		
+		/*Este es para el cliente que toca ESC,este llama a desconectar() lo que hace que se limpie el server 
+		y ponga en el if de abajo que el estado es DESCONECTADO para el segundo cliente, es una especie de polimorfismo*/
+		if(entradas.isEscape()) {	
+			Render.app.setScreen(new PantallaMenu());
+			Red.desconectar();
+		}
+		
+		//Para forzar al cliente que no se desconecto mediante el ESC o ALT F4, a que se vaya.
+		if(Red.getEstado() == EstadoRed.DESCONECTADO) {	
+			Render.app.setScreen(new PantallaMenu());
 		}
 		
 		stage.act(delta);
@@ -131,8 +143,7 @@ public final class PantallaSeleccion implements Screen{
 		
 	}
 	
-	private void cambiarPantallaFadeOut(int seleccion) {  	
-		//La seleccion se pasa por parametro porque luego de elegir el pj, las teclas se siguen moviendo y modifican la seleccion.
+	private void cambiarPantallaFadeOut() {  	
 		final int _seleccionElegida = seleccion;		
 		stage.addAction(Actions.sequence(Actions.fadeOut(1.5f),
 			Actions.run(new Runnable() {   
@@ -172,9 +183,12 @@ public final class PantallaSeleccion implements Screen{
 			botonesPj[i].addListener(new ClickListener() {		//Evento que escucha cuando un boton es clickeado (solo mouse).
 				 @Override
 		         public void clicked(InputEvent event, float x, float y) {
-		             seleccion = opc;
-		             mostrarInformacion(seleccion);
-		             Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
+					 if(!opcionElegida) {
+			             seleccion = opc;
+			             mostrarInformacion(seleccion);
+			             Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
+			             Red.enviarSeleccion(seleccion);
+					 }
 				 } 
 			});
 			botones.add(botonesPj[i]).pad(10);
@@ -183,13 +197,23 @@ public final class PantallaSeleccion implements Screen{
 	}
 	
 	private void marcarOpcionSeleccionada() {
+		
+		if(Red.getSeleccionOponente() != seleccion) {
+			botonesPj[Red.getSeleccionOponente()].setColor(Color.RED); 	//Se colorea la seleccion mia y del oponente.
+			botonesPj[seleccion].setColor(Color.BLUE);
+		}else {		//Si los 2 son iguales se pone violeta.
+			botonesPj[seleccion].setColor(Color.PURPLE);
+		}
+		
+		mostrarInformacion(seleccion);
+		
 		for (int i = 0; i < botonesPj.length; i++) {
-			if(i == seleccion) {
-				botonesPj[seleccion].setColor(Color.PURPLE);
-				mostrarInformacion(seleccion);
-			}else {
+			if (i != seleccion && i != Red.getSeleccionOponente()) {
 				botonesPj[i].setColor(Color.WHITE);
 			}
+		}
+		if(opcionElegida) {
+			botonesPj[seleccion].setColor(Color.GOLD);
 		}
 	}
 
@@ -206,12 +230,14 @@ public final class PantallaSeleccion implements Screen{
 				Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				seleccion = (seleccion == cantMaxPersonajes-1)?0:seleccion+1;
 				tiempo = 0;
+				Red.enviarSeleccion(seleccion);
 			}
 		}else if(izquierda) {
 			if(tiempo >= 0.2f) {
 				Render.audio.sonidoSeleccion.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				seleccion = (seleccion == 0)?cantMaxPersonajes-1:seleccion-1;
 				tiempo = 0;
+				Red.enviarSeleccion(seleccion);
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.pantallas;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.elementos.SkinFreeTypeLoader;
 import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.io.Entradas;
-import com.bakpun.mistborn.redes.EstadoRed;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
@@ -57,7 +57,7 @@ public class PantallaEspera implements Screen {
 			Render.app.setScreen(new PantallaMenu());
 		}
 		
-		if(Red.isOponenteListo()){Render.app.setScreen(new PantallaSeleccion());}	//Si los 2 estan listos van a la PantallaSeleccion.
+		if(Red.isOponenteEncontrado()){Render.app.setScreen(new PantallaSeleccion());}	//Si los 2 estan listos van a la PantallaSeleccion.
 		
 		stage.act();
 		stage.draw();

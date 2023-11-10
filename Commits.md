@@ -11,6 +11,14 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "redes en PantallaSeleccion" - Fecha 10/11
+
+- Hicimos la logica del cliente-servidor para bastantes cosas en PantallaSeleccion.
+- Un cliente cuando toque ESC se puede salir y al oponente tambien se le va a salir, porque no tiene contrincante.
+- Si se selecciona un PJ y el oponente todavia no lo selecciono, esta la posibilidad de volver a elegir tocando RMB.
+- Si los 2 estan listos, el server envia a los 2 un EmpiezaPartida.
+- Hicimos tambien para que los 2 clientes puedan ver la seleccion de su contrincante. Esto nos sirve esteticamente y cuando hagamos reflection tanto para el server como los clientes.
+
 ### "comienzo Redes,conexion y desconexion" - Fecha 9/11
 
 - Empezamos con redes haciendo la copia del juego para el server https://github.com/Facundototo/MistBorn_Server.
