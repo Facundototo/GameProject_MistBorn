@@ -38,14 +38,17 @@ public final class PantallaPvP implements Screen{
 	private Box2DDebugRenderer db;
 	private InputMultiplexer im;
 	private Hud hud;
-	private String nombrePj;
+	private String nombrePj1, nombrePj2;
 	private Pixmap cursor;
 	private CuerposMundo entidades;
+	private int nroOponente;
 	
-	public PantallaPvP(String clasePj) {
+	public PantallaPvP(String clasePj1, String clasePj2,int nroOponente) {
 		Render.audio.cancionBatalla.play();
 		Render.audio.cancionBatalla.setLooping(true);
-		this.nombrePj = clasePj;		//Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
+		this.nombrePj1 = clasePj1;  //Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
+		this.nombrePj2 = clasePj2;	
+		this.nroOponente = nroOponente;
 	}
 	
 	public void show() {
@@ -59,8 +62,8 @@ public final class PantallaPvP implements Screen{
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
 		hud = new Hud();
-		pj1 = crearPersonaje(this.nombrePj);
-		//pj2 = new Ham(mundo,entradasPj2,colisionMundo,cam,true);
+		pj1 = crearPersonaje(this.nombrePj1,entradasPj1,false,((nroOponente == 2)?false:true));//Si el cliente es el pj1 el oponente es el pj2
+		pj2 = crearPersonaje(this.nombrePj2,entradasPj2,true,((nroOponente == 2)?true:false));	//Si el cliente es el pj2 el oponente es el pj1.
 		
 		GestorMonedas.mundo = mundo;
 		GestorMonedas.c = colisionMundo;
@@ -82,7 +85,7 @@ public final class PantallaPvP implements Screen{
 		
 		fondo.draw();	//Dibujo el fondo.
 		pj1.draw(delta); 	//Updateo al jugador.
-		//pj2.draw(delta);		//Updateo al jugador2.
+		pj2.draw(delta);		//Updateo al jugador2.
 		entidades.draw();		//Se dibujan las entidades del mundo.
 		GestorMonedas.drawMonedas();	//Se dibujan las monedas.
 		
@@ -139,14 +142,14 @@ public final class PantallaPvP implements Screen{
 		mundo.setContactListener(colisionMundo); 
 	}
 
-	private Personaje crearPersonaje(String clasePj) {	//Metodo para la creacion del pj, utilizando Reflection.
+	private Personaje crearPersonaje(String clasePj,Entradas entrada ,boolean ladoDerecho,boolean oponente) {	//Metodo para la creacion del pj, utilizando Reflection.
 		Personaje pj = null;
 	    try {
 	    	//<?> no sabemos que significa pero si lo sacamos nos sale el mark amarillo.
 	        Class<?> clase = Class.forName("com.bakpun.mistborn.personajes." + clasePj);
 	        //boolean.class lo ponemos porque el booleano no tiene .getClass(), es lo mismo.
-	        Constructor<?> constructor = clase.getConstructor(mundo.getClass(), entradasPj1.getClass(), colisionMundo.getClass(), cam.getClass(), boolean.class);
-	        pj = (Personaje) constructor.newInstance(mundo, entradasPj1, colisionMundo, cam, false);
+	        Constructor<?> constructor = clase.getConstructor(mundo.getClass(), entradasPj1.getClass(), colisionMundo.getClass(), cam.getClass(), boolean.class, boolean.class);
+	        pj = (Personaje) constructor.newInstance(mundo, entrada, colisionMundo, cam, ladoDerecho, oponente);
 	    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
 	        e.printStackTrace();
 	    }

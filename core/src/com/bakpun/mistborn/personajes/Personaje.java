@@ -52,11 +52,11 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	private TipoPersonaje tipo;
 	
 	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
-	private boolean reproducirSonidoCorrer;
+	private boolean reproducirSonidoCorrer,esOponente;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f;
 	private int seleccion = 0;
 	
-	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,TipoPersonaje tipo) {
+	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,boolean esOponente,TipoPersonaje tipo) {
 		this.animacionSaltos = animacionSaltos;
 		this.animacionEstados = animacionEstados;
 		this.ladoDerecho = ladoDerecho;
@@ -65,6 +65,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		this.poderes = new Poder[(tipo == TipoPersonaje.NACIDO_BRUMA)?3:1];
 		this.tipo = tipo;
 		this.monedas = 10;	//Monedas iniciales 10.
+		this.esOponente = esOponente;
 		movimiento = new Vector2();
 		f = new Fisica();
 		cm = new ColisionMouse(mundo,cam);
@@ -72,7 +73,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
 		crearBody(mundo);
-		crearPoderes(mundo,cam,c);
+		if(!esOponente) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
 		Listeners.agregarListener(this);
 	}
 	
@@ -109,10 +110,10 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		animar();	//Animacion del pj.
 		reproducirSFX();	//Efectos de sonido.
 		
-		aumentarEnergia(delta);	//Aumento de los poderes.
-		
-		quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
-
+		if(!esOponente){		//Si es oponente no se manipulan los poderes ya que no tiene.
+			aumentarEnergia(delta);	//Aumento de los poderes.
+			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
+		}
 	}
 	private void aumentarEnergia(float delta) {
 		this.tiempoMonedas += delta;	
@@ -159,9 +160,9 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 
 	private void calcularAcciones() {
 		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.	
-		correrDerecha = ((!ladoDerecho)?entradas.isIrDerD():entradas.isIrDerRight());
-		correrIzquierda = ((!ladoDerecho)?entradas.isIrIzqA():entradas.isIrIzqLeft());
-		saltar = (((!ladoDerecho)?Gdx.input.isKeyJustPressed(Keys.SPACE):Gdx.input.isKeyJustPressed(Keys.UP)) && this.c.isPuedeSaltar(pj));
+		correrDerecha = ((!esOponente)?entradas.isIrDerD():false);
+		correrIzquierda = ((!esOponente)?entradas.isIrIzqA():false);
+		saltar = (((!esOponente)?Gdx.input.isKeyJustPressed(Keys.SPACE):false) && this.c.isPuedeSaltar(pj));
 		puedeMoverse = (correrDerecha != correrIzquierda);	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
 		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse && this.c.isPuedeSaltar(pj));
 		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse && this.c.isPuedeSaltar(pj));

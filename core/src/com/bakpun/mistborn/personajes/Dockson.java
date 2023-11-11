@@ -10,8 +10,8 @@ import com.bakpun.mistborn.utiles.Recursos;
 
 public final class Dockson extends Personaje{
 
-	public Dockson(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho) {
-		super(Recursos.PERSONAJE_HAM,Recursos.SALTOS_HAM,Recursos.ANIMACIONES_ESTADOS_HAM, mundo, entradas, c, cam, ladoDerecho,TipoPersonaje.LANZAMONEDAS);
+	public Dockson(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,boolean oponente) {
+		super(Recursos.PERSONAJE_HAM,Recursos.SALTOS_HAM,Recursos.ANIMACIONES_ESTADOS_HAM, mundo, entradas, c, cam, ladoDerecho,oponente,TipoPersonaje.LANZAMONEDAS);
 	}
 
 	@Override

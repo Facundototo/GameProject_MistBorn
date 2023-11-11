@@ -42,4 +42,8 @@ public class Red {
 	public static EstadoRed getEstado() {
 		return hc.getEstado();
 	}
+	
+	public static int getId() {
+		return Integer.valueOf(hc.getMiId());
+	}
 }

@@ -13,8 +13,8 @@ import com.bakpun.mistborn.utiles.Recursos;
 
 public final class Vin extends Personaje{
 	
-	public Vin(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho) {
-		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas,c,cam,ladoDerecho,TipoPersonaje.NACIDO_BRUMA);
+	public Vin(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,boolean oponente) {
+		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas,c,cam,ladoDerecho,oponente,TipoPersonaje.NACIDO_BRUMA);
 	}
 
 	@Override

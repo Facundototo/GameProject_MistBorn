@@ -11,6 +11,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "implementando redes en la creacion de personajes" - Fecha 11/11
+
+- Creamos dos personajes en cada pantalla, la de los clientes y server.
+- Modificamos crearPersonaje(reflection).
+- Hicimos la logica de saber quien aparece en el lado derecho y a su vez quien es el oponente, son dos cosas distintas. 
+
 ### "redes en PantallaSeleccion" - Fecha 10/11
 
 - Hicimos la logica del cliente-servidor para bastantes cosas en PantallaSeleccion.

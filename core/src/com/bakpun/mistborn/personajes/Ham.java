@@ -10,8 +10,8 @@ import com.bakpun.mistborn.utiles.Recursos;
 
 public final class Ham extends Personaje{
 
-	public Ham(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho) {
-		super(Recursos.PERSONAJE_HAM,Recursos.SALTOS_HAM,Recursos.ANIMACIONES_ESTADOS_HAM, mundo, entradas,c,cam,ladoDerecho,TipoPersonaje.VIOLENTO);
+	public Ham(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,boolean oponente) {
+		super(Recursos.PERSONAJE_HAM,Recursos.SALTOS_HAM,Recursos.ANIMACIONES_ESTADOS_HAM, mundo, entradas,c,cam,ladoDerecho,oponente,TipoPersonaje.VIOLENTO);
 	}
 
 	@Override
