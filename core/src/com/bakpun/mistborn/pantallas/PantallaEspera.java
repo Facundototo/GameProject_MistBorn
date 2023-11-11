@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.elementos.SkinFreeTypeLoader;
 import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.io.Entradas;
+import com.bakpun.mistborn.redes.EstadoRed;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
@@ -33,7 +34,7 @@ public class PantallaEspera implements Screen {
 		tabla = new Table();
 		tabla.setFillParent(true);
 		
-		esperando = new Label("Buscando Oponente...", Fuente.PIXELMENU.getStyle(skin));
+		esperando = new Label("", Fuente.PIXELMENU.getStyle(skin));
 		esperando.addAction(Actions.forever(Actions.sequence(
 				Actions.fadeIn(1f),Actions.fadeOut(1f),		
 			    Actions.delay(0.4f)
@@ -50,7 +51,13 @@ public class PantallaEspera implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Render.limpiarPantalla(0,0,0);;
+		Render.limpiarPantalla(0,0,0);
+	
+		if(Red.getEstado() == EstadoRed.CONECTADO) {
+			esperando.setText("Buscando Oponente...");
+		}else {
+			esperando.setText("Buscando Servidor...");
+		}
 		
 		if(entradas.isEscape()) {		//Si toca ESCAPE se desconecta del server.
 			Red.desconectar();

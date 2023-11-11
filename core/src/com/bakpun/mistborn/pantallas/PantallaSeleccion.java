@@ -49,7 +49,6 @@ public final class PantallaSeleccion implements Screen{
 	private Label txtInfo,nombrePj,avisoSeleccion;
 	private InfoPersonaje pjSeleccionado;
 
-	//Falta boton ESCAPE para ir hacia atras.
 	
 	public PantallaSeleccion() {
 		skin = SkinFreeTypeLoader.cargar();		//Cargo el codigo que hay que copiar para usar FreeTypeFont en Scene2DUI.
@@ -133,7 +132,7 @@ public final class PantallaSeleccion implements Screen{
 			Red.desconectar();
 		}
 		
-		//Para forzar al cliente que no se desconecto mediante el ESC o ALT F4, a que se vaya.
+		//Para forzar al cliente que no se desconecto mediante el ESC o ALT F4, a que se vaya. Y tambien por si el server se cierra inesperadamente.
 		if(Red.getEstado() == EstadoRed.DESCONECTADO) {	
 			Render.app.setScreen(new PantallaMenu());
 		}

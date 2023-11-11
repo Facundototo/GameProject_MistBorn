@@ -1,18 +1,19 @@
 package com.bakpun.mistborn.redes;
 import java.io.IOException;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+
 public class HiloCliente extends Thread{
 	
 	private DatagramSocket socket;
-	private boolean fin = false;
 	private InetAddress ipServer;
 	private int puerto = 7654, id = -1,seleccionOponente = 0;
-	private boolean oponenteEncontrado = false, empiezaPartida = false;
+	private boolean oponenteEncontrado = false, empiezaPartida = false,fin = false;
 	public EstadoRed estado = EstadoRed.DESCONECTADO;
 	
 	public HiloCliente() {
@@ -27,14 +28,13 @@ public class HiloCliente extends Thread{
 	public void enviarMensaje(String msg) {
 		byte[] data = msg.getBytes(); 
 		DatagramPacket dp = new DatagramPacket(data,data.length,ipServer,puerto);
-		try {
-			socket.send(dp);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			try {
+				socket.send(dp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
 	}
-
-
+	
 	@Override
 	public void run() {
 		do {

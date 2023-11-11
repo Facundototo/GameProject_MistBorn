@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bakpun.mistborn.elementos.Audio;
 import com.bakpun.mistborn.pantallas.PantallaCarga;
 import com.bakpun.mistborn.redes.EstadoRed;
+import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
 
@@ -18,7 +19,8 @@ public class MistBorn extends Game {
 		Render.batch = new SpriteBatch();	//SpriteBatch unico.
 		Render.audio.cancionMenu.play();
 		Render.audio.cancionMenu.setLooping(true);
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+		//Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+		Gdx.graphics.setWindowedMode(Config.ANCHO/3,Config.ALTO/2);
 		this.setScreen(new PantallaCarga());
 		Red.iniciar();	//start() el HiloCliente.
 	}
