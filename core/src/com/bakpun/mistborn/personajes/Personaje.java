@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,12 +16,14 @@ import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.OpcionAcero;
+import com.bakpun.mistborn.enums.Spawn;
 import com.bakpun.mistborn.enums.TipoAudio;
+import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.enums.UserData;
-import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.EventoGestionMonedas;
+import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.poderes.Acero;
@@ -49,23 +50,25 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	private String animacionEstados[] = new String[2];
 	protected Poder poderes[];
 	private int monedas;
-	private TipoPersonaje tipo;
+	private TipoPersonaje tipoPj;
+	private TipoCliente tipoCliente;
+	private Spawn spawn;
 	
-	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,ladoDerecho,correrDerecha,correrIzquierda;
-	private boolean reproducirSonidoCorrer,esOponente;
+	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,correrDerecha,correrIzquierda;
+	private boolean reproducirSonidoCorrer;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f;
 	private int seleccion = 0;
 	
-	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,boolean esOponente,TipoPersonaje tipo) {
+	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,Spawn spawn,TipoCliente tipoCliente,TipoPersonaje tipoPj) {
 		this.animacionSaltos = animacionSaltos;
 		this.animacionEstados = animacionEstados;
-		this.ladoDerecho = ladoDerecho;
+		this.spawn = spawn;
 		this.c = c;
 		this.entradas = entradas;
-		this.poderes = new Poder[(tipo == TipoPersonaje.NACIDO_BRUMA)?3:1];
-		this.tipo = tipo;
+		this.poderes = new Poder[(tipoPj == TipoPersonaje.NACIDO_BRUMA)?3:1];
+		this.tipoPj = tipoPj;
 		this.monedas = 10;	//Monedas iniciales 10.
-		this.esOponente = esOponente;
+		this.tipoCliente = tipoCliente;
 		movimiento = new Vector2();
 		f = new Fisica();
 		cm = new ColisionMouse(mundo,cam);
@@ -73,14 +76,14 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
 		crearBody(mundo);
-		if(!esOponente) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
+		if(tipoCliente == TipoCliente.USUARIO) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
 		Listeners.agregarListener(this);
 	}
 	
 	protected abstract void crearPoderes(World mundo,OrthographicCamera cam,Colision c);
 	
 	private void crearBody(World mundo) {
-		f.setBody(BodyType.DynamicBody,new Vector2((!ladoDerecho)?10:20,5));
+		f.setBody(BodyType.DynamicBody,new Vector2((spawn == Spawn.IZQUIERDA)?10:20,5));
 		f.createPolygon(spr.getTexture().getWidth()/Box2dConfig.PPM, spr.getTexture().getHeight()/Box2dConfig.PPM);		//Uso la clase Fisica.
 		f.setFixture(f.getPolygon(), 60, 0, 0);
 		pj = mundo.createBody(f.getBody());
@@ -110,7 +113,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		animar();	//Animacion del pj.
 		reproducirSFX();	//Efectos de sonido.
 		
-		if(!esOponente){		//Si es oponente no se manipulan los poderes ya que no tiene.
+		if(tipoCliente == TipoCliente.USUARIO){		//Si es oponente no se manipulan los poderes ya que no tiene.
 			aumentarEnergia(delta);	//Aumento de los poderes.
 			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
 		}
@@ -122,7 +125,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		permite que haya un minimo de energia para el disparo cuando la condicion del disparo es que energia > 0*/
 		for (int i = 0; i < poderes.length; i++) {	
 			if(poderes[i].getEnergia() < 100) {
-				Listeners.aumentarPoderPj(this.tipo, poderes[i].getTipoPoder(), 0.05f);
+				Listeners.aumentarPoderPj(this.tipoPj, poderes[i].getTipoPoder(), 0.05f);
 			}
 			if(this.tiempoMonedas > 2) { //Es el cooldown que tiene la regeneracion de las monedas.
 				if(this.monedas < 10) {		//Si las monedas son 10 no se aumentan pero si se resetea el contador.
@@ -134,15 +137,15 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	}
 
 	private void quemarPoder() {
-		if(tipo == TipoPersonaje.NACIDO_BRUMA){		//Si es nacido de la bruma, puede seleccionar los poderes.
+		if(tipoPj == TipoPersonaje.NACIDO_BRUMA){		//Si es nacido de la bruma, puede seleccionar los poderes.
 			if(entradas.isPrimerPoder()) {seleccion = 0;}
 			else if(entradas.isSegundoPoder()) {seleccion = 1;}
 			else if(Gdx.input.isKeyJustPressed(Keys.R) || ((Peltre)poderes[2]).isPoderActivo()) {poderes[2].quemar();}
 		}//Si es violento y toco la R o si es violento y el poder esta activo se llama al metodo quemar(),logica tiene porque si esta activo, se esta quemando.
-		if((tipo == TipoPersonaje.VIOLENTO) && (Gdx.input.isKeyJustPressed(Keys.R) || ((Peltre)poderes[seleccion]).isPoderActivo())){poderes[seleccion].quemar();}		
+		if((tipoPj == TipoPersonaje.VIOLENTO) && (Gdx.input.isKeyJustPressed(Keys.R) || ((Peltre)poderes[seleccion]).isPoderActivo())){poderes[seleccion].quemar();}		
 		
 		// Este if le sirve tanto al nacido de la bruma como a atraedor y lanzamonedas.
-		if(disparando && tipo != TipoPersonaje.VIOLENTO) {poderes[seleccion].quemar();} 
+		if(disparando && tipoPj != TipoPersonaje.VIOLENTO) {poderes[seleccion].quemar();} 
 		
 		// Chequea todo el tiempo calcularFuerzas() porque lo que pasa es que todo lo de Disparo no se puede chequear en Acero.
 		if(poderes[seleccion].getTipoPoder() == TipoPoder.ACERO) {
@@ -160,9 +163,9 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 
 	private void calcularAcciones() {
 		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.	
-		correrDerecha = ((!esOponente)?entradas.isIrDerD():false);
-		correrIzquierda = ((!esOponente)?entradas.isIrIzqA():false);
-		saltar = (((!esOponente)?Gdx.input.isKeyJustPressed(Keys.SPACE):false) && this.c.isPuedeSaltar(pj));
+		correrDerecha = ((tipoCliente == TipoCliente.USUARIO)?entradas.isIrDerD():false);
+		correrIzquierda = ((tipoCliente == TipoCliente.USUARIO)?entradas.isIrIzqA():false);
+		saltar = (((tipoCliente == TipoCliente.USUARIO)?Gdx.input.isKeyJustPressed(Keys.SPACE):false) && this.c.isPuedeSaltar(pj));
 		puedeMoverse = (correrDerecha != correrIzquierda);	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
 		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse && this.c.isPuedeSaltar(pj));
 		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse && this.c.isPuedeSaltar(pj));
@@ -294,7 +297,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		return this.cm;
 	}
 	public TipoPersonaje getTipo() {
-		return this.tipo;
+		return this.tipoPj;
 	}
 	
 }

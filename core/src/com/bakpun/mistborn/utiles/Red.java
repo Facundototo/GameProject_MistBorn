@@ -1,5 +1,6 @@
 package com.bakpun.mistborn.utiles;
 
+import com.bakpun.mistborn.pantallas.PantallaMenu;
 import com.bakpun.mistborn.redes.EstadoRed;
 import com.bakpun.mistborn.redes.HiloCliente;
 
@@ -25,6 +26,12 @@ public class Red {
 	
 	public static void enviarSeleccion(int seleccion) {
 		hc.enviarMensaje("seleccion#" + hc.getMiId() + "#" + String.valueOf(seleccion));
+	}
+	
+	public static void chequearEstado() {
+		if(hc.getEstado() == EstadoRed.DESCONECTADO) {	
+			Render.app.setScreen(new PantallaMenu());
+		}
 	}
 	
 	public static int getSeleccionOponente() {

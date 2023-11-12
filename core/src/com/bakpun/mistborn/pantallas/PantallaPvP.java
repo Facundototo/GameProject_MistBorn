@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.pantallas;
 
 import java.lang.reflect.Constructor;
-
 import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
@@ -17,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.elementos.Imagen;
+import com.bakpun.mistborn.enums.Spawn;
+import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.hud.Hud;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.objetos.CuerposMundo;
@@ -24,6 +25,7 @@ import com.bakpun.mistborn.objetos.GestorMonedas;
 import com.bakpun.mistborn.personajes.Personaje;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
+import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
 
 public final class PantallaPvP implements Screen{
@@ -62,8 +64,8 @@ public final class PantallaPvP implements Screen{
 		vw = new FillViewport(Config.ANCHO/Box2dConfig.PPM,Config.ALTO/Box2dConfig.PPM,cam);
 		db = new Box2DDebugRenderer();
 		hud = new Hud();
-		pj1 = crearPersonaje(this.nombrePj1,entradasPj1,false,((nroOponente == 2)?false:true));//Si el cliente es el pj1 el oponente es el pj2
-		pj2 = crearPersonaje(this.nombrePj2,entradasPj2,true,((nroOponente == 2)?true:false));	//Si el cliente es el pj2 el oponente es el pj1.
+		pj1 = crearPersonaje(this.nombrePj1,entradasPj1,Spawn.IZQUIERDA,((nroOponente == 2)?TipoCliente.USUARIO:TipoCliente.OPONENTE));//Si el cliente es el pj1 el oponente es el pj2
+		pj2 = crearPersonaje(this.nombrePj2,entradasPj2,Spawn.DERECHA,((nroOponente == 2)?TipoCliente.OPONENTE:TipoCliente.USUARIO));	//Si el cliente es el pj2 el oponente es el pj1.
 		
 		GestorMonedas.mundo = mundo;
 		GestorMonedas.c = colisionMundo;
@@ -79,6 +81,8 @@ public final class PantallaPvP implements Screen{
 	public void render(float delta) {
 		Render.limpiarPantalla(0,0,0);
 		cam.update();	
+		
+		Red.chequearEstado();
 		
 		Render.batch.setProjectionMatrix(cam.combined);
 		Render.batch.begin();
@@ -142,14 +146,14 @@ public final class PantallaPvP implements Screen{
 		mundo.setContactListener(colisionMundo); 
 	}
 
-	private Personaje crearPersonaje(String clasePj,Entradas entrada ,boolean ladoDerecho,boolean oponente) {	//Metodo para la creacion del pj, utilizando Reflection.
+	private Personaje crearPersonaje(String clasePj,Entradas entrada ,Spawn spawn,TipoCliente tipoCliente) {	//Metodo para la creacion del pj, utilizando Reflection.
 		Personaje pj = null;
 	    try {
 	    	//<?> no sabemos que significa pero si lo sacamos nos sale el mark amarillo.
 	        Class<?> clase = Class.forName("com.bakpun.mistborn.personajes." + clasePj);
 	        //boolean.class lo ponemos porque el booleano no tiene .getClass(), es lo mismo.
-	        Constructor<?> constructor = clase.getConstructor(mundo.getClass(), entradasPj1.getClass(), colisionMundo.getClass(), cam.getClass(), boolean.class, boolean.class);
-	        pj = (Personaje) constructor.newInstance(mundo, entrada, colisionMundo, cam, ladoDerecho, oponente);
+	        Constructor<?> constructor = clase.getConstructor(mundo.getClass(), entradasPj1.getClass(), colisionMundo.getClass(), cam.getClass(),Spawn.class, TipoCliente.class);
+	        pj = (Personaje) constructor.newInstance(mundo, entrada, colisionMundo, cam, spawn, tipoCliente);
 	    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
 	        e.printStackTrace();
 	    }

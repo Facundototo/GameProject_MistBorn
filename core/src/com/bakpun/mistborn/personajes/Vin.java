@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Colision;
+import com.bakpun.mistborn.enums.Spawn;
+import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.poderes.Acero;
@@ -13,8 +15,8 @@ import com.bakpun.mistborn.utiles.Recursos;
 
 public final class Vin extends Personaje{
 	
-	public Vin(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,boolean ladoDerecho,boolean oponente) {
-		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas,c,cam,ladoDerecho,oponente,TipoPersonaje.NACIDO_BRUMA);
+	public Vin(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,Spawn spawn,TipoCliente tipoCliente) {
+		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas,c,cam,spawn,tipoCliente,TipoPersonaje.NACIDO_BRUMA);
 	}
 
 	@Override

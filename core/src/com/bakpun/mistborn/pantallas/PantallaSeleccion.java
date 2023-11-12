@@ -133,9 +133,10 @@ public final class PantallaSeleccion implements Screen{
 		}
 		
 		//Para forzar al cliente que no se desconecto mediante el ESC o ALT F4, a que se vaya. Y tambien por si el server se cierra inesperadamente.
-		if(Red.getEstado() == EstadoRed.DESCONECTADO) {	
+		Red.chequearEstado();
+		/*if(Red.getEstado() == EstadoRed.DESCONECTADO) {	
 			Render.app.setScreen(new PantallaMenu());
-		}
+		}*/
 		
 		stage.act(delta);
 		stage.draw();

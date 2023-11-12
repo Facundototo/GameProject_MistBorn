@@ -11,6 +11,11 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "pequeños cambios" - Fecha 12/11
+
+- Reemplazamos 2 variables booleanas por enumeradores, para hacerlo mas entendible y correcto.
+-  Mejoramos las desconexiones cliente/servidor (pantallaPvP, pantallaEspera).
+
 ### "implementando redes en la creacion de personajes" - Fecha 11/11
 
 - Creamos dos personajes en cada pantalla, la de los clientes y server.
