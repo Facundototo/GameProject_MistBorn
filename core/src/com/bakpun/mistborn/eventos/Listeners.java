@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 
 import com.badlogic.gdx.graphics.Color;
+import com.bakpun.mistborn.enums.Movimiento;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 
@@ -63,6 +64,13 @@ public class Listeners {
 		for (EventListener listener : listeners) {
 			if(listener instanceof EventoSetDuracionPeltre)
 			((EventoSetDuracionPeltre)listener).setDuracion(segundo);
+		}
+	}
+	
+	public static void mover(Movimiento movimiento) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoMoverPj)
+			((EventoMoverPj)listener).mover(movimiento);
 		}
 	}
 }

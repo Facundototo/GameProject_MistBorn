@@ -15,6 +15,7 @@ import com.bakpun.mistborn.box2d.ColisionMouse;
 import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
 import com.bakpun.mistborn.elementos.Imagen;
+import com.bakpun.mistborn.enums.Movimiento;
 import com.bakpun.mistborn.enums.OpcionAcero;
 import com.bakpun.mistborn.enums.Spawn;
 import com.bakpun.mistborn.enums.TipoAudio;
@@ -234,21 +235,25 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	}
 	private void calcularSalto() {
 		if(saltar) {
-			movimiento.y = impulsoY;
+			Listeners.mover(Movimiento.SALTO);
+			//movimiento.y = impulsoY;
 		}else {
-			movimiento.y = pj.getLinearVelocity().y;	//Esto hace que actue junto a la gravedad del mundo.
+			//movimiento.y = pj.getLinearVelocity().y;	//Esto hace que actue junto a la gravedad del mundo.
 		}
 	}
 	private void calcularMovimiento() {
 		if(puedeMoverse) {
 			if(correrDerecha) {
-				movimiento.x = velocidadX;
+				Listeners.mover(Movimiento.DERECHA);
+				//movimiento.x = velocidadX;
 			} else if (correrIzquierda){
-				movimiento.x = -velocidadX;
+				Listeners.mover(Movimiento.IZQUIERDA);
+				//movimiento.x = -velocidadX;
 			}
 		}
 		if(estaQuieto) {	//Esto para que no se quede deslizando.
-			movimiento.x = 0;
+			//Listeners.mover(Movimiento.QUIETO);
+			//movimiento.x = 0;
 		}
 	}
 	public float getX() {

@@ -1,14 +1,19 @@
 package com.bakpun.mistborn.redes;
 import java.io.IOException;
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.EventListener;
+
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.bakpun.mistborn.enums.Movimiento;
+import com.bakpun.mistborn.eventos.EventoMoverPj;
+import com.bakpun.mistborn.eventos.Listeners;
 
 
-public class HiloCliente extends Thread{
+public final class HiloCliente extends Thread implements EventoMoverPj, EventListener{
 	
 	private DatagramSocket socket;
 	private InetAddress ipServer;
@@ -23,6 +28,7 @@ public class HiloCliente extends Thread{
 		} catch (SocketException | UnknownHostException e) {
 			e.printStackTrace();
 		}
+		Listeners.agregarListener(this);
 	}
 	
 	public void enviarMensaje(String msg) {
@@ -91,6 +97,17 @@ public class HiloCliente extends Thread{
 	}
 	public String getMiId() {
 		return String.valueOf(this.id);
+	}
+
+	@Override
+	public void mover(Movimiento movimiento) {
+		enviarMensaje("movimiento#" + movimiento.getMovimiento() + "#" + this.id);
+	}
+
+	@Override
+	public boolean handle(Event event) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }
