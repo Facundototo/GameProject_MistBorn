@@ -11,10 +11,18 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "haciendo movimiento en redes" - Fecha 14/11
+
+- Seguimos con redes haciendo el movimiento , salto,der,izq,quieto.
+- Para esto creamos un evento que se llama en Pj y va al HiloCliente para mandar la info del mov al server y este transmitirlo a los 2 clientes de vuelta.
+- Creamos el enum Movimiento para esta implementacion.
+- Creamos tambien la interfaz EventoMoverPj.
+- Por ahora nos faltaria transmitir las posiciones de los pj hacia los clientes, asi posicionan a los pj.
+
 ### "pequeños cambios" - Fecha 12/11
 
 - Reemplazamos 2 variables booleanas por enumeradores, para hacerlo mas entendible y correcto.
--  Mejoramos las desconexiones cliente/servidor (pantallaPvP, pantallaEspera).
+- Mejoramos las desconexiones cliente/servidor (pantallaPvP, pantallaEspera).
 
 ### "implementando redes en la creacion de personajes" - Fecha 11/11
 

@@ -105,19 +105,17 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		updateAnimacion(delta);
 		
 		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
-		calcularSalto();	//Calcula el salto con la gravedad.
-		calcularMovimiento();	//Calcula el movimiento.
-		
+		if(tipoCliente == TipoCliente.USUARIO){		//Si es oponente no se calcula ni el mov,salto y poderes ya que se genera un conflicto con el server.
+			calcularSalto();	//Calcula el salto con la gravedad.
+			calcularMovimiento();	//Calcula el movimiento.
+			aumentarEnergia(delta);	//Aumento de los poderes.
+			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
+		}
 		pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
 		spr.setPosicion(pj.getPosition().x, pj.getPosition().y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
 		animar();	//Animacion del pj.
 		reproducirSFX();	//Efectos de sonido.
-		
-		if(tipoCliente == TipoCliente.USUARIO){		//Si es oponente no se manipulan los poderes ya que no tiene.
-			aumentarEnergia(delta);	//Aumento de los poderes.
-			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
-		}
 	}
 	private void aumentarEnergia(float delta) {
 		this.tiempoMonedas += delta;	
@@ -236,24 +234,18 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	private void calcularSalto() {
 		if(saltar) {
 			Listeners.mover(Movimiento.SALTO);
-			//movimiento.y = impulsoY;
-		}else {
-			//movimiento.y = pj.getLinearVelocity().y;	//Esto hace que actue junto a la gravedad del mundo.
 		}
 	}
 	private void calcularMovimiento() {
 		if(puedeMoverse) {
 			if(correrDerecha) {
 				Listeners.mover(Movimiento.DERECHA);
-				//movimiento.x = velocidadX;
 			} else if (correrIzquierda){
 				Listeners.mover(Movimiento.IZQUIERDA);
-				//movimiento.x = -velocidadX;
 			}
 		}
 		if(estaQuieto) {	//Esto para que no se quede deslizando.
-			//Listeners.mover(Movimiento.QUIETO);
-			//movimiento.x = 0;
+			Listeners.mover(Movimiento.QUIETO);
 		}
 	}
 	public float getX() {
