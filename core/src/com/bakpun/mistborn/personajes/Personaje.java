@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
@@ -22,8 +21,8 @@ import com.bakpun.mistborn.enums.TipoAudio;
 import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
-import com.bakpun.mistborn.enums.UserData;
 import com.bakpun.mistborn.eventos.EventoGestionMonedas;
+import com.bakpun.mistborn.eventos.EventoInformacionPj;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
@@ -32,19 +31,17 @@ import com.bakpun.mistborn.poderes.Peltre;
 import com.bakpun.mistborn.poderes.Poder;
 import com.bakpun.mistborn.utiles.Render;
 
-public abstract class Personaje implements EventoReducirVida,EventoGestionMonedas{
+public abstract class Personaje implements EventoReducirVida,EventoGestionMonedas, EventoInformacionPj{
 	
 	private float velocidadX = 15f, impulsoY = 20f;
 	
-	private float vida = 100f;
+	private float vida = 100f,x,y;
 	
 	private Animacion animacionQuieto,animacionCorrer;
 	private Imagen spr;
 	private Entradas entradas;
 	private Body pj;
-	private Vector2 movimiento;
 	private Fisica f;
-	private Colision c;
 	private ColisionMouse cm;
 	private TextureRegion saltos[] = new TextureRegion[3];
 	private String animacionSaltos[] = new String[3];
@@ -53,46 +50,31 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	private int monedas;
 	private TipoPersonaje tipoPj;
 	private TipoCliente tipoCliente;
-	private Spawn spawn;
+	private Movimiento estadoAnima;
 	
-	private boolean saltar,puedeMoverse,estaCorriendo,estaQuieto,apuntando,disparando,primerSalto,segundoSalto,caidaSalto,correrDerecha,correrIzquierda;
+	private boolean saltar,puedeMoverse,estaSaltando,estaCorriendo,estaQuieto,apuntando,disparando,correrDerecha,correrIzquierda;
 	private boolean reproducirSonidoCorrer;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f;
-	private int seleccion = 0;
+	private int seleccion = 0,frameIndex = 0;
 	
 	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,Spawn spawn,TipoCliente tipoCliente,TipoPersonaje tipoPj) {
 		this.animacionSaltos = animacionSaltos;
 		this.animacionEstados = animacionEstados;
-		this.spawn = spawn;
-		this.c = c;
 		this.entradas = entradas;
 		this.poderes = new Poder[(tipoPj == TipoPersonaje.NACIDO_BRUMA)?3:1];
 		this.tipoPj = tipoPj;
 		this.monedas = 10;	//Monedas iniciales 10.
 		this.tipoCliente = tipoCliente;
-		movimiento = new Vector2();
 		f = new Fisica();
 		cm = new ColisionMouse(mundo,cam);
  		spr = new Imagen(rutaPj);
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
-		crearBody(mundo);
 		if(tipoCliente == TipoCliente.USUARIO) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
 		Listeners.agregarListener(this);
 	}
 	
 	protected abstract void crearPoderes(World mundo,OrthographicCamera cam,Colision c);
-	
-	private void crearBody(World mundo) {
-		f.setBody(BodyType.DynamicBody,new Vector2((spawn == Spawn.IZQUIERDA)?10:20,5));
-		f.createPolygon(spr.getTexture().getWidth()/Box2dConfig.PPM, spr.getTexture().getHeight()/Box2dConfig.PPM);		//Uso la clase Fisica.
-		f.setFixture(f.getPolygon(), 60, 0, 0);
-		pj = mundo.createBody(f.getBody());
-		pj.createFixture(f.getFixture());
-		pj.setUserData(UserData.PJ);	//ID para la colision.
-		pj.setFixedRotation(true);		//Para que el body no rote.
-		f.getPolygon().dispose();
-	}
 
 	private void updateAnimacion(float delta) {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
 
@@ -111,8 +93,8 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 			aumentarEnergia(delta);	//Aumento de los poderes.
 			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
 		}
-		pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
-		spr.setPosicion(pj.getPosition().x, pj.getPosition().y);	//Le digo al Sprite que se ponga en la posicion del body.
+		//pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
+		spr.setPosicion(this.x, this.y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
 		animar();	//Animacion del pj.
 		reproducirSFX();	//Efectos de sonido.
@@ -164,13 +146,10 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		//RECORDATORIO: Esto de ladoDerecho y de cambiarle las teclas es para probar las colisiones sin utilizar redes.	
 		correrDerecha = ((tipoCliente == TipoCliente.USUARIO)?entradas.isIrDerD():false);
 		correrIzquierda = ((tipoCliente == TipoCliente.USUARIO)?entradas.isIrIzqA():false);
-		saltar = (((tipoCliente == TipoCliente.USUARIO)?Gdx.input.isKeyJustPressed(Keys.SPACE):false) && this.c.isPuedeSaltar(pj));
+		saltar = (((tipoCliente == TipoCliente.USUARIO)?Gdx.input.isKeyJustPressed(Keys.SPACE):false));
 		puedeMoverse = (correrDerecha != correrIzquierda);	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
-		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse && this.c.isPuedeSaltar(pj));
-		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse && this.c.isPuedeSaltar(pj));
-		primerSalto = (movimiento.y > impulsoY - 8 && movimiento.y <= impulsoY);
-		segundoSalto = (movimiento.y > 0 && movimiento.y <= impulsoY - 8);
-		caidaSalto = (movimiento.y < 0);
+		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse);
+		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse);
 		apuntando =	(entradas.isBotonDer()); 	//este booleano se utiliza en el metodo drawLineaDisparo().
 		disparando = (entradas.isBotonIzq() && apuntando);	
 	}
@@ -194,24 +173,18 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	}
 
 	private void animar() {
-		
-		if(estaQuieto) {
-			if(!c.isPuedeSaltar(pj)) {		//si estaQuieto pero salta, hace la animacion de salto.
-				spr.draw(saltos[0]);
-			}else {
-				spr.draw(animacionQuieto.getCurrentFrame());
+		if(!estaSaltando) {
+			if(estadoAnima == Movimiento.QUIETO) {		
+				spr.draw(animacionQuieto.getFrames()[frameIndex]);
+			}else if((estadoAnima == Movimiento.DERECHA || estadoAnima == Movimiento.IZQUIERDA)) { 	//Si esta corriendo muestra el fotograma actual de la animacionCorrer.
+				spr.draw(animacionCorrer.getFrames()[frameIndex]);
 			}
-		}else if(estaCorriendo) { 	//Si esta corriendo muestra el fotograma actual de la animacionCorrer.
-			spr.draw(animacionCorrer.getCurrentFrame());
-		}else if(primerSalto) {		
-			spr.draw(saltos[0]);		
-		}else if(segundoSalto) {		//saltos[] contiene las diferentes texturas, se van cambiando en base a la altura, o a la caida,
-			spr.draw(saltos[1]);		//por eso no lo hice con la clase Animacion, porque no es constante esto.
-		}else if(caidaSalto) {
-			spr.draw(saltos[2]);
-		}
-		if(!estaQuieto) {			//cuando !estaQuieto va a poder flipearse el pj, porque sino se queda mirando para un lado que no es.
-			spr.flip((correrDerecha)?false:true);
+		}else{		
+			spr.draw(saltos[frameIndex]);		//saltos[] contiene las diferentes texturas, se van cambiando en base a la altura, o a la caida,																	
+		}										//por eso no lo hice con la clase Animacion, porque no es constante esto.
+		
+		if(estadoAnima != Movimiento.QUIETO) {			//cuando !estaQuieto va a poder flipearse el pj, porque sino se queda mirando para un lado que no es.
+			spr.flip((estadoAnima == Movimiento.DERECHA)?false:true);
 		}
 	}
 	
@@ -295,6 +268,23 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	}
 	public TipoPersonaje getTipo() {
 		return this.tipoPj;
+	}
+
+	@Override
+	public void actualizarPos(TipoCliente tipoCliente, float x, float y) {
+		if(this.tipoCliente == tipoCliente){
+			this.x = x;
+			this.y = y;	
+		}	
+	}
+
+	@Override
+	public void actualizarAnima(TipoCliente tipoCliente, int frameIndex, Movimiento mov, boolean saltando) {
+		if(this.tipoCliente == tipoCliente){
+			this.frameIndex = frameIndex;
+			this.estadoAnima = mov;
+			this.estaSaltando = saltando;
+		}	
 	}
 	
 }

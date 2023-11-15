@@ -9,6 +9,7 @@ import java.util.EventListener;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.bakpun.mistborn.enums.Movimiento;
+import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.eventos.EventoMoverPj;
 import com.bakpun.mistborn.eventos.Listeners;
 
@@ -79,6 +80,23 @@ public final class HiloCliente extends Thread implements EventoMoverPj, EventLis
 		case "seleccionOponente":	//Es la seleccion del oponente mientras se elige al pj.
 			this.seleccionOponente = Integer.valueOf(msg[1]);
 			break;
+		case "posPj":
+			Listeners.actualizarPosClientes(((Integer.valueOf(msg[1]) == this.id)?TipoCliente.USUARIO:TipoCliente.OPONENTE), Float.valueOf(msg[2]),Float.valueOf(msg[3]));
+			break;
+		case "animaPj":
+			boolean encontrado = false;
+			int i = 0;
+			Movimiento mov = Movimiento.QUIETO;		
+			do {		//Buscamos el msg y lo guardamos en el enum para hacer mas faciles las comparaciones despues.
+				if(msg[3].equals(Movimiento.values()[i].getMovimiento())) {
+					mov = Movimiento.values()[i];
+					encontrado = true;
+				}
+				i++;
+			}while(!encontrado);
+			System.out.println(msg[4]);
+			Listeners.actualizarAnimaClientes(((Integer.valueOf(msg[1]) == this.id)?TipoCliente.USUARIO:TipoCliente.OPONENTE), Integer.valueOf(msg[2]),mov,Boolean.valueOf(msg[4]));
+			break;
 		}
 	}
 	
@@ -109,5 +127,5 @@ public final class HiloCliente extends Thread implements EventoMoverPj, EventLis
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 }

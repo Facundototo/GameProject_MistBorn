@@ -5,6 +5,7 @@ import java.util.EventListener;
 
 import com.badlogic.gdx.graphics.Color;
 import com.bakpun.mistborn.enums.Movimiento;
+import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 
@@ -71,6 +72,20 @@ public class Listeners {
 		for (EventListener listener : listeners) {
 			if(listener instanceof EventoMoverPj)
 			((EventoMoverPj)listener).mover(movimiento);
+		}
+	}
+	
+	public static void actualizarPosClientes(TipoCliente tipoCliente, float x, float y) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoInformacionPj)
+			((EventoInformacionPj)listener).actualizarPos(tipoCliente,x,y);
+		}
+	}
+	
+	public static void actualizarAnimaClientes(TipoCliente tipoCliente, int frameIndex,Movimiento mov,boolean saltando) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoInformacionPj)
+			((EventoInformacionPj)listener).actualizarAnima(tipoCliente,frameIndex,mov,saltando);
 		}
 	}
 }

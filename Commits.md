@@ -11,6 +11,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "terminamos el movimiento" - Fecha 15/11
+
+- Hicimos la logica faltante que tiene que ver con el retorno de XY a los clientes por parte del server.
+- De paso implementamos la animacion tambien en red, anda bien y se grafica bien en los 2 clientes.
+- Creamos una interfaz en cliente/servidor EventoInfoPj que transmite las posiciones y las animaciones, tanto en Personaje-HiloServidor y HiloCliente-Personaje.
+- Para enviar las animaciones por red, modificamos la clase Animacion y pusimos un getter que retorna el indice de la TextureRegion actual.
+
 ### "haciendo movimiento en redes" - Fecha 14/11
 
 - Seguimos con redes haciendo el movimiento , salto,der,izq,quieto.
