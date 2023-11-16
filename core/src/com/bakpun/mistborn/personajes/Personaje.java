@@ -1,7 +1,9 @@
 package com.bakpun.mistborn.personajes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,6 +16,7 @@ import com.bakpun.mistborn.box2d.ColisionMouse;
 import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
 import com.bakpun.mistborn.elementos.Imagen;
+import com.bakpun.mistborn.enums.Accion;
 import com.bakpun.mistborn.enums.Movimiento;
 import com.bakpun.mistborn.enums.OpcionAcero;
 import com.bakpun.mistborn.enums.Spawn;
@@ -35,7 +38,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	
 	private float velocidadX = 15f, impulsoY = 20f;
 	
-	private float vida = 100f,x,y;
+	private float x,y;
 	
 	private Animacion animacionQuieto,animacionCorrer;
 	private Imagen spr;
@@ -52,9 +55,9 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	private TipoCliente tipoCliente;
 	private Movimiento estadoAnima;
 	
-	private boolean saltar,puedeMoverse,estaSaltando,estaCorriendo,estaQuieto,apuntando,disparando,correrDerecha,correrIzquierda;
-	private boolean reproducirSonidoCorrer;
-	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f;
+	private boolean saltar,puedeMoverse,estaSaltando,estaQuieto,apuntando,disparando,correrDerecha,correrIzquierda,golpear;
+	private boolean reproducirSonidoCorrer,flagDanoRecibido;
+	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f, tiempoColor = 0f;
 	private int seleccion = 0,frameIndex = 0;
 	
 	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,Spawn spawn,TipoCliente tipoCliente,TipoPersonaje tipoPj) {
@@ -88,6 +91,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		
 		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
 		if(tipoCliente == TipoCliente.USUARIO){		//Si es oponente no se calcula ni el mov,salto y poderes ya que se genera un conflicto con el server.
+			Listeners.ejecutar(((golpear)?Accion.GOLPE:Accion.NADA));
 			calcularSalto();	//Calcula el salto con la gravedad.
 			calcularMovimiento();	//Calcula el movimiento.
 			aumentarEnergia(delta);	//Aumento de los poderes.
@@ -96,9 +100,13 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		//pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
 		spr.setPosicion(this.x, this.y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
+		if(flagDanoRecibido){colorearGolpe(delta);}
+		
 		animar();	//Animacion del pj.
 		reproducirSFX();	//Efectos de sonido.
 	}
+	
+	
 	private void aumentarEnergia(float delta) {
 		this.tiempoMonedas += delta;	
 		/*Inconvenientes de hacer esto: Cuando se termina la energia pero vos seguis manteniendo el disparo 
@@ -149,9 +157,9 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		saltar = (((tipoCliente == TipoCliente.USUARIO)?Gdx.input.isKeyJustPressed(Keys.SPACE):false));
 		puedeMoverse = (correrDerecha != correrIzquierda);	//Si el jugador toca las 2 teclas a la vez no va a poder moverse.
 		estaQuieto = ((!correrDerecha == !correrIzquierda) || !puedeMoverse);
-		estaCorriendo = ((correrDerecha || correrIzquierda) && puedeMoverse);
 		apuntando =	(entradas.isBotonDer()); 	//este booleano se utiliza en el metodo drawLineaDisparo().
 		disparando = (entradas.isBotonIzq() && apuntando);	
+		golpear = Gdx.input.isButtonJustPressed(Buttons.LEFT);
 	}
 
 	//Metodo que administra los sonidos de los pj.
@@ -248,9 +256,23 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	}
 	
 	@Override
-	public void reducirVida(float dano) {
-		this.vida -= dano;
+	public void reducirVida(float dano, TipoCliente cliente) {
+		if(this.tipoCliente == cliente) {
+			flagDanoRecibido = true;	
+		}
 	}
+	
+	private void colorearGolpe(float delta) {
+		tiempoColor += delta;
+		if(tiempoColor >= 0.4f) {
+			spr.setColor(Color.WHITE);
+			tiempoColor = 0f;
+			flagDanoRecibido = false;
+		}else {
+			spr.setColor(Color.RED);
+		}
+	}
+
 	@Override
 	public void restarMonedas() {
 		this.monedas--;

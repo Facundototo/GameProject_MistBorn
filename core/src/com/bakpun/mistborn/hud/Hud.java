@@ -15,12 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.elementos.SkinFreeTypeLoader;
 import com.bakpun.mistborn.enums.Fuente;
+import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.EventoCrearBarra;
+import com.bakpun.mistborn.eventos.EventoGestionMonedas;
 import com.bakpun.mistborn.eventos.EventoGestionPoderes;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
-import com.bakpun.mistborn.eventos.EventoGestionMonedas;
 import com.bakpun.mistborn.eventos.EventoSetDuracionPeltre;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.utiles.Config;
@@ -122,8 +123,10 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoGesti
 		}
 	}
 	@Override
-	public void reducirVida(float dano) {
-		vida -= (dano/100)*245;
+	public void reducirVida(float dano,TipoCliente cliente) {
+		if(cliente == TipoCliente.USUARIO) {
+			vida -= (dano/100)*245;
+		}
 	}
 
 	@Override

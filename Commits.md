@@ -11,6 +11,13 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "haciendo golpe cuerpo a cuerpo" - Fecha 16/11
+
+- Chequeamos las colisiones de los personajes para implementar el golpe y para saber quien pega.
+- Implementamos el golpe.
+- Hicimos la logica de envio servidor/cliente de entradas, golpe, reduccion de vida etc...
+- Coloreamos y empujamos a el personaje afectado por el golpe.
+
 ### "terminamos el movimiento" - Fecha 15/11
 
 - Hicimos la logica faltante que tiene que ver con el retorno de XY a los clientes por parte del server.

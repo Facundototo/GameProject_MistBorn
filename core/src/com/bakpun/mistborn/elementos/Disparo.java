@@ -71,7 +71,7 @@ public final class Disparo{
 					pj.aplicarFuerza(fuerzaContraria);	
 				}
 				if(c.isPjMoneda(pj.getBody())) {
-					Listeners.reducirVidaPj(1);		
+					//Listeners.reducirVidaPj(1);		
 				}
 			}else {	
 				Listeners.restarMonedas();

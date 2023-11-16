@@ -8,13 +8,14 @@ import java.net.UnknownHostException;
 import java.util.EventListener;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
+import com.bakpun.mistborn.enums.Accion;
 import com.bakpun.mistborn.enums.Movimiento;
 import com.bakpun.mistborn.enums.TipoCliente;
-import com.bakpun.mistborn.eventos.EventoMoverPj;
+import com.bakpun.mistborn.eventos.EventoEntradasPj;
 import com.bakpun.mistborn.eventos.Listeners;
 
 
-public final class HiloCliente extends Thread implements EventoMoverPj, EventListener{
+public final class HiloCliente extends Thread implements EventoEntradasPj, EventListener{
 	
 	private DatagramSocket socket;
 	private InetAddress ipServer;
@@ -96,6 +97,10 @@ public final class HiloCliente extends Thread implements EventoMoverPj, EventLis
 			}while(!encontrado);
 			Listeners.actualizarAnimaClientes(((Integer.valueOf(msg[1]) == this.id)?TipoCliente.USUARIO:TipoCliente.OPONENTE), Integer.valueOf(msg[2]),mov,Boolean.valueOf(msg[4]));
 			break;
+			
+		case "reducir_vida":
+			Listeners.reducirVidaPj(Float.valueOf(msg[2]),((Integer.valueOf(msg[1]) == this.id)?TipoCliente.USUARIO:TipoCliente.OPONENTE));
+			break;	
 		}
 	}
 	
@@ -122,9 +127,16 @@ public final class HiloCliente extends Thread implements EventoMoverPj, EventLis
 	}
 
 	@Override
+	public void ejecutar(Accion accion) {
+		enviarMensaje("accion#" + accion.getAccion() + "#" + this.id);
+	}
+	
+	@Override
 	public boolean handle(Event event) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	
 
 }

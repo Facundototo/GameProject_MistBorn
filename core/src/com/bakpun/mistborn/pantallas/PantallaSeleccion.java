@@ -25,7 +25,6 @@ import com.bakpun.mistborn.enums.Fuente;
 import com.bakpun.mistborn.enums.InfoPersonaje;
 import com.bakpun.mistborn.enums.TipoAudio;
 import com.bakpun.mistborn.io.Entradas;
-import com.bakpun.mistborn.redes.EstadoRed;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Red;
