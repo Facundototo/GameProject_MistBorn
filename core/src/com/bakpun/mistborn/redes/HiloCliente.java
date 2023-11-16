@@ -59,7 +59,7 @@ public final class HiloCliente extends Thread implements EventoMoverPj, EventLis
 
 	private void procesarMensaje(DatagramPacket dp) {
 		String msg[] = new String(dp.getData()).trim().split("#");
-		System.out.println(msg[0]);
+		//System.out.println(msg[0]);
 		
 		switch(msg[0]) {
 		case "OK":	//OK es cuando el server responde a conexion, con este ok nos guardamos la ip del server para no estar haciendo broadcast siempre.
@@ -94,7 +94,6 @@ public final class HiloCliente extends Thread implements EventoMoverPj, EventLis
 				}
 				i++;
 			}while(!encontrado);
-			System.out.println(msg[4]);
 			Listeners.actualizarAnimaClientes(((Integer.valueOf(msg[1]) == this.id)?TipoCliente.USUARIO:TipoCliente.OPONENTE), Integer.valueOf(msg[2]),mov,Boolean.valueOf(msg[4]));
 			break;
 		}

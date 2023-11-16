@@ -156,7 +156,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 
 	//Metodo que administra los sonidos de los pj.
 	private void reproducirSFX() {
-		if(estaCorriendo) {
+		if(estadoAnima != Movimiento.QUIETO && !estaSaltando) {
 			if(!reproducirSonidoCorrer) {
 				Render.audio.pjCorriendo.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 				reproducirSonidoCorrer = true;
@@ -167,7 +167,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 				reproducirSonidoCorrer = false;
 			}
 		}
-		if(saltar) {
+		if(saltar && !estaSaltando) {
 			Render.audio.pjSalto.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 		}
 	}
