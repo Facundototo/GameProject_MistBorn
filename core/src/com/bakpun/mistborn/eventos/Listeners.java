@@ -96,4 +96,11 @@ public class Listeners {
 			((EventoInformacionPj)listener).actualizarAnima(tipoCliente,frameIndex,mov,saltando);
 		}
 	}
+	
+	public static void terminarPartida(String texto, TipoCliente ganador) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoTerminaPartida)
+			((EventoTerminaPartida)listener).terminarPartida(texto,ganador);
+		}
+	}
 }

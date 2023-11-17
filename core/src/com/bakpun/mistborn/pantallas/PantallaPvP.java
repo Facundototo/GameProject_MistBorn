@@ -2,6 +2,7 @@ package com.bakpun.mistborn.pantallas;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.EventListener;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -18,6 +19,8 @@ import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.Spawn;
 import com.bakpun.mistborn.enums.TipoCliente;
+import com.bakpun.mistborn.eventos.EventoTerminaPartida;
+import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.hud.Hud;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.objetos.CuerposMundo;
@@ -28,7 +31,7 @@ import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Red;
 import com.bakpun.mistborn.utiles.Render;
 
-public final class PantallaPvP implements Screen{
+public final class PantallaPvP implements Screen,EventoTerminaPartida,EventListener{
 
 	private OrthographicCamera cam;
 	private World mundo;
@@ -44,6 +47,7 @@ public final class PantallaPvP implements Screen{
 	private Pixmap cursor;
 	private CuerposMundo entidades;
 	private int nroOponente;
+	private boolean flagTerminaPartida = false;
 	
 	public PantallaPvP(String clasePj1, String clasePj2,int nroOponente) {
 		Render.audio.cancionBatalla.play();
@@ -51,6 +55,7 @@ public final class PantallaPvP implements Screen{
 		this.nombrePj1 = clasePj1;  //Pasa el nombre de la clase del Personaje que eligio y lo creo con reflection.
 		this.nombrePj2 = clasePj2;	
 		this.nroOponente = nroOponente;
+		Listeners.agregarListener(this);
 	}
 	
 	public void show() {
@@ -97,6 +102,11 @@ public final class PantallaPvP implements Screen{
 		
 		hud.draw(delta);	//Dibujo el hud.
 		GestorMonedas.borrarBasura();		//Se llama siempre a este metodo static para que borre las monedas.
+		
+		if(flagTerminaPartida && (entradasPj1.isEscape() || entradasPj2.isEscape())) {
+			Red.desconectar();
+			Render.app.setScreen(new PantallaMenu());
+		}	
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
 		db.render(mundo, cam.combined);		//Muestra los colisiones/cuerpos.
@@ -158,5 +168,10 @@ public final class PantallaPvP implements Screen{
 	        e.printStackTrace();
 	    }
 	    return pj;
+	}
+
+	@Override
+	public void terminarPartida(String texto, TipoCliente ganador) {
+		flagTerminaPartida = true;	
 	}
 }

@@ -11,6 +11,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "termina partida" - Fecha 17/11
+
+- Hicimos la logica de cuando termina la partida, el server manda a los clientes quien es el ganador y quien es el perdedor, lo grafican en HUD.
+- Cuando termina la partida tambien en la clase Personaje el pj se rota para simular que murio y se colorea de rojo.
+- En PantallaPvP cuando termina la partida es posible tocar ESC para volver al menu.
+
 ### "haciendo golpe cuerpo a cuerpo" - Fecha 16/11
 
 - Chequeamos las colisiones de los personajes para implementar el golpe y para saber quien pega.

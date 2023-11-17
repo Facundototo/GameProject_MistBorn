@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.bakpun.mistborn.elementos.SkinFreeTypeLoader;
 import com.bakpun.mistborn.enums.Fuente;
@@ -23,18 +24,19 @@ import com.bakpun.mistborn.eventos.EventoGestionMonedas;
 import com.bakpun.mistborn.eventos.EventoGestionPoderes;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
 import com.bakpun.mistborn.eventos.EventoSetDuracionPeltre;
+import com.bakpun.mistborn.eventos.EventoTerminaPartida;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
 
-public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoGestionMonedas,EventoSetDuracionPeltre,EventoGestionPoderes{
+public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoReducirVida,EventoGestionMonedas,EventoSetDuracionPeltre,EventoGestionPoderes{
 
 	private Skin skin;
 	private Stage stage;
 	private Table tabla;
 	private Image marcoVida;
 	private Image[] marcosPoder = new Image[3];		//Lo creamos con el max de poderes que puede tener un pj pero lo limita el for de shapesPoder.
-	private Label cantMonedas,tiempoPeltre;
+	private Label cantMonedas,tiempoPeltre,decisionPelea,avisoSalir;
 	private ShapeRenderer shapeVida;
 	private ArrayList<ShapeRenderer> shapesPoder;	//Este arraylist porque no se sabe cuantos poderes se van a crear.
 	private float[] energiaPoderes;
@@ -47,6 +49,8 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoGesti
 		skin = SkinFreeTypeLoader.cargar();
 		stage = new Stage();
 		tabla = new Table();
+		decisionPelea = new Label("",Fuente.PIXELTEXTO.getStyle(skin));
+		avisoSalir = new Label("Toca ESC para salir de la sesion",Fuente.PIXELTEXTO.getStyle(skin));
 		shapeVida = new ShapeRenderer();
 		shapesPoder = new ArrayList<ShapeRenderer>();
 		
@@ -55,12 +59,16 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoGesti
 		shapeVida.setColor(Color.RED);
 				
 		tabla.setFillParent(true);		//Con esto le digo que la tabla ocupe toda la pantalla.
+		
 		marcoVida = new Image(new Texture(Recursos.MARCO_VIDA));
 		
 		tabla.top().left().pad(30);		//Le pongo un padding de 30 px.
 		tabla.add(marcoVida).size(marcoVida.getWidth()*escalado, marcoVida.getHeight()*escalado).row();
+		
 		this.vida = 245;
+		
 		stage.addActor(tabla);
+		
 	}
 	
 	public void draw(float delta) {
@@ -152,6 +160,20 @@ public final class Hud implements EventoCrearBarra,EventoReducirVida,EventoGesti
 	@Override
 	public void aumentarPoder(TipoPersonaje tipoPj,TipoPoder tipoPoder, float energia) {
 		energiaPoderes[(tipoPj == TipoPersonaje.NACIDO_BRUMA)?tipoPoder.getNroSeleccion():0] += (energia/100)*210;
+	}
+
+	@Override
+	public void terminarPartida(String texto,TipoCliente ganador) {
+		if(texto.equals("Perdiste")) {
+			this.vida = 0;
+		}
+		decisionPelea.setText(texto);
+		decisionPelea.setPosition(Config.ANCHO/2, Config.ALTO/2,Align.center);
+		avisoSalir.setPosition(Config.ANCHO/2, Config.ALTO/2.5f,Align.center);
+		
+		stage.addActor(decisionPelea);
+		stage.addActor(avisoSalir);
+		
 	}
 	
 	

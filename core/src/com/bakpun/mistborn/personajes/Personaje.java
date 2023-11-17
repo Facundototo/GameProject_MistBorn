@@ -27,6 +27,7 @@ import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.EventoGestionMonedas;
 import com.bakpun.mistborn.eventos.EventoInformacionPj;
 import com.bakpun.mistborn.eventos.EventoReducirVida;
+import com.bakpun.mistborn.eventos.EventoTerminaPartida;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.poderes.Acero;
@@ -34,7 +35,7 @@ import com.bakpun.mistborn.poderes.Peltre;
 import com.bakpun.mistborn.poderes.Poder;
 import com.bakpun.mistborn.utiles.Render;
 
-public abstract class Personaje implements EventoReducirVida,EventoGestionMonedas, EventoInformacionPj{
+public abstract class Personaje implements EventoTerminaPartida,EventoReducirVida,EventoGestionMonedas, EventoInformacionPj{
 	
 	private float velocidadX = 15f, impulsoY = 20f;
 	
@@ -56,7 +57,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 	private Movimiento estadoAnima;
 	
 	private boolean saltar,puedeMoverse,estaSaltando,estaQuieto,apuntando,disparando,correrDerecha,correrIzquierda,golpear;
-	private boolean reproducirSonidoCorrer,flagDanoRecibido;
+	private boolean reproducirSonidoCorrer,flagDanoRecibido,flagBloquearEntradas;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f, tiempoColor = 0f;
 	private int seleccion = 0,frameIndex = 0;
 	
@@ -73,7 +74,7 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
  		spr = new Imagen(rutaPj);
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
-		if(tipoCliente == TipoCliente.USUARIO) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
+		if(this.tipoCliente == TipoCliente.USUARIO) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
 		Listeners.agregarListener(this);
 	}
 	
@@ -90,14 +91,14 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 		updateAnimacion(delta);
 		
 		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
-		if(tipoCliente == TipoCliente.USUARIO){		//Si es oponente no se calcula ni el mov,salto y poderes ya que se genera un conflicto con el server.
+		if(tipoCliente == TipoCliente.USUARIO && !flagBloquearEntradas){		//Si es oponente no se calcula ni el mov,salto y poderes ya que se genera un conflicto con el server.
 			Listeners.ejecutar(((golpear)?Accion.GOLPE:Accion.NADA));
 			calcularSalto();	//Calcula el salto con la gravedad.
 			calcularMovimiento();	//Calcula el movimiento.
 			aumentarEnergia(delta);	//Aumento de los poderes.
 			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
 		}
-		//pj.setLinearVelocity(movimiento);	//Aplico al pj velocidad lineal, tanto para correr como para saltar.
+		
 		spr.setPosicion(this.x, this.y);	//Le digo al Sprite que se ponga en la posicion del body.
 		
 		if(flagDanoRecibido){colorearGolpe(delta);}
@@ -307,6 +308,15 @@ public abstract class Personaje implements EventoReducirVida,EventoGestionMoneda
 			this.estadoAnima = mov;
 			this.estaSaltando = saltando;
 		}	
+	}
+	
+	@Override
+	public void terminarPartida(String texto,TipoCliente ganador) {
+		if(ganador != this.tipoCliente) {
+			spr.setAngulo(90);
+			spr.setColor(Color.RED);
+		}
+		this.flagBloquearEntradas = true;
 	}
 	
 }

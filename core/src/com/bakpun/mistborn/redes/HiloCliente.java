@@ -63,27 +63,34 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 		//System.out.println(msg[0]);
 		
 		switch(msg[0]) {
+		
 		case "OK":	//OK es cuando el server responde a conexion, con este ok nos guardamos la ip del server para no estar haciendo broadcast siempre.
 			this.estado = EstadoRed.CONECTADO;
 			this.ipServer = dp.getAddress();
 			this.id = Integer.valueOf(msg[1]);
 			break;
+			
 		case "OponenteEncontrado":	//Si el oponente esta listo, por ende vos tambien, se pasa a la PantallaSeleccion.
 			this.oponenteEncontrado = true;
 			break;
+			
 		case "EmpiezaPartida": 
 			this.empiezaPartida = true;
 			break;
+			
 		case "desconexion":		//Responde a la llamada de desconectar, para que le avise al otro cliente de que me desconecte.
 			estado = EstadoRed.DESCONECTADO;	//Con el desconectado se fuerza al otro cliente que se vaya a la PantallaMenu.
 			this.oponenteEncontrado = false;			//Reseteamos este booleano porque sino salta de la PantallaMenu a la PantallaSeleccion.
 			break;
+			
 		case "seleccionOponente":	//Es la seleccion del oponente mientras se elige al pj.
 			this.seleccionOponente = Integer.valueOf(msg[1]);
 			break;
+			
 		case "posPj":
 			Listeners.actualizarPosClientes(((Integer.valueOf(msg[1]) == this.id)?TipoCliente.USUARIO:TipoCliente.OPONENTE), Float.valueOf(msg[2]),Float.valueOf(msg[3]));
 			break;
+			
 		case "animaPj":
 			boolean encontrado = false;
 			int i = 0;
@@ -101,6 +108,10 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 		case "reducir_vida":
 			Listeners.reducirVidaPj(Float.valueOf(msg[2]),((Integer.valueOf(msg[1]) == this.id)?TipoCliente.USUARIO:TipoCliente.OPONENTE));
 			break;	
+		
+		case "terminaPelea":
+			Listeners.terminarPartida(msg[1],((msg[1].equals("Ganaste!"))?TipoCliente.USUARIO:TipoCliente.OPONENTE));
+			break;
 		}
 	}
 	
