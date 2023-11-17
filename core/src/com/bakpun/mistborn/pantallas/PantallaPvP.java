@@ -105,7 +105,6 @@ public final class PantallaPvP implements Screen,EventoTerminaPartida,EventListe
 		
 		if(flagTerminaPartida && (entradasPj1.isEscape() || entradasPj2.isEscape())) {
 			Red.desconectar();
-			Render.app.setScreen(new PantallaMenu());
 		}	
 		
 		mundo.step(1/60f, 6, 2);	//Updateo el mundo.
@@ -139,6 +138,7 @@ public final class PantallaPvP implements Screen,EventoTerminaPartida,EventListe
 		fondo.getTexture().dispose();	//Texture
 		pj1.dispose();	//Texture.
 		pj2.dispose();	//Texture.
+		hud.dispose();
 		cursor.dispose();	
 		entidades.dispose();
 		Render.batch.dispose();		//SpriteBatch.

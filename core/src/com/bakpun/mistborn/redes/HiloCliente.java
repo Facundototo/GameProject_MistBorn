@@ -11,11 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.bakpun.mistborn.enums.Accion;
 import com.bakpun.mistborn.enums.Movimiento;
 import com.bakpun.mistborn.enums.TipoCliente;
+import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.EventoEntradasPj;
+import com.bakpun.mistborn.eventos.EventoUtilizarPoderes;
 import com.bakpun.mistborn.eventos.Listeners;
 
 
-public final class HiloCliente extends Thread implements EventoEntradasPj, EventListener{
+public final class HiloCliente extends Thread implements EventoEntradasPj, EventListener, EventoUtilizarPoderes{
 	
 	private DatagramSocket socket;
 	private InetAddress ipServer;
@@ -81,6 +83,7 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 		case "desconexion":		//Responde a la llamada de desconectar, para que le avise al otro cliente de que me desconecte.
 			estado = EstadoRed.DESCONECTADO;	//Con el desconectado se fuerza al otro cliente que se vaya a la PantallaMenu.
 			this.oponenteEncontrado = false;			//Reseteamos este booleano porque sino salta de la PantallaMenu a la PantallaSeleccion.
+			this.empiezaPartida = false;
 			break;
 			
 		case "seleccionOponente":	//Es la seleccion del oponente mientras se elige al pj.
@@ -143,10 +146,29 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 	}
 	
 	@Override
+	public void activarPeltre(boolean activo) {
+		enviarMensaje("poderPeltre#" + String.valueOf(activo) + "#" + this.id);
+	}
+	
+	@Override
+	public void seleccionPoder(TipoPoder poder) {
+		enviarMensaje("selecPoder#" + poder.getNroSeleccion() + "#"+ this.id);
+	}
+
+	@Override
+	public void posMouse(float x, float y) {
+		
+	}
+	
+	@Override
 	public boolean handle(Event event) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	
+
+	
 
 	
 

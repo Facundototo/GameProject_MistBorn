@@ -11,6 +11,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "peltre en redes y solucionando problemas" - Fecha 17/11
+
+- Implementamos el poder de peltre en redes.
+- Solucionamos que cuando un cliente se va de una partida terminada el server no se crashee.
+- Solucionamos un error que iniciaba la partida de un solo cliente y desp crasheaba. Esto sucedia cuando terminaba una y se queria volver a jugar otra.
+
 ### "termina partida" - Fecha 17/11
 
 - Hicimos la logica de cuando termina la partida, el server manda a los clientes quien es el ganador y quien es el perdedor, lo grafican en HUD.

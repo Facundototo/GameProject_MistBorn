@@ -2,7 +2,7 @@ package com.bakpun.mistborn.enums;
 
 public enum Accion {
 	
-	GOLPE("golpe"),DISPARANDO("disparando"),TOCA_R("toca_r"),NADA("nada");
+	GOLPE("golpe"),DISPARANDO("disparando"),TOCA_X("toca_x"),NADA("nada");
 	
 	private String accion;
 	

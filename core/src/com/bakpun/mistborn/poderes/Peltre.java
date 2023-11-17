@@ -26,14 +26,16 @@ public class Peltre extends Poder{
 			if(super.energia >= 20f) {
 				this.duracion = r.nextInt(3)+5;
 				this.poderActivo = true;
-				super.pj.aumentarVelocidad();
+				//super.pj.aumentarVelocidad();
+				Listeners.activarPeltre(true);
 				Listeners.reducirPoderPj(super.pj.getTipo(), super.tipo, 20f);
 			}
 		}else {
 			this.duracion -= Gdx.graphics.getDeltaTime();
 			Listeners.setDuracion((int)duracion);
 			if((int)this.duracion == 0) {
-				super.pj.reducirVelocidad();
+				Listeners.activarPeltre(false);
+				//super.pj.reducirVelocidad();
 				this.poderActivo = false;
 				this.duracion = 0;
 			}

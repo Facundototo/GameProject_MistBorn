@@ -48,6 +48,27 @@ public class Listeners {
 		}
 	}
 	
+	public static void activarPeltre(boolean activo) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoUtilizarPoderes)
+				((EventoUtilizarPoderes)listener).activarPeltre(activo);
+		}
+	}
+	
+	public static void seleccionPoder(TipoPoder poder) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoUtilizarPoderes)
+				((EventoUtilizarPoderes)listener).seleccionPoder(poder);
+		}
+	}
+	
+	public static void posMouse(float x, float y) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoUtilizarPoderes)
+				((EventoUtilizarPoderes)listener).posMouse(x,y);
+		}
+	}
+	
 	public static void restarMonedas() {
 		for (EventListener listener : listeners) {
 			if(listener instanceof EventoGestionMonedas)

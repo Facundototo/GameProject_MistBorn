@@ -92,10 +92,10 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		
 		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
 		if(tipoCliente == TipoCliente.USUARIO && !flagBloquearEntradas){		//Si es oponente no se calcula ni el mov,salto y poderes ya que se genera un conflicto con el server.
-			Listeners.ejecutar(((golpear)?Accion.GOLPE:Accion.NADA));
+			Listeners.ejecutar(((golpear)?Accion.GOLPE:(disparando)?Accion.DISPARANDO:(Gdx.input.isKeyJustPressed(Keys.X))?Accion.TOCA_X:Accion.NADA));
 			calcularSalto();	//Calcula el salto con la gravedad.
 			calcularMovimiento();	//Calcula el movimiento.
-			aumentarEnergia(delta);	//Aumento de los poderes.
+			//aumentarEnergia(delta);	//Aumento de los poderes.
 			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
 		}
 		
@@ -128,8 +128,8 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 
 	private void quemarPoder() {
 		if(tipoPj == TipoPersonaje.NACIDO_BRUMA){		//Si es nacido de la bruma, puede seleccionar los poderes.
-			if(entradas.isPrimerPoder()) {seleccion = 0;}
-			else if(entradas.isSegundoPoder()) {seleccion = 1;}
+			if(entradas.isPrimerPoder()) {Listeners.seleccionPoder(TipoPoder.ACERO);}
+			else if(entradas.isSegundoPoder()) {Listeners.seleccionPoder(TipoPoder.HIERRO);}
 			else if(Gdx.input.isKeyJustPressed(Keys.R) || ((Peltre)poderes[2]).isPoderActivo()) {poderes[2].quemar();}
 		}//Si es violento y toco la R o si es violento y el poder esta activo se llama al metodo quemar(),logica tiene porque si esta activo, se esta quemando.
 		if((tipoPj == TipoPersonaje.VIOLENTO) && (Gdx.input.isKeyJustPressed(Keys.R) || ((Peltre)poderes[seleccion]).isPoderActivo())){poderes[seleccion].quemar();}		
@@ -138,7 +138,7 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		if(disparando && tipoPj != TipoPersonaje.VIOLENTO) {poderes[seleccion].quemar();} 
 		
 		// Chequea todo el tiempo calcularFuerzas() porque lo que pasa es que todo lo de Disparo no se puede chequear en Acero.
-		if(poderes[seleccion].getTipoPoder() == TipoPoder.ACERO) {
+	/*	if(poderes[seleccion].getTipoPoder() == TipoPoder.ACERO) {
 			poderes[seleccion].getDisparo().calcularFuerzas(disparando);	
 			if(Gdx.input.isKeyJustPressed(Keys.X)) {		//Si la seleccion es Acero y toca la X, se cambia la opcion.
 				((Acero)poderes[seleccion]).cambiarOpcion();	//Lo casteo porque cambiarOpcion() es propia de Acero.
@@ -147,7 +147,7 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		//Si el poder seleccionado es hierro o acero pero con la opcion de empujar, se dibuja el puntero.
 		if((poderes[seleccion].getTipoPoder() == TipoPoder.HIERRO) || (poderes[seleccion].getTipoPoder() == TipoPoder.ACERO && ((Acero)poderes[seleccion]).getOpcion() == OpcionAcero.EMPUJE)) {
 			cm.dibujar(new Vector2(pj.getPosition().x,pj.getPosition().y), new Vector2(entradas.getMouseX()/Box2dConfig.PPM,entradas.getMouseY()/Box2dConfig.PPM));
-		}
+		}*/
 		
 	}
 
@@ -312,7 +312,7 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 	
 	@Override
 	public void terminarPartida(String texto,TipoCliente ganador) {
-		if(ganador != this.tipoCliente) {
+		if(ganador != this.tipoCliente) {	//Si vos sos diferente al ganador vos te moris porque perdiste.
 			spr.setAngulo(90);
 			spr.setColor(Color.RED);
 		}

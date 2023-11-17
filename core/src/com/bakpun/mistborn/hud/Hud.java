@@ -1,6 +1,7 @@
 package com.bakpun.mistborn.hud;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -79,6 +80,11 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		stage.draw();
 	}
 	
+	public void dispose() {
+		shapesPoder.clear();
+		Arrays.fill(marcosPoder, null);
+	}
+	
 	public Stage getStage() {
 		return this.stage;
 	}
@@ -106,9 +112,10 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 	
 	@Override
 	public void crearBarra(String ruta,Color color,TipoPoder tipo) {
+
 		shapesPoder.add(new ShapeRenderer());
 		shapesPoder.get(shapesPoder.size()-1).setColor(color);
-		
+	
 		final int  _index = shapesPoder.size()-1;
 		
 		marcosPoder[_index] = new Image(new Texture(ruta));
