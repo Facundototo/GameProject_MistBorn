@@ -115,6 +115,10 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 		case "terminaPelea":
 			Listeners.terminarPartida(msg[1],((msg[1].equals("Ganaste!"))?TipoCliente.USUARIO:TipoCliente.OPONENTE));
 			break;
+		
+		case "actColision":
+			Listeners.actualizarColisionPj(Float.valueOf(msg[1]), Float.valueOf(msg[2]));
+			break;
 		}
 	}
 	
@@ -157,7 +161,7 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 
 	@Override
 	public void posMouse(float x, float y) {
-		
+		enviarMensaje("posMouse#" + String.valueOf(x) + "#" + String.valueOf(y) + "#" + this.id);
 	}
 	
 	@Override
@@ -166,10 +170,5 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 		return false;
 	}
 
-	
-
-	
-
-	
 
 }

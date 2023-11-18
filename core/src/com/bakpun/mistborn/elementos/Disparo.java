@@ -70,9 +70,9 @@ public final class Disparo{
 					//Cuando la moneda toca algo inamovible mientras dispara el pj, este se impulsa para la direccion contraria a la moneda.
 					pj.aplicarFuerza(fuerzaContraria);	
 				}
-				if(c.isPjMoneda(pj.getBody())) {
+				//if(c.isPjMoneda(pj.getBody())) {
 					//Listeners.reducirVidaPj(1);		
-				}
+				//}
 			}else {	
 				Listeners.restarMonedas();
 				GestorMonedas.agregarBasura(moneda.getBody());		//La agregamos a la basura para despues borrarla.

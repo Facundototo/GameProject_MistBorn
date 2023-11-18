@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bakpun.mistborn.box2d.Box2dConfig;
 import com.bakpun.mistborn.box2d.Colision;
@@ -33,6 +32,7 @@ import com.bakpun.mistborn.io.Entradas;
 import com.bakpun.mistborn.poderes.Acero;
 import com.bakpun.mistborn.poderes.Peltre;
 import com.bakpun.mistborn.poderes.Poder;
+import com.bakpun.mistborn.utiles.Recursos;
 import com.bakpun.mistborn.utiles.Render;
 
 public abstract class Personaje implements EventoTerminaPartida,EventoReducirVida,EventoGestionMonedas, EventoInformacionPj{
@@ -42,14 +42,15 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 	private float x,y;
 	
 	private Animacion animacionQuieto,animacionCorrer;
-	private Imagen spr;
+	private Imagen spr,cursor;
 	private Entradas entradas;
-	private Body pj;
+	//private Body pj;
 	private Fisica f;
 	private ColisionMouse cm;
 	private TextureRegion saltos[] = new TextureRegion[3];
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
+	private Vector2 colMouse;
 	protected Poder poderes[];
 	private int monedas;
 	private TipoPersonaje tipoPj;
@@ -71,7 +72,10 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		this.tipoCliente = tipoCliente;
 		f = new Fisica();
 		cm = new ColisionMouse(mundo,cam);
+		colMouse = new Vector2();
  		spr = new Imagen(rutaPj);
+ 		cursor = new Imagen(Recursos.CURSOR_COLISIONMOUSE);
+ 		cursor.setEscalaBox2D(24);
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
 		if(this.tipoCliente == TipoCliente.USUARIO) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
@@ -93,6 +97,7 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
 		if(tipoCliente == TipoCliente.USUARIO && !flagBloquearEntradas){		//Si es oponente no se calcula ni el mov,salto y poderes ya que se genera un conflicto con el server.
 			Listeners.ejecutar(((golpear)?Accion.GOLPE:(disparando)?Accion.DISPARANDO:(Gdx.input.isKeyJustPressed(Keys.X))?Accion.TOCA_X:Accion.NADA));
+			Listeners.posMouse(this.entradas.getMouseX()/Box2dConfig.PPM,this.entradas.getMouseY()/Box2dConfig.PPM);
 			calcularSalto();	//Calcula el salto con la gravedad.
 			calcularMovimiento();	//Calcula el movimiento.
 			//aumentarEnergia(delta);	//Aumento de los poderes.
@@ -138,16 +143,17 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		if(disparando && tipoPj != TipoPersonaje.VIOLENTO) {poderes[seleccion].quemar();} 
 		
 		// Chequea todo el tiempo calcularFuerzas() porque lo que pasa es que todo lo de Disparo no se puede chequear en Acero.
-	/*	if(poderes[seleccion].getTipoPoder() == TipoPoder.ACERO) {
-			poderes[seleccion].getDisparo().calcularFuerzas(disparando);	
+		if(poderes[seleccion].getTipoPoder() == TipoPoder.ACERO) {
+			//poderes[seleccion].getDisparo().calcularFuerzas(disparando);	
 			if(Gdx.input.isKeyJustPressed(Keys.X)) {		//Si la seleccion es Acero y toca la X, se cambia la opcion.
 				((Acero)poderes[seleccion]).cambiarOpcion();	//Lo casteo porque cambiarOpcion() es propia de Acero.
 			}
 		}
 		//Si el poder seleccionado es hierro o acero pero con la opcion de empujar, se dibuja el puntero.
 		if((poderes[seleccion].getTipoPoder() == TipoPoder.HIERRO) || (poderes[seleccion].getTipoPoder() == TipoPoder.ACERO && ((Acero)poderes[seleccion]).getOpcion() == OpcionAcero.EMPUJE)) {
-			cm.dibujar(new Vector2(pj.getPosition().x,pj.getPosition().y), new Vector2(entradas.getMouseX()/Box2dConfig.PPM,entradas.getMouseY()/Box2dConfig.PPM));
-		}*/
+			cursor.setPosicion(colMouse.x, colMouse.y);
+			cursor.draw();
+		}
 		
 	}
 
@@ -231,20 +237,22 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		}
 	}
 	public float getX() {
-		return this.pj.getPosition().x;
+		//return this.pj.getPosition().x;
+		return this.x;
 	}
 	public float getY() {
-		return this.pj.getPosition().y;
+		//return this.pj.getPosition().y;
+		return this.y;
 	}
-	public Body getBody() {
-		return this.pj;
-	}
+	//public Body getBody() {
+		//return this.pj;
+	//}
 	
 	public Entradas getInput() {
 		return this.entradas;
 	}
 	public void aplicarFuerza(Vector2 movimiento) {	//Metodo que se usa en la clase Disparo para los poderes, Acero y Hierro.
-		pj.setLinearVelocity(movimiento);
+		//pj.setLinearVelocity(movimiento);
 	}
 	public void aumentarVelocidad() {		//Metodo que se usa en el poder Peltre.
 		velocidadX = velocidadX*2;	
@@ -317,6 +325,10 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 			spr.setColor(Color.RED);
 		}
 		this.flagBloquearEntradas = true;
+	}
+	
+	public void actualizarColisionPj(float x, float y) {
+		this.colMouse.set(x, y);
 	}
 	
 }

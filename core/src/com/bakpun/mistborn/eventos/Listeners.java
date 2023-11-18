@@ -124,4 +124,11 @@ public class Listeners {
 			((EventoTerminaPartida)listener).terminarPartida(texto,ganador);
 		}
 	}
+	
+	public static void actualizarColisionPj(float x, float y) {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoInformacionPj)
+			((EventoInformacionPj)listener).actualizarColisionPj(x,y);
+		}
+	}
 }
