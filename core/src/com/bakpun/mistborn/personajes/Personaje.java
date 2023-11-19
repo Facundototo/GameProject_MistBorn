@@ -133,8 +133,14 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 
 	private void quemarPoder() {
 		if(tipoPj == TipoPersonaje.NACIDO_BRUMA){		//Si es nacido de la bruma, puede seleccionar los poderes.
-			if(entradas.isPrimerPoder()) {Listeners.seleccionPoder(TipoPoder.ACERO);}
-			else if(entradas.isSegundoPoder()) {Listeners.seleccionPoder(TipoPoder.HIERRO);}
+			if(entradas.isPrimerPoder()) {
+				Listeners.seleccionPoder(TipoPoder.ACERO);
+				seleccion = 0;
+			}
+			else if(entradas.isSegundoPoder()) {
+				Listeners.seleccionPoder(TipoPoder.HIERRO);
+				seleccion = 1;
+			}
 			else if(Gdx.input.isKeyJustPressed(Keys.R) || ((Peltre)poderes[2]).isPoderActivo()) {poderes[2].quemar();}
 		}//Si es violento y toco la R o si es violento y el poder esta activo se llama al metodo quemar(),logica tiene porque si esta activo, se esta quemando.
 		if((tipoPj == TipoPersonaje.VIOLENTO) && (Gdx.input.isKeyJustPressed(Keys.R) || ((Peltre)poderes[seleccion]).isPoderActivo())){poderes[seleccion].quemar();}		

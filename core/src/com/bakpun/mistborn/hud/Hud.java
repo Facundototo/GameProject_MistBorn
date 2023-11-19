@@ -112,7 +112,7 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 	
 	@Override
 	public void crearBarra(String ruta,Color color,TipoPoder tipo) {
-
+		System.out.println(tipo);
 		shapesPoder.add(new ShapeRenderer());
 		shapesPoder.get(shapesPoder.size()-1).setColor(color);
 	
