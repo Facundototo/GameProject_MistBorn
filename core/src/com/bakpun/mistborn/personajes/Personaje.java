@@ -58,7 +58,7 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 	private Movimiento estadoAnima;
 	
 	private boolean saltar,puedeMoverse,estaSaltando,estaQuieto,apuntando,disparando,correrDerecha,correrIzquierda,golpear;
-	private boolean reproducirSonidoCorrer,flagDanoRecibido,flagBloquearEntradas;
+	private boolean reproducirSonidoCorrer,flagDanoRecibido,flagBloquearEntradas,colMouseMetal;
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f, tiempoColor = 0f;
 	private int seleccion = 0,frameIndex = 0;
 	
@@ -108,7 +108,7 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		
 		if(flagDanoRecibido){colorearGolpe(delta);}
 		
-		animar();	//Animacion del pj.
+		animar(); 	//Animacion del pj.
 		reproducirSFX();	//Efectos de sonido.
 	}
 	
@@ -150,7 +150,8 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 			}
 		}
 		//Si el poder seleccionado es hierro o acero pero con la opcion de empujar, se dibuja el puntero.
-		if((poderes[seleccion].getTipoPoder() == TipoPoder.HIERRO) || (poderes[seleccion].getTipoPoder() == TipoPoder.ACERO && ((Acero)poderes[seleccion]).getOpcion() == OpcionAcero.EMPUJE)) {
+		if((poderes[seleccion].getTipoPoder() == TipoPoder.HIERRO) || (poderes[seleccion].getTipoPoder() == TipoPoder.ACERO && ((Acero)poderes[seleccion]).getOpcion() == OpcionAcero.EMPUJE)
+				&& colMouseMetal){
 			cursor.setPosicion(colMouse.x, colMouse.y);
 			cursor.draw();
 		}
@@ -232,7 +233,7 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 				Listeners.mover(Movimiento.IZQUIERDA);
 			}
 		}
-		if(estaQuieto) {	//Esto para que no se quede deslizando.
+		if(estaQuieto || flagBloquearEntradas) {	//Esto para que no se quede deslizando.
 			Listeners.mover(Movimiento.QUIETO);
 		}
 	}
@@ -300,7 +301,12 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 	public TipoPersonaje getTipo() {
 		return this.tipoPj;
 	}
-
+	public boolean isColMouseMetal() {
+		return this.colMouseMetal;
+	}
+	
+	
+	
 	@Override
 	public void actualizarPos(TipoCliente tipoCliente, float x, float y) {
 		if(this.tipoCliente == tipoCliente){
@@ -327,8 +333,9 @@ public abstract class Personaje implements EventoTerminaPartida,EventoReducirVid
 		this.flagBloquearEntradas = true;
 	}
 	
-	public void actualizarColisionPj(float x, float y) {
+	public void actualizarColisionPj(float x, float y, boolean colisionando) {
 		this.colMouse.set(x, y);
+		this.colMouseMetal = colisionando;
 	}
 	
 }

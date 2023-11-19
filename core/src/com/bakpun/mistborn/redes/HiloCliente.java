@@ -117,7 +117,7 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 			break;
 		
 		case "actColision":
-			Listeners.actualizarColisionPj(Float.valueOf(msg[1]), Float.valueOf(msg[2]));
+			Listeners.actualizarColisionPj(Float.valueOf(msg[1]), Float.valueOf(msg[2]), Boolean.valueOf(msg[3]));
 			break;
 		}
 	}

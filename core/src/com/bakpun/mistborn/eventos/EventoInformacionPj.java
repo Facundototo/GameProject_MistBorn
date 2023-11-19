@@ -6,5 +6,5 @@ import com.bakpun.mistborn.enums.TipoCliente;
 public interface EventoInformacionPj {
 	void actualizarPos(TipoCliente tipoCliente, float x, float y);
 	void actualizarAnima(TipoCliente tipoCliente, int frameIndex,Movimiento mov,boolean saltando);
-	void actualizarColisionPj(float x, float y);
+	void actualizarColisionPj(float x, float y,boolean colisionando);
 }

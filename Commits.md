@@ -11,6 +11,11 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "hierro terminado, haciendo acero y detalles" - Fecha 19/11
+
+- Terminamos el poder de Hierro en redes.
+- Terminamos cierto parte del poder de Acero, faltaria el disparo de las monedas.
+
 ### "peltre en redes y solucionando problemas" - Fecha 17/11
 
 - Implementamos el poder de peltre en redes.

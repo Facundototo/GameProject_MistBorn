@@ -30,11 +30,9 @@ public class Acero extends Poder implements Disparable{
 					super.disparo.disparar(super.energia);
 				}
 			}else {
-				//if(super.pj.getColisionMouse().isColision()) {	//Si existe colision con un body en el rayo, se aplica la fuerza.
-					//super.disparo.actualizarDireccion(super.pj.getColisionMouse().getPuntoColision().x,super.pj.getColisionMouse().getPuntoColision().y);
-					//super.pj.aplicarFuerza(super.disparo.getFuerzaContraria());
+				if(super.pj.isColMouseMetal()) {
 					Listeners.reducirPoderPj(super.pj.getTipo(), super.tipo, 0.5f);
-				//}
+				}
 			}
 		}
 	}

@@ -22,11 +22,9 @@ public class Hierro extends Poder implements Disparable{
 	@Override
 	public void quemar() {
 		if(super.energia > 0f) {
-			//if(super.pj.getColisionMouse().isColision()) {
-				//super.disparo.actualizarDireccion(super.pj.getColisionMouse().getPuntoColision().x,super.pj.getColisionMouse().getPuntoColision().y);
-				//super.pj.aplicarFuerza(super.disparo.getMovimientoBala());
+			if(super.pj.isColMouseMetal()) {
 				Listeners.reducirPoderPj(super.pj.getTipo(), super.tipo, 1f);
-			//}
+			}
 		}
 	}
 
