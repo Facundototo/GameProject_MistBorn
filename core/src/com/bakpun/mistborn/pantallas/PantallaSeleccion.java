@@ -50,6 +50,8 @@ public final class PantallaSeleccion implements Screen{
 
 	
 	public PantallaSeleccion() {
+		Render.audio.cancionSeleccion.play();
+		Render.audio.cancionSeleccion.setLooping(true);
 		skin = SkinFreeTypeLoader.cargar();		//Cargo el codigo que hay que copiar para usar FreeTypeFont en Scene2DUI.
 		stage = new Stage(new FillViewport(Config.ANCHO,Config.ALTO));
 		tabla = new Table();
@@ -127,15 +129,13 @@ public final class PantallaSeleccion implements Screen{
 		/*Este es para el cliente que toca ESC,este llama a desconectar() lo que hace que se limpie el server 
 		y ponga en el if de abajo que el estado es DESCONECTADO para el segundo cliente, es una especie de polimorfismo*/
 		if(entradas.isEscape()) {	
+			Render.audio.cancionSeleccion.stop();
 			Render.app.setScreen(new PantallaMenu());
 			Red.desconectar();
 		}
 		
 		//Para forzar al cliente que no se desconecto mediante el ESC o ALT F4, a que se vaya. Y tambien por si el server se cierra inesperadamente.
 		Red.chequearEstado();
-		/*if(Red.getEstado() == EstadoRed.DESCONECTADO) {	
-			Render.app.setScreen(new PantallaMenu());
-		}*/
 		
 		stage.act(delta);
 		stage.draw();
@@ -150,11 +150,11 @@ public final class PantallaSeleccion implements Screen{
 	            public void run() {					//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
 					Render.audio.cancionMenu.stop();
 					if(Red.getId() == 0) {
-						System.out.println("hola");
 						Render.app.setScreen(new PantallaPvP(InfoPersonaje.values()[_seleccionElegida].getNombre(), InfoPersonaje.values()[Red.getSeleccionOponente()].getNombre(),2));
 					}else {
 						Render.app.setScreen(new PantallaPvP(InfoPersonaje.values()[Red.getSeleccionOponente()].getNombre(), InfoPersonaje.values()[_seleccionElegida].getNombre(),1));
 					}
+					Render.audio.cancionSeleccion.stop();
 					
 	            }})));	
 	}

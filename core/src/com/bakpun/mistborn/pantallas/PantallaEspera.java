@@ -25,22 +25,25 @@ public class PantallaEspera implements Screen {
 	private Table tabla;
 	private Entradas entradas;
 
-	@Override
-	public void show() {
+	public PantallaEspera() {
+		Render.audio.cancionEspera.play();
+		Render.audio.cancionEspera.setLooping(true);
 		entradas = new Entradas();
 		Gdx.input.setInputProcessor(entradas);
 		stage = new Stage(new FillViewport(Config.ANCHO, Config.ALTO));
 		skin = SkinFreeTypeLoader.cargar();
 		tabla = new Table();
-		tabla.setFillParent(true);
-		
 		esperando = new Label("", Fuente.PIXELMENU.getStyle(skin));
+		escape = new Label("Pulsa ESC para volver al Menu", Fuente.PIXELMENU.getStyle(skin));
+	}
+	
+	@Override
+	public void show() {
+		tabla.setFillParent(true);
 		esperando.addAction(Actions.forever(Actions.sequence(
 				Actions.fadeIn(1f),Actions.fadeOut(1f),		
 			    Actions.delay(0.4f)
 				)));
-		
-		escape = new Label("Pulsa ESC para volver al Menu", Fuente.PIXELMENU.getStyle(skin));
 		
 		tabla.add(esperando).center().expandY().row();
 		tabla.add(escape).bottom().pad(50);
@@ -62,9 +65,10 @@ public class PantallaEspera implements Screen {
 		if(entradas.isEscape()) {		//Si toca ESCAPE se desconecta del server.
 			Red.desconectar();
 			Render.app.setScreen(new PantallaMenu());
+			Render.audio.cancionEspera.stop();
 		}
 		
-		if(Red.isOponenteEncontrado()){Render.app.setScreen(new PantallaSeleccion());}	//Si los 2 estan listos van a la PantallaSeleccion.
+		if(Red.isOponenteEncontrado()){Render.app.setScreen(new PantallaSeleccion());Render.audio.cancionEspera.stop();}	//Si los 2 estan listos van a la PantallaSeleccion.
 		
 		stage.act();
 		stage.draw();
@@ -96,7 +100,6 @@ public class PantallaEspera implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		
 	}
 	
 	

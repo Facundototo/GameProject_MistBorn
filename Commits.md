@@ -11,6 +11,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "inicio pelea y detalles" - Fecha 20/11
+
+- Hicimos el conteo previo a la pelea.
+- Agregamos mas canciones, en PantallaEspera y PantallaSeleccion.
+- Cambiamos la fuente de texto de la pelea.
+
 ### "hierro terminado, haciendo acero y detalles" - Fecha 19/11
 
 - Terminamos el poder de Hierro en redes.

@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.hud;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,6 +28,7 @@ import com.bakpun.mistborn.eventos.EventoTerminaPartida;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.utiles.Config;
 import com.bakpun.mistborn.utiles.Recursos;
+import com.bakpun.mistborn.utiles.Render;
 
 public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoReducirVida,EventoGestionMonedas,EventoSetDuracionPeltre,EventoGestionPoderes{
 
@@ -37,12 +37,13 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 	private Table tabla;
 	private Image marcoVida;
 	private Image[] marcosPoder = new Image[3];		//Lo creamos con el max de poderes que puede tener un pj pero lo limita el for de shapesPoder.
-	private Label cantMonedas,tiempoPeltre,decisionPelea,avisoSalir;
+	private Label cantMonedas,tiempoPeltre,txtCentro,avisoSalir;
 	private ShapeRenderer shapeVida;
 	private ArrayList<ShapeRenderer> shapesPoder;	//Este arraylist porque no se sabe cuantos poderes se van a crear.
 	private float[] energiaPoderes;
-	private float vida,escalado = 1.5f;
+	private float vida,escalado = 1.5f,tiempoComienzo = 6f;
 	private int monedas = 10;
+	private boolean flagComenzo = false;
 	
 	public Hud() {
 		Listeners.agregarListener(this);
@@ -50,8 +51,8 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		skin = SkinFreeTypeLoader.cargar();
 		stage = new Stage();
 		tabla = new Table();
-		decisionPelea = new Label("",Fuente.PIXELTEXTO.getStyle(skin));
-		avisoSalir = new Label("Toca ESC para salir de la sesion",Fuente.PIXELTEXTO.getStyle(skin));
+		txtCentro = new Label("",Fuente.PIXELPELEA.getStyle(skin));
+		avisoSalir = new Label(Render.bundle.get("hud.salir"),Fuente.PIXELPELEA.getStyle(skin));
 		shapeVida = new ShapeRenderer();
 		shapesPoder = new ArrayList<ShapeRenderer>();
 		
@@ -68,11 +69,15 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		
 		this.vida = 245;
 		
+		txtCentro.setPosition(Config.ANCHO/2, Config.ALTO/2,Align.center);
+		
+		stage.addActor(txtCentro);
 		stage.addActor(tabla);
 		
 	}
 	
 	public void draw(float delta) {
+		if(!flagComenzo) {empezarPelea(delta);}
 		drawVida();
 		drawPoderes();
 		
@@ -80,11 +85,19 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		stage.draw();
 	}
 	
-	public void dispose() {
-		shapesPoder.clear();
-		Arrays.fill(marcosPoder, null);
+	private void empezarPelea(float delta) {
+		this.tiempoComienzo -= delta;
+		if((int)tiempoComienzo >= 1) {
+			txtCentro.setText((int)tiempoComienzo);
+		}else if(tiempoComienzo >= -0.2f){
+			txtCentro.setText(Render.bundle.get("hud.empezar"));
+		}else {
+			this.flagComenzo = true;
+			txtCentro.setVisible(false);
+			Listeners.empezarPartida();
+		}
 	}
-	
+
 	public Stage getStage() {
 		return this.stage;
 	}
@@ -174,11 +187,11 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		if(texto.equals("Perdiste")) {
 			this.vida = 0;
 		}
-		decisionPelea.setText(texto);
-		decisionPelea.setPosition(Config.ANCHO/2, Config.ALTO/2,Align.center);
+		txtCentro.setText(texto);
+		txtCentro.setVisible(true);
+		
 		avisoSalir.setPosition(Config.ANCHO/2, Config.ALTO/2.5f,Align.center);
 		
-		stage.addActor(decisionPelea);
 		stage.addActor(avisoSalir);
 		
 	}

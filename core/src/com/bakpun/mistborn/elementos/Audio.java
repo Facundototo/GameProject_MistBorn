@@ -10,7 +10,7 @@ public class Audio {
 	//Clase para organizar todos los sonidos del videojuego.
 	
 	public Sound sonidoMenu,sonidoSeleccion,seleccionElegida,pjCorriendo,pjSalto,pjDisparo;
-	public Music cancionMenu,cancionBatalla;
+	public Music cancionMenu,cancionBatalla,cancionEspera,cancionSeleccion;
 	private float volumenMusica = 0.5f,volumenSonido = 0.5f;	//Volumenes iniciales
 	
 	public Audio() {
@@ -18,6 +18,8 @@ public class Audio {
 		sonidoSeleccion = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_SELECCION));
 		cancionMenu = Gdx.audio.newMusic(Gdx.files.internal(Recursos.CANCION_MENU));
 		cancionBatalla = Gdx.audio.newMusic(Gdx.files.internal(Recursos.CANCION_BATALLA));
+		cancionEspera = Gdx.audio.newMusic(Gdx.files.internal(Recursos.CANCION_ESPERA));
+		cancionSeleccion = Gdx.audio.newMusic(Gdx.files.internal(Recursos.CANCION_SELECCION));
 		sonidoMenu = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_OPCION_MENU));
 		pjCorriendo = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_PJ_CORRIENDO));
 		pjSalto = Gdx.audio.newSound(Gdx.files.internal(Recursos.SONIDO_PJ_SALTO));
@@ -33,6 +35,8 @@ public class Audio {
 		}
 		cancionMenu.setVolume(this.volumenMusica);
 		cancionBatalla.setVolume(this.volumenMusica);
+		cancionEspera.setVolume(this.volumenMusica);
+		cancionSeleccion.setVolume(this.volumenMusica);
 	}
 	
 	public void dispose() {

@@ -18,6 +18,8 @@ public class Recursos {
 	public static final String SELECCION_ELEGIDA = "sonidos/seleccionElegida.wav";
 	public static final String CANCION_MENU = "sonidos/cancionMenu.mp3";
 	public static final String CANCION_BATALLA = "sonidos/cancionBatalla.mp3";
+	public static final String CANCION_ESPERA = "sonidos/cancionEspera.mp3";
+	public static final String CANCION_SELECCION = "sonidos/cancionSeleccion.mp3";
 	public static final String SONIDO_PJ_CORRIENDO = "sonidos/corriendo.mp3";
 	public static final String SONIDO_PJ_SALTO = "sonidos/MaleJump.mp3";
 	public static final String SONIDO_DISPARO = "sonidos/disparo.wav";

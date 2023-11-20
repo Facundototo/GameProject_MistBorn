@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -44,7 +43,6 @@ public final class PantallaPvP implements Screen,EventoTerminaPartida,EventListe
 	private InputMultiplexer im;
 	private Hud hud;
 	private String nombrePj1, nombrePj2;
-	private Pixmap cursor;
 	private CuerposMundo entidades;
 	private int nroOponente;
 	private boolean flagTerminaPartida = false;
@@ -78,9 +76,6 @@ public final class PantallaPvP implements Screen,EventoTerminaPartida,EventListe
 		entidades = new CuerposMundo(mundo,cam);
 		entidades.crearPlataformas();	
 		entidades.crearMetales();
-		
-		cursor = new Pixmap(Gdx.files.internal(Recursos.CURSOR_MOUSE));	//Cargamos un cursor.
-		Gdx.graphics.setCursor(Gdx.graphics.newCursor(cursor, 0, 0));
 	}
 
 	public void render(float delta) {
@@ -104,6 +99,7 @@ public final class PantallaPvP implements Screen,EventoTerminaPartida,EventListe
 		GestorMonedas.borrarBasura();		//Se llama siempre a este metodo static para que borre las monedas.
 		
 		if(flagTerminaPartida && (entradasPj1.isEscape() || entradasPj2.isEscape())) {
+			Render.audio.cancionBatalla.stop();
 			Red.desconectar();
 		}	
 		
@@ -138,8 +134,6 @@ public final class PantallaPvP implements Screen,EventoTerminaPartida,EventListe
 		fondo.getTexture().dispose();	//Texture
 		pj1.dispose();	//Texture.
 		pj2.dispose();	//Texture.
-		hud.dispose();
-		cursor.dispose();	
 		entidades.dispose();
 		Render.batch.dispose();		//SpriteBatch.
 		this.dispose();

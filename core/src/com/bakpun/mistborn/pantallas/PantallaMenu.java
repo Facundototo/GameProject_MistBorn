@@ -1,5 +1,7 @@
 package com.bakpun.mistborn.pantallas;
 
+import java.awt.Cursor;
+
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.InputMultiplexer;
@@ -46,6 +48,9 @@ public class PantallaMenu implements Screen{
 	//Falta cambiar el skin con skinComposer
 	
 	public PantallaMenu(){
+		Render.audio.cancionMenu.play();
+		Render.audio.cancionMenu.setLooping(true);
+		
 		fondo = new Image(new Texture(Recursos.FONDO_MENU));
 		barraNegra = new Image(new Texture(Recursos.BARRA_NEGRA));
 		stage = new Stage(new FillViewport(Config.ANCHO, Config.ANCHO));
@@ -196,7 +201,7 @@ public class PantallaMenu implements Screen{
 	
 	private void tocarOpcion(boolean click) {		//Booleano que es true en el evento clicked().
 		if(entradas.isEnter() || click) {
-			if(seleccion == 0) {Render.app.setScreen(new PantallaEspera());}
+			if(seleccion == 0) {Render.app.setScreen(new PantallaEspera()); Render.audio.cancionMenu.stop();}
 			else if(seleccion == 1) {flagOpciones = true;}
 			else {Gdx.app.exit();}
 		}

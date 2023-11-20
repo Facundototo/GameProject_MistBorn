@@ -9,7 +9,6 @@ import com.bakpun.mistborn.enums.Movimiento;
 import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
-import com.bakpun.mistborn.hud.Hud;
 
 public class Listeners {
 
@@ -130,6 +129,13 @@ public class Listeners {
 		for (EventListener listener : listeners) {
 			if(listener instanceof EventoTerminaPartida)
 			((EventoTerminaPartida)listener).terminarPartida(texto,ganador);
+		}
+	}
+	
+	public static void empezarPartida() {
+		for (EventListener listener : listeners) {
+			if(listener instanceof EventoEmpiezaPartida)
+			((EventoEmpiezaPartida)listener).empezarPartida();
 		}
 	}
 	

@@ -676,6 +676,35 @@ jsonData: {
 		}
 		{
 			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: pixelFight
+			file: C:/Users/Facundo/.skincomposer/preview fonts/Pixel Combat.otf
+			previewTTF: Alkhemikal
+			useCustomSerializer: true
+			size: 50
+			mono: false
+			hinting: AutoMedium
+			color: white
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 0
+			borderColor: null
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 0
+			spaceY: 0
+			characters: ""
+			kerning: true
+			flip: false
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
+		}
+		{
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
 			name: pixelfont-black
 			file: C:/Users/Facundo/.skincomposer/preview fonts/PressStart2P-Regular.ttf
 			previewTTF: PressStart2P-Regular

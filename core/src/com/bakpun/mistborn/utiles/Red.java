@@ -31,6 +31,7 @@ public class Red {
 	public static void chequearEstado() {
 		if(hc.getEstado() == EstadoRed.DESCONECTADO) {	
 			Render.app.setScreen(new PantallaMenu());
+			Render.audio.cancionBatalla.stop();
 		}
 	}
 	

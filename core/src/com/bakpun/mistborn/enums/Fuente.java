@@ -10,7 +10,8 @@ public enum Fuente {
 	//Fuentes de texto que se usaran en el juego.
 	PIXELINFO("fontpixel-info-white"),
 	PIXELTEXTO("pixelfont-white"),
-	PIXELMENU("pixelfontMenu");	
+	PIXELMENU("pixelfontMenu"),
+	PIXELPELEA("pixelFight");
 	
 	private String nombreFuente;
 	
