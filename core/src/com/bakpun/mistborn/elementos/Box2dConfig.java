@@ -1,4 +1,4 @@
-package com.bakpun.mistborn.box2d;
+package com.bakpun.mistborn.elementos;
 
 public class Box2dConfig {
 	

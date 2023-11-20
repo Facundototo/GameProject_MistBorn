@@ -1,9 +1,5 @@
 package com.bakpun.mistborn.personajes;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-
-import com.badlogic.gdx.physics.box2d.World;
-import com.bakpun.mistborn.box2d.Colision;
 import com.bakpun.mistborn.enums.Spawn;
 import com.bakpun.mistborn.enums.TipoCliente;
 import com.bakpun.mistborn.enums.TipoPersonaje;
@@ -15,14 +11,14 @@ import com.bakpun.mistborn.utiles.Recursos;
 
 public final class Vin extends Personaje{
 	
-	public Vin(World mundo, Entradas entradas,Colision c,OrthographicCamera cam,Spawn spawn,TipoCliente tipoCliente) {
-		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN, mundo, entradas,c,cam,spawn,tipoCliente,TipoPersonaje.NACIDO_BRUMA);
+	public Vin(Entradas entradas,Spawn spawn,TipoCliente tipoCliente) {
+		super(Recursos.PERSONAJE_VIN,Recursos.SALTOS_VIN,Recursos.ANIMACIONES_ESTADOS_VIN,entradas,spawn,tipoCliente,TipoPersonaje.NACIDO_BRUMA);
 	}
 
 	@Override
-	protected void crearPoderes(World mundo,OrthographicCamera cam,Colision c) {
-		super.poderes[0] = new Acero(mundo,this,cam,c);		
-		super.poderes[1] = new Hierro(mundo,this,cam,c);	
+	protected void crearPoderes() {
+		super.poderes[0] = new Acero(this);		
+		super.poderes[1] = new Hierro(this);	
 		super.poderes[2] = new Peltre(this);
 	}
 

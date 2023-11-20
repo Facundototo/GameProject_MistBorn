@@ -15,20 +15,17 @@ public class Listeners {
 	private static ArrayList<EventListener> listeners = new ArrayList<EventListener>();
 	
 	public static void agregarListener(EventListener listener) { 	//Anade las clases que tengan eventos.
-		    if (!listeners.contains(listener)) {
-		        listeners.add(listener);
-		        System.out.println("Se ha agregado un nuevo listener: " + listener.getClass().getName());
-		    }
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
 		
 	}
 	
 	public static void crearBarraHUD(String ruta,Color color,TipoPoder tipo) {		//Este evento va a llamar al metodo de Hud para crear los marcos del poder que se cree.
-		int cont = 0;
 		for (EventListener listener : listeners) {
-			if((listener instanceof EventoCrearBarra) && cont == 0) {
+			if((listener instanceof EventoCrearBarra)) {
 				System.out.println("se esta creando barra" + listener.getClass().getName());
 				((EventoCrearBarra)listener).crearBarra(ruta,color,tipo);
-				cont++;
 			}
 		}
 	}

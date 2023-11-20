@@ -1,22 +1,17 @@
 package com.bakpun.mistborn.poderes;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.physics.box2d.World;
-import com.bakpun.mistborn.box2d.Colision;
-import com.bakpun.mistborn.elementos.Disparo;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.Listeners;
 import com.bakpun.mistborn.personajes.Personaje;
 import com.bakpun.mistborn.utiles.Recursos;
 
-public class Hierro extends Poder implements Disparable{
+public class Hierro extends Poder{
 	
 	//Poder que tira de objetos metalicos.
 	
-	public Hierro(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
+	public Hierro(Personaje pj) {
 		super(Recursos.MARCO_HIERRO, Color.GRAY,TipoPoder.HIERRO,pj);	
-		crearDisparo(mundo,pj,cam,c);
 	}
 
 	@Override
@@ -26,11 +21,5 @@ public class Hierro extends Poder implements Disparable{
 				Listeners.reducirPoderPj(super.pj.getTipo(), super.tipo, 1f);
 			}
 		}
-	}
-
-	@Override
-	public void crearDisparo(World mundo,Personaje pj,OrthographicCamera cam,Colision c) {
-		super.disparo = new Disparo(mundo,pj,cam,c);
-	}
-	
+	}	
 }

@@ -1,7 +1,6 @@
 package com.bakpun.mistborn.poderes;
 
 import com.badlogic.gdx.graphics.Color;
-import com.bakpun.mistborn.elementos.Disparo;
 import com.bakpun.mistborn.enums.TipoPersonaje;
 import com.bakpun.mistborn.enums.TipoPoder;
 import com.bakpun.mistborn.eventos.EventoGestionPoderes;
@@ -12,7 +11,6 @@ public abstract class Poder implements EventoGestionPoderes{
 	
 	protected TipoPoder tipo;
 	protected Personaje pj;
-	protected Disparo disparo;
 	protected float energia = 100f;
 	
 	public Poder(String ruta,Color color,TipoPoder tipo,Personaje pj) {
@@ -26,10 +24,6 @@ public abstract class Poder implements EventoGestionPoderes{
 	
 	public TipoPoder getTipoPoder() {
 		return this.tipo;
-	}
-	
-	public Disparo getDisparo(){
-		return this.disparo;
 	}
 	
 	public float getEnergia() {

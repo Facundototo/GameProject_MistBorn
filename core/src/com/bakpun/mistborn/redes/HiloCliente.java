@@ -84,6 +84,7 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 			estado = EstadoRed.DESCONECTADO;	//Con el desconectado se fuerza al otro cliente que se vaya a la PantallaMenu.
 			this.oponenteEncontrado = false;			//Reseteamos este booleano porque sino salta de la PantallaMenu a la PantallaSeleccion.
 			this.empiezaPartida = false;
+			this.id = -1;
 			break;
 			
 		case "seleccionOponente":	//Es la seleccion del oponente mientras se elige al pj.

@@ -4,16 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.bakpun.mistborn.box2d.Box2dConfig;
-import com.bakpun.mistborn.box2d.Colision;
-import com.bakpun.mistborn.box2d.ColisionMouse;
-import com.bakpun.mistborn.box2d.Fisica;
 import com.bakpun.mistborn.elementos.Animacion;
+import com.bakpun.mistborn.elementos.Box2dConfig;
 import com.bakpun.mistborn.elementos.Imagen;
 import com.bakpun.mistborn.enums.Accion;
 import com.bakpun.mistborn.enums.Movimiento;
@@ -45,9 +40,6 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 	private Animacion animacionQuieto,animacionCorrer;
 	private Imagen spr,cursor;
 	private Entradas entradas;
-	//private Body pj;
-	private Fisica f;
-	private ColisionMouse cm;
 	private TextureRegion saltos[] = new TextureRegion[3];
 	private String animacionSaltos[] = new String[3];
 	private String animacionEstados[] = new String[2];
@@ -63,7 +55,7 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 	private float duracionQuieto = 0.2f,duracionCorrer = 0.15f,tiempoMonedas = 0f, tiempoColor = 0f;
 	private int seleccion = 0,frameIndex = 0;
 	
-	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,World mundo,Entradas entradas,Colision c,OrthographicCamera cam,Spawn spawn,TipoCliente tipoCliente,TipoPersonaje tipoPj) {
+	public Personaje(String rutaPj,String[] animacionSaltos,String[] animacionEstados,Entradas entradas,Spawn spawn,TipoCliente tipoCliente,TipoPersonaje tipoPj) {
 		this.animacionSaltos = animacionSaltos;
 		this.animacionEstados = animacionEstados;
 		this.entradas = entradas;
@@ -71,19 +63,17 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 		this.tipoPj = tipoPj;
 		this.monedas = 10;	//Monedas iniciales 10.
 		this.tipoCliente = tipoCliente;
-		f = new Fisica();
-		cm = new ColisionMouse(mundo,cam);
 		colMouse = new Vector2();
  		spr = new Imagen(rutaPj);
  		cursor = new Imagen(Recursos.CURSOR_COLISIONMOUSE);
  		cursor.setEscalaBox2D(24);
  		spr.setEscalaBox2D(12);
 		crearAnimaciones();
-		if(this.tipoCliente == TipoCliente.USUARIO) {crearPoderes(mundo,cam,c);} 	//Si es oponente no se crean los poderes.
+		if(this.tipoCliente == TipoCliente.USUARIO) {crearPoderes();} 	//Si es oponente no se crean los poderes.
 		Listeners.agregarListener(this);
 	}
 	
-	protected abstract void crearPoderes(World mundo,OrthographicCamera cam,Colision c);
+	protected abstract void crearPoderes();
 
 	private void updateAnimacion(float delta) {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
 
@@ -101,7 +91,7 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 			Listeners.posMouse(this.entradas.getMouseX()/Box2dConfig.PPM,this.entradas.getMouseY()/Box2dConfig.PPM);
 			calcularSalto();	//Calcula el salto con la gravedad.
 			calcularMovimiento();	//Calcula el movimiento.
-			//aumentarEnergia(delta);	//Aumento de los poderes.
+			aumentarEnergia(delta);	//Aumento de los poderes.
 			quemarPoder();	//Seleccion de poderes. Y demas acciones respecto a los mismos.
 		}
 		
@@ -213,8 +203,6 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 	
 	public void dispose() {
 		spr.getTexture().dispose();
-		f.dispose();
-		cm.dispose();
 	}
 	
 	private void crearAnimaciones() {
@@ -245,16 +233,11 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 		}
 	}
 	public float getX() {
-		//return this.pj.getPosition().x;
 		return this.x;
 	}
 	public float getY() {
-		//return this.pj.getPosition().y;
 		return this.y;
 	}
-	//public Body getBody() {
-		//return this.pj;
-	//}
 	
 	public Entradas getInput() {
 		return this.entradas;
@@ -301,9 +284,6 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 	
 	public int getCantMonedas() {
 		return this.monedas;
-	}
-	public ColisionMouse getColisionMouse() {
-		return this.cm;
 	}
 	public TipoPersonaje getTipo() {
 		return this.tipoPj;

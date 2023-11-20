@@ -147,7 +147,7 @@ public final class PantallaSeleccion implements Screen{
 		stage.addAction(Actions.sequence(Actions.fadeOut(1.5f),
 			Actions.run(new Runnable() {   
 			  @Override
-	            public void run() {					//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
+	            public void run() {	//Se hace el fadeOut y cuando termine se cambia la pantalla con el .run
 					Render.audio.cancionMenu.stop();
 					if(Red.getId() == 0) {
 						Render.app.setScreen(new PantallaPvP(InfoPersonaje.values()[_seleccionElegida].getNombre(), InfoPersonaje.values()[Red.getSeleccionOponente()].getNombre(),2));

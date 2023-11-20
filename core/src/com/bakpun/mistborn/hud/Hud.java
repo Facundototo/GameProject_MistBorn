@@ -36,7 +36,7 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 	private Stage stage;
 	private Table tabla;
 	private Image marcoVida;
-	private Image[] marcosPoder = new Image[3];		//Lo creamos con el max de poderes que puede tener un pj pero lo limita el for de shapesPoder.
+	private ArrayList<Image> marcosPoder;	//Lo creamos con el max de poderes que puede tener un pj pero lo limita el for de shapesPoder.
 	private Label cantMonedas,tiempoPeltre,txtCentro,avisoSalir;
 	private ShapeRenderer shapeVida;
 	private ArrayList<ShapeRenderer> shapesPoder;	//Este arraylist porque no se sabe cuantos poderes se van a crear.
@@ -55,6 +55,7 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		avisoSalir = new Label(Render.bundle.get("hud.salir"),Fuente.PIXELPELEA.getStyle(skin));
 		shapeVida = new ShapeRenderer();
 		shapesPoder = new ArrayList<ShapeRenderer>();
+		marcosPoder = new ArrayList<Image>();
 		
 		stage.setViewport(new FillViewport(Config.ANCHO,Config.ALTO,stage.getCamera()));
 		
@@ -113,7 +114,7 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		for (int i = 0; i < shapesPoder.size(); i++) {
 			shapesPoder.get(i).setProjectionMatrix(stage.getCamera().combined);
 			shapesPoder.get(i).begin(ShapeType.Filled);
-			shapesPoder.get(i).rect(marcosPoder[i].getX()+10*escalado, marcosPoder[i].getY(), energiaPoderes[i], marcosPoder[i].getHeight());
+			shapesPoder.get(i).rect(marcosPoder.get(i).getX()+10*escalado, marcosPoder.get(i).getY(), energiaPoderes[i], marcosPoder.get(i).getHeight());
 			shapesPoder.get(i).end();
 		}
 		if(tiempoPeltre != null) {
@@ -129,10 +130,12 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		shapesPoder.add(new ShapeRenderer());
 		shapesPoder.get(shapesPoder.size()-1).setColor(color);
 	
-		final int  _index = shapesPoder.size()-1;
+		int  _index = shapesPoder.size()-1;
 		
-		marcosPoder[_index] = new Image(new Texture(ruta));
-		tabla.add(marcosPoder[_index]).size(marcosPoder[_index].getWidth()*escalado, marcosPoder[_index].getHeight()*escalado).padTop(10).left();
+		System.out.println(_index);
+		
+		marcosPoder.add(new Image(new Texture(ruta)));
+		tabla.add(marcosPoder.get(_index)).size(marcosPoder.get(_index).getWidth()*escalado, marcosPoder.get(_index).getHeight()*escalado).padTop(10).left();
 		
 		if(tipo == TipoPoder.ACERO) {		//Para que se agregue al lado de la barra de acero el contador de monedas que tiene el pj.
 			cantMonedas = new Label(String.valueOf(monedas),Fuente.PIXELTEXTO.getStyle(skin));
