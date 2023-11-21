@@ -35,10 +35,6 @@ public class Imagen {
 		s.draw(Render.batch);	
 	}
 	
-	public void escalarSprite(float tamano) {	//Tamano.
-		s.scale(tamano);
-	}
-	
 	public void setEscalaBox2D(float ppm) {
 		s.setSize(s.getWidth()/ppm, s.getHeight()/ppm);
 	}

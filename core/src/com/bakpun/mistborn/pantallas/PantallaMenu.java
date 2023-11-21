@@ -137,7 +137,6 @@ public class PantallaMenu implements Screen{
 		Render.limpiarPantalla((float) 212 / 255, (float) 183 / 255, (float) 117 / 255);
         
         tiempo += delta;
-        
         if(!flagOpciones) {
         	asignarEntradas();
         	colorearSeleccion();

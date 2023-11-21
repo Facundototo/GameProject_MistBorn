@@ -88,11 +88,9 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 	
 	private void empezarPelea(float delta) {
 		this.tiempoComienzo -= delta;
-		if((int)tiempoComienzo >= 1) {
-			txtCentro.setText((int)tiempoComienzo);
-		}else if(tiempoComienzo >= -0.2f){
-			txtCentro.setText(Render.bundle.get("hud.empezar"));
-		}else {
+		if((int)tiempoComienzo >= 1) {txtCentro.setText((int)tiempoComienzo);}
+		else if(tiempoComienzo >= -0.2f) {txtCentro.setText(Render.bundle.get("hud.empezar"));}
+		else {
 			this.flagComenzo = true;
 			txtCentro.setVisible(false);
 			Listeners.empezarPartida();
@@ -126,7 +124,7 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 	
 	@Override
 	public void crearBarra(String ruta,Color color,TipoPoder tipo) {
-		System.out.println(tipo);
+		//System.out.println(tipo);
 		shapesPoder.add(new ShapeRenderer());
 		shapesPoder.get(shapesPoder.size()-1).setColor(color);
 	
@@ -179,6 +177,7 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 		//Este if ternario porque si es nacido de la bruma el array energiaPoderes tiene mas indices y varian.
 		energiaPoderes[(tipoPj == TipoPersonaje.NACIDO_BRUMA)?tipoPoder.getNroSeleccion():0] -= (energia/100)*210;
 	}
+	
 	
 	@Override
 	public void aumentarPoder(TipoPersonaje tipoPj,TipoPoder tipoPoder, float energia) {

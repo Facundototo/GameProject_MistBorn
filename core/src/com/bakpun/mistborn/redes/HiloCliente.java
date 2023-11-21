@@ -82,6 +82,7 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 			
 		case "desconexion":		//Responde a la llamada de desconectar, para que le avise al otro cliente de que me desconecte.
 			estado = EstadoRed.DESCONECTADO;	//Con el desconectado se fuerza al otro cliente que se vaya a la PantallaMenu.
+			buscarPorBroadcast();
 			this.oponenteEncontrado = false;			//Reseteamos este booleano porque sino salta de la PantallaMenu a la PantallaSeleccion.
 			this.empiezaPartida = false;
 			this.id = -1;
@@ -123,6 +124,14 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 		}
 	}
 	
+	private void buscarPorBroadcast() {
+		try {
+			ipServer = InetAddress.getByName("255.255.255.255");	//Al principio se hace broadcast.
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public boolean isOponenteEncontrado() {
 		return this.oponenteEncontrado;
 	}

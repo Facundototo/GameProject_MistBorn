@@ -44,7 +44,12 @@ public class Audio {
 		sonidoSeleccion.dispose();
 		seleccionElegida.dispose();
 		pjCorriendo.dispose();
+		pjSalto.dispose();
+		pjDisparo.dispose();
 		cancionMenu.dispose();
+		cancionBatalla.dispose();
+		cancionEspera.dispose();
+		cancionSeleccion.dispose();
 	}
 	
 	public float getVolumen(TipoAudio tipo) {

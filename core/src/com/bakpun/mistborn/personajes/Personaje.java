@@ -74,16 +74,8 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 	}
 	
 	protected abstract void crearPoderes();
-
-	private void updateAnimacion(float delta) {		//Este metodo updatea que frame de la animacion se va a mostrar actualmente,lo llamo en draw().
-
-		animacionQuieto.update(delta);
-		animacionCorrer.update(delta);
-	}
 	
 	public void draw(float delta) {		
-		
-		updateAnimacion(delta);
 		
 		calcularAcciones();	//Activa o desactiva las acciones del pj en base al input.
 		if(tipoCliente == TipoCliente.USUARIO && !flagBloquearEntradas){		//Si es oponente no se calcula ni el mov,salto y poderes ya que se genera un conflicto con el server.

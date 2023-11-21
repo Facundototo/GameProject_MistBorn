@@ -59,7 +59,7 @@ public class PantallaEspera implements Screen {
 		if(Red.getEstado() == EstadoRed.CONECTADO) {
 			esperando.setText("Buscando Oponente...");
 		}else {
-			esperando.setText("Buscando Servidor...");
+			esperando.setText("No hay servidores.");
 		}
 		
 		if(entradas.isEscape()) {		//Si toca ESCAPE se desconecta del server.
