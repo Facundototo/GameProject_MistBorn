@@ -124,13 +124,12 @@ public final class Hud implements EventoTerminaPartida,EventoCrearBarra,EventoRe
 	
 	@Override
 	public void crearBarra(String ruta,Color color,TipoPoder tipo) {
-		//System.out.println(tipo);
+		
 		shapesPoder.add(new ShapeRenderer());
 		shapesPoder.get(shapesPoder.size()-1).setColor(color);
 	
 		int  _index = shapesPoder.size()-1;
 		
-		System.out.println(_index);
 		
 		marcosPoder.add(new Image(new Texture(ruta)));
 		tabla.add(marcosPoder.get(_index)).size(marcosPoder.get(_index).getWidth()*escalado, marcosPoder.get(_index).getHeight()*escalado).padTop(10).left();

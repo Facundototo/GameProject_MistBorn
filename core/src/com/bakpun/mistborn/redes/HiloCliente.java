@@ -57,6 +57,7 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 			}
 			procesarMensaje(dp);
 		}while(!fin);
+		socket.close();
 	}
 
 
@@ -86,6 +87,7 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 			this.oponenteEncontrado = false;			//Reseteamos este booleano porque sino salta de la PantallaMenu a la PantallaSeleccion.
 			this.empiezaPartida = false;
 			this.id = -1;
+			this.seleccionOponente = 0;	//Defaulteamos seleccionOponente porque se puede quedar en un lugar que el otro no esta.
 			break;
 			
 		case "seleccionOponente":	//Es la seleccion del oponente mientras se elige al pj.
@@ -147,6 +149,10 @@ public final class HiloCliente extends Thread implements EventoEntradasPj, Event
 	}
 	public String getMiId() {
 		return String.valueOf(this.id);
+	}
+	public void fin() {
+		fin = true;
+		socket.close();
 	}
 
 	@Override

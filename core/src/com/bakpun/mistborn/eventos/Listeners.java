@@ -24,7 +24,6 @@ public class Listeners {
 	public static void crearBarraHUD(String ruta,Color color,TipoPoder tipo) {		//Este evento va a llamar al metodo de Hud para crear los marcos del poder que se cree.
 		for (EventListener listener : listeners) {
 			if((listener instanceof EventoCrearBarra)) {
-				System.out.println("se esta creando barra" + listener.getClass().getName());
 				((EventoCrearBarra)listener).crearBarra(ruta,color,tipo);
 			}
 		}

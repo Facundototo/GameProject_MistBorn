@@ -30,8 +30,8 @@ public class Imagen {
 	}
 	
 	public void flip(boolean flip) {
-		s.setScale((flip)?-1:1, 1);				//resto el tamano para quede invertida la textura.
-		s.setRegion(this.frameActual);
+		s.setScale((flip)?-1:1, 1);		//resto el tamano para quede invertida la textura.
+		if(this.frameActual != null) {s.setRegion(this.frameActual);}	//Este if porque en la milesima de segundo que se crea PantallaPvP el juego crashea.
 		s.draw(Render.batch);	
 	}
 	

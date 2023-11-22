@@ -101,7 +101,9 @@ public class PantallaMenu implements Screen{
 		addListeners();
 		addTablaOpciones();
 		
-		modoPantalla.setItems(new String[] {Render.bundle.get("menuopciones.ventana"),Render.bundle.get("menuopciones.fullscreen") });
+		if(Config.esFullScreen) {modoPantalla.setItems(new String[] {Render.bundle.get("menuopciones.fullscreen"),Render.bundle.get("menuopciones.ventana")});}
+		else {modoPantalla.setItems(new String[] {Render.bundle.get("menuopciones.ventana"),Render.bundle.get("menuopciones.fullscreen")});}
+		
 		modoPantalla.setWidth(100);
 		
 		fondo.addAction(Actions.forever(Actions.parallel(Actions.sequence(		//Esta accion es la que maneja todo el movimiento del fondo.
@@ -176,8 +178,10 @@ public class PantallaMenu implements Screen{
 			public void changed(ChangeEvent arg0, Actor arg1) {			//Si hubo algun cambio en el SelectBox este evento lo detecta.
 				if(modoPantalla.getSelected().equals(Render.bundle.get("menuopciones.fullscreen"))) {		//Si el string seleccionado es fullscreen.
 					Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+					Config.esFullScreen = true;
 				}else {
 					Gdx.graphics.setWindowedMode(Config.ANCHO/3, Config.ALTO/2);
+					Config.esFullScreen = false;
 				}
 			}
 		});

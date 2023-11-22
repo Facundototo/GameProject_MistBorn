@@ -11,6 +11,12 @@ Proyecto final de la materia "programacion sobre redes".
 
 ## Commits (del mas actual al mas antiguo)
 
+### "commit antes de la defensa" - Fecha 21/11
+
+- Hicimos los jars tanto del server como del cliente.
+- Modificamos los Hilos para que se cierren automaticamente.
+- Y ya estaria.
+
 ### "inicio pelea y detalles" - Fecha 20/11
 
 - Hicimos el conteo previo a la pelea.

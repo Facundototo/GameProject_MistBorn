@@ -175,6 +175,10 @@ public abstract class Personaje implements EventoEmpiezaPartida,EventoTerminaPar
 		if(saltar && !estaSaltando) {
 			Render.audio.pjSalto.play(Render.audio.getVolumen(TipoAudio.SONIDO));
 		}
+		
+		if(flagBloquearEntradas) {
+			Render.audio.pjCorriendo.stop();
+		}
 	}
 
 	private void animar() {

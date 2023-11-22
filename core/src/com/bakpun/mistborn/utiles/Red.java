@@ -20,6 +20,10 @@ public class Red {
 		hc.enviarMensaje("desconectar");
 	}
 	
+	public static void cerrar() {
+		hc.fin();
+	}
+	
 	public static void listoSeleccion(boolean listo) {
 		hc.enviarMensaje(((listo)?"listo#":"nolisto#") + hc.getMiId());
 	}
@@ -32,6 +36,7 @@ public class Red {
 		if(hc.getEstado() == EstadoRed.DESCONECTADO) {	
 			Render.app.setScreen(new PantallaMenu());
 			Render.audio.cancionBatalla.stop();
+			Render.audio.cancionSeleccion.stop();
 		}
 	}
 	
